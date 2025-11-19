@@ -2,19 +2,19 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@yield('title', 'TryMyWatch - AI-Powered AR Watch Try-On')</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
     <style>
-        /* Enhanced CSS with responsive improvements */
+        /* === YOUR FULL EXISTING CSS === */
         :root {
             --primary: #0f0f0f;
             --secondary: #1a1a1a;
@@ -124,25 +124,25 @@
             align-items: center;
             position: relative;
             overflow: hidden;
-            padding: 2rem 0;
+            padding: 1rem 0;
         }
 
-        /* Enhanced Text Sizes */
+        /* Responsive Text Sizes */
         .hero-title {
-            font-size: 2.25rem;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             line-height: 1.2;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             font-weight: 700;
         }
 
         .hero-description {
-            font-size: 1.05rem;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
             line-height: 1.6;
             margin-bottom: 1.5rem;
         }
 
         .feature-list {
-            font-size: 0.95rem;
+            font-size: clamp(0.85rem, 1.8vw, 0.95rem);
             line-height: 1.5;
         }
 
@@ -216,6 +216,7 @@
             background: var(--text);
             transform-origin: bottom center;
             border-radius: 2px;
+            transition: transform 0.05s cubic-bezier(0.4, 2.3, 0.8, 1);
         }
 
         .hour-hand {
@@ -244,6 +245,7 @@
             margin-top: -80px;
             margin-left: -0.5px;
             background: var(--accent);
+            transition: transform 0.2s cubic-bezier(0.4, 2.3, 0.8, 1);
         }
 
         .watch-crown {
@@ -303,7 +305,6 @@
 
         /* Animations */
         @keyframes float {
-
             0%,
             100% {
                 transform: translateY(0);
@@ -546,7 +547,6 @@
             overflow-y: auto;
         }
 
-
         .watch-glow {
             position: absolute;
             width: 110%;
@@ -565,15 +565,16 @@
         /* Features Section */
         .features-section {
             background: linear-gradient(180deg, var(--primary) 0%, rgba(26, 26, 26, 0.3) 100%);
-            padding: 4rem 0;
+            padding: 3rem 0;
         }
 
+        /* Enhanced Section Titles */
         .section-title {
             position: relative;
             display: inline-block;
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 3vw, 2rem);
             font-weight: 700;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .section-title::after {
@@ -615,16 +616,24 @@
             transform: scale(1.1);
         }
 
+        /* Feature Card Text */
         .feature-heading {
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2vw, 1.1rem);
             font-weight: 600;
             margin-bottom: 1rem;
         }
 
         .feature-description {
-            font-size: 0.9rem;
+            font-size: clamp(0.85rem, 1.8vw, 0.9rem);
             line-height: 1.5;
             color: var(--text-secondary);
+        }
+
+        /* Button Text Sizes */
+        .btn-primary-custom,
+        .btn-outline-custom {
+            font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+            padding: 0.75rem 1.5rem;
         }
 
         /* Button Group Animation */
@@ -637,12 +646,8 @@
             scroll-behavior: smooth;
         }
 
-        /* Responsive Design */
+        /* Enhanced Responsive Design */
         @media (max-width: 1200px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-
             .watch-container {
                 width: 250px;
                 height: 250px;
@@ -652,136 +657,61 @@
         @media (max-width: 992px) {
             .hero {
                 text-align: center;
-                padding: 4rem 0;
-            }
-
-            .hero-title {
-                font-size: 1.75rem;
-            }
-
-            .hero-description {
-                font-size: 1rem;
+                padding: 3rem 0;
             }
 
             .watch-container {
                 width: 220px;
                 height: 220px;
-                margin: 3rem auto 1rem;
+                margin: 2rem auto 1rem;
             }
 
-            .section-title {
-                font-size: 1.75rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 1.3rem;
-            }
-
-            .nav-link {
-                font-size: 0.9rem;
-                margin: 0 0.3rem;
-            }
-
-            .hero-title {
-                font-size: 1.5rem;
-            }
-
-            .hero-description {
-                font-size: 0.95rem;
-            }
-
-            .feature-list {
-                font-size: 0.9rem;
-            }
-
-            .btn-primary-custom,
-            .btn-outline-custom {
-                padding: 0.65rem 1.25rem;
-                font-size: 0.9rem;
-            }
-
-            .watch-container {
-                width: 200px;
-                height: 200px;
-            }
-
-            .watch-brand {
-                font-size: 0.8rem;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .feature-heading {
-                font-size: 1rem;
-            }
-
-            .feature-description {
-                font-size: 0.85rem;
+            .hero .row {
+                flex-direction: column-reverse;
             }
         }
 
         @media (max-width: 576px) {
-            .hero {
-                padding: 3rem 0;
-                min-height: auto;
-            }
-
-            .hero-title {
-                font-size: 1.35rem;
-                margin-bottom: 1rem;
-            }
-
-            .hero-description {
-                font-size: 0.9rem;
-                margin-bottom: 1rem;
-            }
-
-            .feature-list {
-                font-size: 0.85rem;
-            }
-
-            .button-group {
-                justify-content: center;
-            }
-
             .btn-primary-custom,
             .btn-outline-custom {
                 width: 100%;
-                max-width: 200px;
-                margin: 0.25rem 0;
-            }
-
-            .watch-container {
-                width: 180px;
-                height: 180px;
-            }
-
-            .features-section {
-                padding: 3rem 0;
-            }
-
-            .section-title {
-                font-size: 1.35rem;
-            }
-
-            .feature-card {
-                padding: 1.25rem 0.75rem;
-                margin-bottom: 1rem;
+                padding: 1rem;
             }
         }
 
-        @media (max-width: 400px) {
-            .watch-container {
-                width: 160px;
-                height: 160px;
-            }
+        /* NEW: Watch dial reload animation */
+        .watch-dial-reload {
+            animation: dialReload 1.5s ease-out;
+        }
 
-            .hero-title {
-                font-size: 1.25rem;
+        @keyframes dialReload {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) rotate(-180deg);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.05) rotate(10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        /* NEW: Watch hands reload animation */
+        .watch-hands-reload {
+            animation: handsReload 2s ease-out;
+        }
+
+        @keyframes handsReload {
+            0% {
+                opacity: 0;
+                transform: rotate(180deg);
+            }
+            100% {
+                opacity: 1;
+                transform: rotate(0deg);
             }
         }
     </style>
@@ -796,95 +726,191 @@
 
     @include('partials.footer')
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- CART MODAL -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cartItems">
+                        <p>Your cart is empty.</p>
+                    </div>
+                </div>
+                 <div class="modal-footer">
+    <button type="button" id="clearCartBtn" class="btn btn-danger">Clear Cart</button>
+    <a href="{{ route('checkout') }}" class="btn btn-primary">Checkout</a>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
     <script>
-        // Enhanced scroll effect with throttle
-        let scrollTimeout;
-        window.addEventListener('scroll', function () {
-            const navbar = document.getElementById('navbar');
-
-            if (!navbar) return;
-
-            // Clear the timeout if it's already set
-            clearTimeout(scrollTimeout);
-
-            // Set a new timeout
-            scrollTimeout = setTimeout(function () {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
+        // === NEW: WATCH RELOAD ANIMATION ===
+        function animateWatchOnLoad() {
+            const watchDial = document.querySelector('.watch-dial');
+            const watchHands = document.querySelector('.watch-hands');
+            
+            // Reset and animate the watch dial
+            if (watchDial) {
+                watchDial.classList.add('watch-dial-reload');
+            }
+            
+            // Reset and animate the watch hands
+            if (watchHands) {
+                watchHands.classList.add('watch-hands-reload');
+            }
+            
+            // Remove animation classes after animation completes
+            setTimeout(() => {
+                if (watchDial) {
+                    watchDial.classList.remove('watch-dial-reload');
                 }
-            }, 10);
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
+                if (watchHands) {
+                    watchHands.classList.remove('watch-hands-reload');
                 }
-            });
-        }, observerOptions);
+            }, 2000);
+        }
 
-        // Observe feature cards and other elements
-        document.addEventListener('DOMContentLoaded', function () {
-            const featureCards = document.querySelectorAll('.feature-card');
-            const animateElements = document.querySelectorAll('.animate-fade-in, .slide-in-left');
+        // === EXISTING WATCH HANDS ANIMATION ===
+        const hourHand = document.querySelector('.hour-hand');
+        const minuteHand = document.querySelector('.minute-hand');
+        const secondHand = document.querySelector('.second-hand');
 
-            featureCards.forEach(card => {
-                observer.observe(card);
-            });
-
-            animateElements.forEach(element => {
-                observer.observe(element);
-            });
-        });
-
-        // Enhanced watch hand animation with smooth transitions
-        function updateWatchHands() {
+        function setClock() {
             const now = new Date();
             const seconds = now.getSeconds();
             const minutes = now.getMinutes();
-            const hours = now.getHours() % 12;
-
-            const secondHand = document.querySelector('.second-hand');
-            const minuteHand = document.querySelector('.minute-hand');
-            const hourHand = document.querySelector('.hour-hand');
-
-            if (!secondHand || !minuteHand || !hourHand) return;
+            const hours = now.getHours();
 
             const secondsDegrees = ((seconds / 60) * 360) + 90;
             const minutesDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
             const hoursDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30) + 90;
 
-            // Add smooth transition only for hour and minute hands
-            minuteHand.style.transition = seconds === 0 ? 'none' : 'transform 0.3s cubic-bezier(0.4, 2.3, 0.8, 1)';
-            hourHand.style.transition = seconds === 0 ? 'none' : 'transform 0.3s cubic-bezier(0.4, 2.3, 0.8, 1)';
-
-            secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
-            minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
-            hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+            if (secondHand)
+                secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+            if (minuteHand)
+                minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+            if (hourHand)
+                hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function () {
-            updateWatchHands();
-            setInterval(updateWatchHands, 1000);
+        // Initialize everything on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start the reload animation
+            animateWatchOnLoad();
+            
+            // Start the clock
+            setClock();
+            setInterval(setClock, 1000);
+        });
 
-            // Add loaded class for any future animations
-            document.body.classList.add('loaded');
+        // === CART FUNCTIONALITY ===
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartCount = document.getElementById('cartCount');
+            const cartItemsContainer = document.getElementById('cartItems');
+            const clearCartBtn = document.getElementById('clearCartBtn');
+
+            function loadCart() {
+                return JSON.parse(localStorage.getItem('cart')) || [];
+            }
+
+            function saveCart(cart) {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+
+            function updateCartCount() {
+                const cart = loadCart();
+                let totalCount = 0;
+                cart.forEach(item => totalCount += item.quantity);
+                if (cartCount) {
+                    cartCount.textContent = totalCount;
+                    cartCount.style.display = totalCount > 0 ? 'inline-block' : 'none';
+                }
+            }
+
+            function renderCartItems() {
+                const cart = loadCart();
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+                    return;
+                }
+
+                let html = '<ul class="list-group">';
+                cart.forEach(item => {
+                    html += `
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img src="${item.thumbnail}" alt="${item.title}" style="width:50px; height:auto; margin-right:15px; border-radius:5px;">
+                                <div>
+                                    <strong>${item.title}</strong><br>
+                                    <small>$${item.price.toFixed(2)} x ${item.quantity}</small>
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-danger remove-item-btn" data-id="${item.id}" aria-label="Remove item">&times;</button>
+                        </li>
+                    `;
+                });
+                html += '</ul>';
+                cartItemsContainer.innerHTML = html;
+
+                // Attach remove handlers
+                document.querySelectorAll('.remove-item-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        removeFromCart(id);
+                    });
+                });
+            }
+
+            function addToCart(product) {
+                const cart = loadCart();
+                const existing = cart.find(item => item.id == product.id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    product.quantity = 1;
+                    cart.push(product);
+                }
+                saveCart(cart);
+                updateCartCount();
+            }
+
+            function removeFromCart(id) {
+                let cart = loadCart();
+                cart = cart.filter(item => item.id != id);
+                saveCart(cart);
+                updateCartCount();
+                renderCartItems();
+            }
+
+            clearCartBtn.addEventListener('click', function () {
+                localStorage.removeItem('cart');
+                updateCartCount();
+                renderCartItems();
+            });
+
+            // Update cart count on page load
+            updateCartCount();
+
+            // Render cart when modal opens
+            const cartModal = document.getElementById('cartModal');
+            cartModal.addEventListener('show.bs.modal', function () {
+                renderCartItems();
+            });
+
+            // Expose addToCart globally to use from product pages/buttons
+            window.addToCart = addToCart;
         });
     </script>
+    @yield('scripts')
 
-    @stack('scripts')
 </body>
 
 </html>

@@ -151,10 +151,10 @@
           <p>Your cart is empty.</p>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" id="clearCartBtn" class="btn btn-danger">Clear Cart</button>
-        <a href="{{ url('/checkout') }}" class="btn btn-primary">Checkout</a>
-      </div>
+     <div class="modal-footer">
+    <button type="button" id="clearCartBtn" class="btn btn-danger">Clear Cart</button>
+    <a href="{{ route('checkout') }}" class="btn btn-primary">Checkout</a>
+</div>
     </div>
   </div>
 </div>
@@ -162,6 +162,8 @@
 
 @section('scripts')
 <script>
+    // console.log("Cart script loaded");
+
 document.addEventListener('DOMContentLoaded', function () {
     const cartCount = document.getElementById('cartCount');
     const cartItemsContainer = document.getElementById('cartItems');

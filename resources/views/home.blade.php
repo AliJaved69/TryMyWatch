@@ -7,18 +7,18 @@
     <div class="container">
         <div class="row align-items-center">
             <!-- Left content: Headline + Description + Buttons -->
-            <div class="col-lg-6" style="margin-top: 50px;">
-                <h1 class="display-4 fw-bold mb-4 animate-fade-in">
+            <div class="col-lg-6" style="margin-top: 30px;">
+                <h1 class="hero-title animate-fade-in">
                     Discover the Future of Watch Shopping with 
-                    <span class="text-accent gradient-text">AI-Powered Augmented Reality</span>
+                    <span class="text-accent gradient-text">AI-Powered AR</span>
                 </h1>
-                <p class="lead mb-4 text-secondary-custom slide-in-left">
-                    TryMyWatch transforms the way you shop for luxury watches — try on the latest models virtually using cutting-edge AI and AR technology, all from the comfort of your home.
+                <p class="hero-description text-secondary-custom slide-in-left">
+                    TryMyWatch transforms how you shop for luxury watches — try on models virtually using cutting-edge AI and AR technology from home.
                 </p>
                 <ul class="mb-4 text-secondary-custom feature-list" style="list-style: none; padding-left: 0;">
-                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Real-time, realistic watch try-on experience</li>
-                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Extensive collection of top watch brands</li>
-                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Seamless integration with your device camera</li>
+                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Real-time, realistic watch try-on</li>
+                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Top watch brands collection</li>
+                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Seamless camera integration</li>
                 </ul>
                 <div class="d-flex flex-wrap gap-3 button-group">
                     <a href="{{ url('/shop') }}" class="btn btn-primary-custom btn-glow">Try It Now</a>
@@ -68,8 +68,8 @@
                 <div class="feature-icon">
                     <i class="fas fa-mobile-alt fa-3x text-accent mb-3"></i>
                 </div>
-                <h5 class="mb-3">Easy-to-Use Interface</h5>
-                <p class="text-secondary-custom">
+                <h5 class="feature-heading">Easy-to-Use Interface</h5>
+                <p class="feature-description">
                     Simply use your device camera to virtually try on watches in real-time with smooth, intuitive controls.
                 </p>
             </div>
@@ -77,8 +77,8 @@
                 <div class="feature-icon">
                     <i class="fas fa-shield-alt fa-3x text-accent mb-3"></i>
                 </div>
-                <h5 class="mb-3">Secure & Private</h5>
-                <p class="text-secondary-custom">
+                <h5 class="feature-heading">Secure & Private</h5>
+                <p class="feature-description">
                     Your privacy matters. All AR processing happens securely without storing your images or data.
                 </p>
             </div>
@@ -86,8 +86,8 @@
                 <div class="feature-icon">
                     <i class="fas fa-clock fa-3x text-accent mb-3"></i>
                 </div>
-                <h5 class="mb-3">Save Time & Shop Confidently</h5>
-                <p class="text-secondary-custom">
+                <h5 class="feature-heading">Save Time & Shop Confidently</h5>
+                <p class="feature-description">
                     No more guesswork — see exactly how each watch fits your wrist before buying.
                 </p>
             </div>
