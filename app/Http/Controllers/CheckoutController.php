@@ -2,68 +2,81 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Mail\OrderConfirmationMail;
+use Illuminate\Support\Facades\Mail;
+
+use Stripe\Stripe;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 
 class CheckoutController extends Controller
 {
     public function showCheckout()
     {
-        $cart = json_decode(request()->cookie('cart'), true) ?? [];
-        
-        if (empty($cart)) {
-            return redirect('/')->with('error', 'Your cart is empty.');
-        }
-
-        $total = array_reduce($cart, function($sum, $item) {
-            return $sum + ($item['price'] * $item['quantity']);
-        }, 0);
-
-        return view('checkout', compact('cart', 'total'));
+        return view('checkout'); 
     }
 
     public function processCheckout(Request $request)
     {
         $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'required|string|max:20',
-            'address' => 'required|string|max:500',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:20',
-            'country' => 'required|string|max:255',
-            'card_number' => 'required|string|max:20',
-            'expiry_date' => 'required|string|max:7',
-            'cvv' => 'required|string|max:4',
-            'name_on_card' => 'required|string|max:255'
+            'address' => 'required|string|max:1000',
+            'items' => 'required|string',
+            'total_price' => 'required|numeric',
+            'payment_method' => 'required|string|in:card,cod',
+            'payment_method_id' => 'nullable|string',
         ]);
 
-        try {
-            // Process payment (in real app, integrate with payment gateway)
-            $paymentSuccess = $this->processPayment($validated);
-            
-            if ($paymentSuccess) {
-                // Clear the cart
-                $cookie = Cookie::make('cart', json_encode([]), 0);
-                
-                return response()
-                    ->view('checkout', ['success' => true, 'cart' => [], 'total' => 0])
-                    ->withCookie($cookie);
+        // ----------- CARD PAYMENT -----------
+        if ($validated['payment_method'] === 'card') {
+
+            if (empty($validated['payment_method_id'])) {
+                return back()->withErrors('Payment method ID is required for card payments.');
             }
-            
-        } catch (\Exception $e) {
-            return back()->with('error', 'An error occurred during checkout. Please try again.');
+
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            try {
+                $paymentIntent = \Stripe\PaymentIntent::create([
+                    'amount' => intval($validated['total_price'] * 100),
+                    'currency' => 'usd',
+                    'payment_method' => $validated['payment_method_id'],
+                    'confirmation_method' => 'manual',
+                    'confirm' => true,
+                    'receipt_email' => $validated['email'],
+                ]);
+
+                if ($paymentIntent->status !== 'succeeded') {
+                    return back()->withErrors('Payment failed. Please try again.');
+                }
+
+            } catch (\Exception $e) {
+                return back()->withErrors('Payment Error: ' . $e->getMessage());
+            }
         }
 
-        return back()->with('error', 'Payment failed. Please try again.');
+        // ----------- SAVE ORDER ----------
+        $order = Order::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'items' => $validated['items'],
+            'total_price' => $validated['total_price'],
+            'payment_method' => $validated['payment_method'],
+        ]);
+
+        // ----------- SEND CONFIRMATION EMAIL -----------
+        Mail::to($order->email)->send(new OrderConfirmationMail($order));
+
+        return redirect()->route('checkout.success')
+            ->with('message', 'Order placed successfully!');
     }
 
-    private function processPayment($paymentData)
+    public function success()
     {
-        // Simulate payment processing
-        sleep(2);
-        return true; // Always success for demo
+        return view('checkout_success');
     }
 }
