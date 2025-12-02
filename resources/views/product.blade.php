@@ -28,6 +28,7 @@
     .modal-body p, 
     .modal-body ul.list-group li {
         color: #ddd;
+        background-color: black;
     }
 
     .btn-danger {

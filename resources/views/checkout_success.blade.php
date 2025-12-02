@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <h1 style="margin-top: 80px;">Thank you!</h1>
     <p>Your order has been placed successfully.</p>
-    <a href="{{ url('/shop') }}" class="btn btn-primary">Continue Shopping</a>
+    <a href="{{ url('/shop') }}" class="btn btn-primary-custom px-4 py-2 mt-2">Continue Shopping</a>
 </div>
 @endsection
 

@@ -5,78 +5,63 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Mail\OrderConfirmationMail;
 use Illuminate\Support\Facades\Mail;
-
-use Stripe\Stripe;
 use Illuminate\Http\Request;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
 
 class CheckoutController extends Controller
 {
     public function showCheckout()
     {
-        return view('checkout'); 
+        return view('checkout');
     }
 
     public function processCheckout(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required',
             'email' => 'required|email',
-            'phone' => 'required|string|max:20',
-            'address' => 'required|string|max:1000',
-            'items' => 'required|string',
+            'phone' => 'required',
+            'address' => 'required',
+            'items' => 'required',
             'total_price' => 'required|numeric',
-            'payment_method' => 'required|string|in:card,cod',
-            'payment_method_id' => 'nullable|string',
+            'payment_method' => 'required|in:card,cod',
+            'payment_method_id' => 'nullable|string'
         ]);
 
-        // ----------- CARD PAYMENT -----------
+        // ---------- CARD PAYMENT ----------
         if ($validated['payment_method'] === 'card') {
+            
+            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-            if (empty($validated['payment_method_id'])) {
-                return back()->withErrors('Payment method ID is required for card payments.');
-            }
-
-            Stripe::setApiKey(env('STRIPE_SECRET'));
 
             try {
-                $paymentIntent = \Stripe\PaymentIntent::create([
+                $payment = PaymentIntent::create([
                     'amount' => intval($validated['total_price'] * 100),
                     'currency' => 'usd',
                     'payment_method' => $validated['payment_method_id'],
-                    'confirmation_method' => 'manual',
-                    'confirm' => true,
-                    'receipt_email' => $validated['email'],
+                    'confirm' => true
                 ]);
 
-                if ($paymentIntent->status !== 'succeeded') {
-                    return back()->withErrors('Payment failed. Please try again.');
+                if ($payment->status !== "succeeded") {
+                    return back()->withErrors("Payment failed. Try again.");
                 }
 
             } catch (\Exception $e) {
-                return back()->withErrors('Payment Error: ' . $e->getMessage());
+                return back()->withErrors("Payment Error: ".$e->getMessage());
             }
         }
 
-        // ----------- SAVE ORDER ----------
-        $order = Order::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'address' => $validated['address'],
-            'items' => $validated['items'],
-            'total_price' => $validated['total_price'],
-            'payment_method' => $validated['payment_method'],
-        ]);
+        // ---------- SAVE ORDER ----------
+        $order = Order::create($validated);
 
-        // ----------- SEND CONFIRMATION EMAIL -----------
-        Mail::to($order->email)->send(new OrderConfirmationMail($order));
+        Mail::to($validated['email'])->send(new OrderConfirmationMail($order));
 
-        return redirect()->route('checkout.success')
-            ->with('message', 'Order placed successfully!');
+        return redirect()->route("checkout.success")->with("message", "Order placed successfully.");
     }
 
     public function success()
     {
-        return view('checkout_success');
+        return view("checkout_success");
     }
 }

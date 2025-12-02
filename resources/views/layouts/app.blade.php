@@ -529,6 +529,7 @@
         .modal-body p,
         .modal-body ul.list-group li {
             color: #ddd;
+            background-color: black;
         }
 
         .btn-danger {
@@ -741,7 +742,8 @@
                 </div>
                  <div class="modal-footer">
     <button type="button" id="clearCartBtn" class="btn btn-danger">Clear Cart</button>
-    <a href="{{ route('checkout') }}" class="btn btn-primary">Checkout</a>
+   <button type="button" id="checkoutBtn" class="btn btn-primary">Checkout</button>
+
 </div>
             </div>
         </div>
@@ -908,6 +910,31 @@
             // Expose addToCart globally to use from product pages/buttons
             window.addToCart = addToCart;
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+    // ...existing cart code...
+
+    const checkoutBtn = document.getElementById('checkoutBtn');
+
+    checkoutBtn.addEventListener('click', function () {
+        // Make an AJAX call to check if user is logged in
+        fetch('/api/check-auth', { credentials: 'same-origin' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.authenticated) {
+                    // redirect to checkout
+                    window.location.href = '{{ route('checkout') }}';
+                } else {
+                    // redirect to login page
+                    window.location.href = '{{ route('login') }}';
+                }
+            }).catch(() => {
+                // fallback to login page on error
+                window.location.href = '{{ route('login') }}';
+            });
+    });
+});
+
     </script>
     @yield('scripts')
 

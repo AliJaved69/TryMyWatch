@@ -55,7 +55,7 @@
             <div id="card-errors" role="alert" style="color: red; margin-bottom: 15px;"></div>
         </div>
 
-        <button id="submitBtn" class="btn btn-primary" type="submit">Place Order</button>
+        <button id="submitBtn" class="btn btn-primary-custom px-4 py-2 mt-2" type="submit">Place Order</button>
     </form>
 </div>
 @endsection
@@ -63,14 +63,12 @@
 @section('scripts')
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    const stripe = Stripe("{{ env('STRIPE_KEY') }}");
+    const stripe = Stripe("{{ config('services.stripe.key') }}");
     const elements = stripe.elements();
 
-    // Create an instance of the card Element
     const card = elements.create('card');
     card.mount('#card-element');
 
-    // Show/hide card element based on payment method selection
     const cardContainer = document.getElementById('card-element-container');
     const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
 
@@ -87,9 +85,8 @@
         radio.addEventListener('change', toggleCardElement);
     });
 
-    toggleCardElement(); // initialize on page load
+    toggleCardElement();
 
-    // Handle real-time validation errors from the card Element
     card.on('change', function(event) {
         const displayError = document.getElementById('card-errors');
         if (event.error) {
@@ -103,7 +100,7 @@
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        // Validate cart is not empty and populate hidden inputs
+        // Example cart data - replace with your cart logic
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         if(cart.length === 0){
             alert('Your cart is empty! Please add products before placing an order.');
@@ -119,10 +116,8 @@
         const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
 
         if(selectedPaymentMethod === 'card') {
-            // Disable submit button to prevent multiple clicks
             document.getElementById('submitBtn').disabled = true;
 
-            // Create payment method & tokenize card
             const { paymentMethod, error } = await stripe.createPaymentMethod({
                 type: 'card',
                 card: card,
@@ -133,21 +128,18 @@
             });
 
             if (error) {
-                // Show error and re-enable button
                 document.getElementById('card-errors').textContent = error.message;
                 document.getElementById('submitBtn').disabled = false;
             } else {
-                // Append paymentMethod.id to form and submit
                 const hiddenInput = document.createElement('input');
-                hiddenInput.setAttribute('type', 'hidden');
-                hiddenInput.setAttribute('name', 'payment_method_id');
-                hiddenInput.setAttribute('value', paymentMethod.id);
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'payment_method_id';
+                hiddenInput.value = paymentMethod.id;
                 form.appendChild(hiddenInput);
 
                 form.submit();
             }
         } else {
-            // For COD, just submit form without Stripe payment method
             form.submit();
         }
     });
