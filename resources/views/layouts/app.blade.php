@@ -11,7 +11,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
 
     <style>
         /* === YOUR FULL EXISTING CSS === */
@@ -305,6 +306,7 @@
 
         /* Animations */
         @keyframes float {
+
             0%,
             100% {
                 transform: translateY(0);
@@ -673,6 +675,7 @@
         }
 
         @media (max-width: 576px) {
+
             .btn-primary-custom,
             .btn-outline-custom {
                 width: 100%;
@@ -690,10 +693,12 @@
                 opacity: 0;
                 transform: scale(0.8) rotate(-180deg);
             }
+
             70% {
                 opacity: 1;
                 transform: scale(1.05) rotate(10deg);
             }
+
             100% {
                 opacity: 1;
                 transform: scale(1) rotate(0deg);
@@ -710,6 +715,7 @@
                 opacity: 0;
                 transform: rotate(180deg);
             }
+
             100% {
                 opacity: 1;
                 transform: rotate(0deg);
@@ -740,11 +746,11 @@
                         <p>Your cart is empty.</p>
                     </div>
                 </div>
-                 <div class="modal-footer">
-    <button type="button" id="clearCartBtn" class="btn btn-danger">Clear Cart</button>
-   <button type="button" id="checkoutBtn" class="btn btn-primary">Checkout</button>
+                <div class="modal-footer">
+                    <button type="button" id="clearCartBtn" class="btn btn-danger">Clear Cart</button>
+<button type="button" id="checkoutBtn" class="btn btn-primary">Checkout</button>
 
-</div>
+                </div>
             </div>
         </div>
     </div>
@@ -758,17 +764,17 @@
         function animateWatchOnLoad() {
             const watchDial = document.querySelector('.watch-dial');
             const watchHands = document.querySelector('.watch-hands');
-            
+
             // Reset and animate the watch dial
             if (watchDial) {
                 watchDial.classList.add('watch-dial-reload');
             }
-            
+
             // Reset and animate the watch hands
             if (watchHands) {
                 watchHands.classList.add('watch-hands-reload');
             }
-            
+
             // Remove animation classes after animation completes
             setTimeout(() => {
                 if (watchDial) {
@@ -804,10 +810,10 @@
         }
 
         // Initialize everything on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Start the reload animation
             animateWatchOnLoad();
-            
+
             // Start the clock
             setClock();
             setInterval(setClock, 1000);
@@ -911,29 +917,20 @@
             window.addToCart = addToCart;
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-    // ...existing cart code...
+       document.addEventListener('DOMContentLoaded', function () {
+    const isLoggedIn = @json(Auth::check());
+    console.log('Is user logged in?', isLoggedIn);
 
     const checkoutBtn = document.getElementById('checkoutBtn');
 
     checkoutBtn.addEventListener('click', function () {
-        // Make an AJAX call to check if user is logged in
-        fetch('/api/check-auth', { credentials: 'same-origin' })
-            .then(res => res.json())
-            .then(data => {
-                if (data.authenticated) {
-                    // redirect to checkout
-                    window.location.href = '{{ route('checkout') }}';
-                } else {
-                    // redirect to login page
-                    window.location.href = '{{ route('login') }}';
-                }
-            }).catch(() => {
-                // fallback to login page on error
-                window.location.href = '{{ route('login') }}';
-            });
+      if (isLoggedIn) {
+        window.location.href = '{{ route('checkout') }}';
+      } else {
+        window.location.href = '{{ route('login') }}';
+      }
     });
-});
+  });
 
     </script>
     @yield('scripts')

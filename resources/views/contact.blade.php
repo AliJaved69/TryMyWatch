@@ -3,59 +3,84 @@
 @section('title', 'Contact')
 
 @section('content')
-<div class="container py-5" id="contact" style="max-width: 700px; margin-top: 40px;">
 
-    <h1 class="text-white mb-4">Contact Us</h1>
+<div class="container" style="margin-top: 80px;">
 
-    <form method="POST" action="{{ route('contact.send') }}">
-        @csrf
+    <div class="row justify-content-center">
 
-         {{-- Optional Order ID --}}
-        <label class="text-white mb-1 fw-semibold">Order ID (if applicable)</label>
-        <input type="text" name="order_id" class="form-control mb-4" placeholder="Enter your order ID if you have one">
+        <div class="col-lg-10">
 
+            <div class="row bg-dark p-5 rounded-4 shadow-lg">
 
-        {{-- Name --}}
-        <label class="text-white mb-1 fw-semibold">Full Name</label>
-        <input 
-            type="text" 
-            name="name" 
-            class="form-control mb-4"
-            style="background:#fff; border-radius:10px; height:40px;"
-            required>
+                {{-- LEFT SIDE CONTENT --}}
+                <div class="col-md-5 mb-4">
+                    <h1 class="text-white fw-bold mb-4">Contact Us</h1>
+                    <p class="text-white-50 mb-3">
+                        Have questions about your order, product, or anything else?
+                        We're here to help and will respond quickly.
+                    </p>
 
-        {{-- Email --}}
-        <label class="text-white mb-1 fw-semibold">Email Address</label>
-        <input 
-            type="email" 
-            name="email" 
-            class="form-control mb-4"
-            style="background:#fff; border-radius:10px; height:40px;"
-            required>
+                    <p class="text-white-50 mb-3">
+                        Please include your Order ID (if you have one)  
+                        so we can assist you faster.
+                    </p>
+                </div>
 
-        {{-- Message --}}
-        <label class="text-white mb-1 fw-semibold">Message</label>
-        <textarea 
-            name="message" 
-            rows="4"
-            class="form-control mb-4"
-            style="background:#fff; border-radius:10px;"
-            required></textarea>
+                {{-- RIGHT SIDE FORM --}}
+                <div class="col-md-7">
 
-        <button 
-            class="btn btn-primary-custom px-4 py-2 mt-2"
-            type="submit">
-            Send Message
-        </button>
+                    <form method="POST" action="{{ route('contact.send') }}">
+                        @csrf
 
-    </form>
+                        {{-- Order ID --}}
+                        <div class="mb-3">
+                            <label class="text-white fw-semibold">Order ID (if applicable)</label>
+                            <input type="text" name="order_id" class="form-control rounded-3"
+                                   placeholder="Enter your order ID">
+                        </div>
+
+                        {{-- Name --}}
+                        <div class="mb-3">
+                            <label class="text-white fw-semibold">Full Name</label>
+                            <input type="text" name="name" class="form-control rounded-3"
+                                   style="background:#fff;" required>
+                        </div>
+
+                        {{-- Email --}}
+                        <div class="mb-3">
+                            <label class="text-white fw-semibold">Email Address</label>
+                            <input type="email" name="email" class="form-control rounded-3"
+                                   style="background:#fff;" required>
+                        </div>
+
+                        {{-- Message --}}
+                        <div class="mb-3">
+                            <label class="text-white fw-semibold">Message</label>
+                            <textarea name="message" rows="4"
+                                      class="form-control rounded-3"
+                                      style="background:#fff;" required></textarea>
+                        </div>
+
+                        <button class="btn btn-primary-custom px-4 py-2 rounded-pill mt-2">
+                            Send Message
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
 @if(session('success'))
-    <script>
-        alert("{{ session('success') }}");
-    </script>
+<script>
+    alert("{{ session('success') }}");
+</script>
 @endif
 
 @endsection

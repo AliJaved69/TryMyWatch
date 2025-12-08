@@ -58,14 +58,7 @@
     <li class="nav-item ms-3">
         <a href="{{ route('login') }}" class="btn btn-primary-custom">Login</a>
     </li>
-
-    <li class="nav-item ms-2">
-        <a href="{{ route('signup') }}" class="btn btn-primary-custom">Signup</a>
-    </li>
 @endguest
-
-
-
 
                 @auth
                     <!-- Logout -->
@@ -79,7 +72,7 @@
 
             </ul>
 
-            <a href="{{ url('/shop') }}" class="btn btn-primary-custom ms-lg-2">Try It Now</a>
+            <!-- <a href="{{ url('/shop') }}" class="btn btn-primary-custom ms-lg-2">Try It Now</a> -->
         </div>
     </div>
 </nav>
