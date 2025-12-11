@@ -49,7 +49,7 @@
         <!-- Stripe Card Element Container -->
         <div id="card-element-container">
             <label for="card-element" class="form-label">Credit or debit card</label>
-            <div id="card-element" class="mb-3" style="padding: 12px; border: 1px solid #ced4da; border-radius: 4px;"></div>
+            <div id="card-element" class="bg-white mb-3" style="padding: 12px; border: 1px solid #ced4da; border-radius: 4px;"></div>
 
             <!-- Display error message to user -->
             <div id="card-errors" role="alert" style="color: red; margin-bottom: 15px;"></div>
@@ -62,7 +62,33 @@
 
 @section('scripts')
 <script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
 <script>
+Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: "{{ session('success') }}",
+});
+</script>
+@endif
+
+@if(session('error'))
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Error!',
+    text: "{{ session('error') }}",
+});
+</script>
+@endif
+
+<script>
+
+    // 🔍 DEBUG: Check if Laravel is sending the Stripe key
+    console.log("Stripe key from Laravel:", "{{ config('services.stripe.key') }}");
+
     const stripe = Stripe("{{ config('services.stripe.key') }}");
     const elements = stripe.elements();
 
@@ -100,12 +126,12 @@
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        // Example cart data - replace with your cart logic
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         if(cart.length === 0){
             alert('Your cart is empty! Please add products before placing an order.');
             return;
         }
+
         let totalPrice = 0;
         cart.forEach(item => {
             totalPrice += item.price * item.quantity;
@@ -145,3 +171,4 @@
     });
 </script>
 @endsection
+

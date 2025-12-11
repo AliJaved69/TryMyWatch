@@ -29,39 +29,54 @@ class CheckoutController extends Controller
             'payment_method_id' => 'nullable|string'
         ]);
 
-        // ---------- CARD PAYMENT ----------
         if ($validated['payment_method'] === 'card') {
-            
-            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
+            Stripe::setApiKey(config('services.stripe.secret'));
 
             try {
                 $payment = PaymentIntent::create([
-                    'amount' => intval($validated['total_price'] * 100),
+                    'amount' => intval($validated['total_price'] * 100),  // amount in cents
                     'currency' => 'usd',
                     'payment_method' => $validated['payment_method_id'],
-                    'confirm' => true
+                    'confirm' => true,
+                    'automatic_payment_methods' => [
+                        'enabled' => true,
+                        'allow_redirects' => 'never',
+                    ],
                 ]);
 
                 if ($payment->status !== "succeeded") {
-                    return back()->withErrors("Payment failed. Try again.");
+                    return redirect()->back()->with('error', 'Payment failed. Please try again.');
                 }
 
             } catch (\Exception $e) {
-                return back()->withErrors("Payment Error: ".$e->getMessage());
+                return redirect()->back()->with('error', 'Payment Error: ' . $e->getMessage());
             }
         }
 
-        // ---------- SAVE ORDER ----------
-        $order = Order::create($validated);
+        // Save order data
+        $order = Order::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'items' => $validated['items'],
+            'total_price' => $validated['total_price'],
+            'payment_method' => $validated['payment_method'],
+        ]);
 
+        // Send confirmation email
         Mail::to($validated['email'])->send(new OrderConfirmationMail($order));
 
-        return redirect()->route("checkout.success")->with("message", "Order placed successfully.");
+        // Redirect to success page with message
+        if ($validated['payment_method'] === 'card') {
+            return redirect()->route('checkout.success')->with('success', 'Payment successful! Your order has been placed.');
+        } else {
+            return redirect()->route('checkout.success')->with('success', 'Order placed successfully with Cash on Delivery!');
+        }
     }
 
     public function success()
     {
-        return view("checkout_success");
+        return view('checkout_success');
     }
 }

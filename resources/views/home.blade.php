@@ -20,10 +20,10 @@
                     <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Top watch brands collection</li>
                     <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Seamless camera integration</li>
                 </ul>
-                <div class="d-flex flex-wrap gap-3 button-group">
+                <!-- <div class="d-flex flex-wrap gap-3 button-group">
                     <a href="{{ url('/shop') }}" class="btn btn-primary-custom btn-glow">Try It Now</a>
                     <a href="#features" class="btn btn-outline-custom btn-slide">Learn More</a>
-                </div>
+                </div> -->
             </div>
 
             <!-- Right content: Enhanced Watch animation -->
