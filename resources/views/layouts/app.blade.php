@@ -32,6 +32,354 @@
             overflow-x: hidden;
         }
 
+        /* === ENHANCED ANIMATIONS SECTION === */
+
+        /* Floating animation for feature cards */
+        @keyframes float-card {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .feature-card:hover {
+            animation: float-card 3s ease-in-out infinite;
+        }
+
+        /* Pulse animation for CTA buttons */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(201, 169, 110, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(201, 169, 110, 0.6);
+            }
+        }
+
+        .btn-primary-custom {
+            animation: pulse-glow 2s infinite;
+        }
+
+        .btn-primary-custom:hover {
+            animation: none;
+        }
+
+        /* Shimmer effect for text */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* Rotating watch bezel */
+        @keyframes rotate-bezel {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .watch-bezel {
+            animation: rotate-bezel 60s linear infinite;
+        }
+
+        .watch-container:hover .watch-bezel {
+            animation-duration: 30s;
+        }
+
+        /* Bounce animation for indicators */
+        @keyframes bounce-indicator {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .watch-indicator:nth-child(3n) {
+            animation: bounce-indicator 2s ease-in-out infinite;
+        }
+
+        .watch-indicator:nth-child(3n+1) {
+            animation: bounce-indicator 2s ease-in-out infinite 0.5s;
+        }
+
+        .watch-indicator:nth-child(3n+2) {
+            animation: bounce-indicator 2s ease-in-out infinite 1s;
+        }
+
+        /* Wave animation for AR overlay */
+        @keyframes wave {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-10px) scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        .ar-text i {
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        /* Slide-in animation for page load */
+        @keyframes slide-in-bg {
+            from {
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            }
+            to {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            z-index: -1;
+            animation: slide-in-bg 1.5s ease-out forwards;
+        }
+
+        /* Typewriter effect for hero text */
+        @keyframes typewriter {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: var(--accent);
+            }
+        }
+
+        .hero-title {
+            overflow: hidden;
+            border-right: 2px solid var(--accent);
+            white-space: nowrap;
+            animation: 
+                typewriter 3.5s steps(40, end),
+                blink-caret 0.75s step-end infinite;
+        }
+
+        /* Fade-in stagger for nav items */
+        .nav-item {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .nav-item:nth-child(1) { animation-delay: 0.2s; }
+        .nav-item:nth-child(2) { animation-delay: 0.3s; }
+        .nav-item:nth-child(3) { animation-delay: 0.4s; }
+        .nav-item:nth-child(4) { animation-delay: 0.5s; }
+        .nav-item:nth-child(5) { animation-delay: 0.6s; }
+
+        /* Hover ripple effect for buttons */
+        .btn-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-ripple:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Glitch effect for watch brand */
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        .watch-brand {
+            animation: glitch 5s infinite;
+        }
+
+        /* Breathing animation for watch container */
+        @keyframes breathing {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .watch-container {
+            animation: 
+                float 6s ease-in-out infinite,
+                breathing 8s ease-in-out infinite;
+        }
+
+        /* Enhanced modal entrance */
+        @keyframes modal-entrance {
+            0% {
+                opacity: 0;
+                transform: scale(0.7) rotateX(-30deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotateX(0);
+            }
+        }
+
+        .modal-content {
+            animation: modal-entrance 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Staggered fade-in for feature list */
+        .feature-list li {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInLeft 0.5s ease-out forwards;
+        }
+
+        .feature-list li:nth-child(1) { animation-delay: 0.3s; }
+        .feature-list li:nth-child(2) { animation-delay: 0.5s; }
+        .feature-list li:nth-child(3) { animation-delay: 0.7s; }
+
+        /* Neon border animation */
+        @keyframes neon-border {
+            0%, 100% {
+                box-shadow: 
+                    0 0 5px var(--accent),
+                    inset 0 0 5px var(--accent);
+            }
+            50% {
+                box-shadow: 
+                    0 0 20px var(--accent),
+                    inset 0 0 10px var(--accent);
+            }
+        }
+
+        .watch-face {
+            animation: neon-border 4s ease-in-out infinite;
+        }
+
+        /* Shake animation for cart notification */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        #cartCount {
+            animation: shake 0.5s;
+        }
+
+        /* Loading spinner for async operations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--accent);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Particle animation */
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: float-particle linear infinite;
+        }
+
         /* Header Styles */
         .navbar {
             background: rgba(15, 15, 15, 0.95) !important;
@@ -306,12 +654,9 @@
 
         /* Animations */
         @keyframes float {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0);
             }
-
             50% {
                 transform: translateY(-15px);
             }
@@ -355,7 +700,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -367,7 +711,6 @@
                 opacity: 0;
                 transform: translateX(-20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -379,7 +722,6 @@
                 opacity: 0;
                 transform: translateY(15px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -675,7 +1017,6 @@
         }
 
         @media (max-width: 576px) {
-
             .btn-primary-custom,
             .btn-outline-custom {
                 width: 100%;
@@ -693,12 +1034,10 @@
                 opacity: 0;
                 transform: scale(0.8) rotate(-180deg);
             }
-
             70% {
                 opacity: 1;
                 transform: scale(1.05) rotate(10deg);
             }
-
             100% {
                 opacity: 1;
                 transform: scale(1) rotate(0deg);
@@ -715,7 +1054,6 @@
                 opacity: 0;
                 transform: rotate(180deg);
             }
-
             100% {
                 opacity: 1;
                 transform: rotate(0deg);
@@ -748,8 +1086,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="clearCartBtn" class="btn btn-danger">Clear Cart</button>
-<button type="button" id="checkoutBtn" class="btn btn-primary">Checkout</button>
-
+                    <button type="button" id="checkoutBtn" class="btn btn-primary">Checkout</button>
                 </div>
             </div>
         </div>
@@ -786,6 +1123,41 @@
             }, 2000);
         }
 
+        // === CREATE PARTICLE EFFECT ===
+        function createParticles() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles';
+            document.body.appendChild(particlesContainer);
+
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size
+                const size = Math.random() * 3 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                // Random opacity
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                // Random animation duration
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random animation delay
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
         // === EXISTING WATCH HANDS ANIMATION ===
         const hourHand = document.querySelector('.hour-hand');
         const minuteHand = document.querySelector('.minute-hand');
@@ -809,14 +1181,103 @@
                 hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
         }
 
-        // Initialize everything on page load
+        // === ADD RIPPLE EFFECT TO BUTTONS ===
+        function addRippleEffect() {
+            const buttons = document.querySelectorAll('.btn-primary-custom, .btn-outline-custom');
+            
+            buttons.forEach(button => {
+                button.classList.add('btn-ripple');
+                
+                button.addEventListener('click', function(e) {
+                    const ripple = this.querySelector('.btn-ripple::after');
+                    if (ripple) {
+                        ripple.style.width = '300px';
+                        ripple.style.height = '300px';
+                        setTimeout(() => {
+                            ripple.style.width = '0';
+                            ripple.style.height = '0';
+                        }, 600);
+                    }
+                });
+            });
+        }
+
+        // === SHAKE CART WHEN ITEM ADDED ===
+        function shakeCart() {
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) {
+                cartCount.style.animation = 'none';
+                setTimeout(() => {
+                    cartCount.style.animation = 'shake 0.5s';
+                }, 10);
+            }
+        }
+
+        // === PARALLAX EFFECT ON SCROLL ===
+        function initParallax() {
+            const watchContainer = document.querySelector('.watch-container');
+            
+            window.addEventListener('scroll', () => {
+                if (watchContainer) {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * -0.5;
+                    watchContainer.style.transform = `translateY(${rate}px)`;
+                }
+            });
+        }
+
+        // === ANIMATE FEATURE CARDS ON SCROLL ===
+        function animateOnScroll() {
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    } else {
+                        entry.target.style.animationPlayState = 'paused';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            featureCards.forEach(card => {
+                card.style.animationPlayState = 'paused';
+                observer.observe(card);
+            });
+        }
+
+        // === INITIALIZE EVERYTHING ON PAGE LOAD ===
         document.addEventListener('DOMContentLoaded', function () {
             // Start the reload animation
             animateWatchOnLoad();
-
+            
+            // Create particle background
+            createParticles();
+            
             // Start the clock
             setClock();
             setInterval(setClock, 1000);
+            
+            // Add ripple effects to buttons
+            addRippleEffect();
+            
+            // Initialize parallax effect
+            initParallax();
+            
+            // Initialize scroll animations
+            animateOnScroll();
+            
+            // Add hover effects to watch
+            const watchContainer = document.querySelector('.watch-container');
+            if (watchContainer) {
+                watchContainer.addEventListener('mouseenter', () => {
+                    watchContainer.style.animationDuration = '4s, 4s';
+                });
+                
+                watchContainer.addEventListener('mouseleave', () => {
+                    watchContainer.style.animationDuration = '6s, 8s';
+                });
+            }
         });
 
         // === CART FUNCTIONALITY ===
@@ -840,6 +1301,11 @@
                 if (cartCount) {
                     cartCount.textContent = totalCount;
                     cartCount.style.display = totalCount > 0 ? 'inline-block' : 'none';
+                    
+                    // Shake animation when cart updates
+                    if (totalCount > 0) {
+                        shakeCart();
+                    }
                 }
             }
 
@@ -917,21 +1383,52 @@
             window.addToCart = addToCart;
         });
 
-       document.addEventListener('DOMContentLoaded', function () {
-    const isLoggedIn = @json(Auth::check());
-    console.log('Is user logged in?', isLoggedIn);
+        document.addEventListener('DOMContentLoaded', function () {
+            const isLoggedIn = @json(Auth::check());
+            console.log('Is user logged in?', isLoggedIn);
 
-    const checkoutBtn = document.getElementById('checkoutBtn');
+            const checkoutBtn = document.getElementById('checkoutBtn');
 
-    checkoutBtn.addEventListener('click', function () {
-      if (isLoggedIn) {
-        window.location.href = '{{ route('checkout') }}';
-      } else {
-        window.location.href = '{{ route('login') }}';
-      }
-    });
-  });
+            checkoutBtn.addEventListener('click', function () {
+                if (isLoggedIn) {
+                    window.location.href = '{{ route('checkout') }}';
+                } else {
+                    window.location.href = '{{ route('login') }}';
+                }
+            });
+        });
 
+        // === SMOOTH SCROLLING FOR ANCHOR LINKS ===
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // === LOADING SPINNER FOR BUTTONS ===
+        function showLoading(button) {
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner"></span> Loading...';
+            button.disabled = true;
+            
+            return () => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            };
+        }
+
+        // Expose utility functions
+        window.showLoading = showLoading;
     </script>
     @yield('scripts')
 
