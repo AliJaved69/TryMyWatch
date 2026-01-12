@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Watch;
 
 class PageController extends Controller
 {
     public function home()
     {
-        return view('home');
+        $watch = Watch::findOrFail(1);
+        return view('home', compact('watch'));
     }
 
     public function about()

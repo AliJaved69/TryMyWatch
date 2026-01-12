@@ -19,6 +19,7 @@
                     <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Photorealistic virtual try-on with 98% accuracy</li>
                     <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Curated collection of 50+ luxury watch brands</li>
                     <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>AI-powered size & fit recommendations</li>
+                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i><a href="{{ route('watch.try', $watch->id) }}" class="text-decoration-none">Try Now</a></li>   
                 </ul>
                 <!-- <div class="d-flex flex-wrap gap-3 button-group">
                     <a href="{{ url('/shop') }}" class="btn btn-primary-custom btn-glow">Try It Now</a>

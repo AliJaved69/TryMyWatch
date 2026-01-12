@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WatchController;
 
 
 use Stripe\Stripe;
@@ -45,3 +46,8 @@ Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('c
 
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact.form');
 Route::post('/contact', [ContactController::class, 'sendMessage'])->name('contact.send');
+
+// Watch try-on feature
+Route::get('/watch/{id}/try', [WatchController::class, 'try'])->name('watch.try');
+Route::get('/watch/form', [WatchController::class, 'showForm'])->name('watch.form');  
+Route::post('/watch/upload', [WatchController::class, 'store'])->name('watch.store');
