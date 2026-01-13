@@ -7,7 +7,7 @@ class PageController extends Controller
 {
     public function home()
     {
-        $watch = Watch::findOrFail(1);
+        $watch = Watch::findOrFail(3);
         return view('home', compact('watch'));
     }
 
