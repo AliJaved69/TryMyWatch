@@ -8,7 +8,7 @@
     <!-- Header Section -->
     <div class="text-center mb-5">
         <h1 class="fw-bold text-white">
-            About <span class="text-primary">TryMyWatch</span>
+            About <span class="text-accent">TryMyWatch</span>
         </h1>
         <p class="text-secondary mt-2" style="max-width: 650px; margin: auto; font-size: 17px;">
             A next-generation watch shopping experience powered by AI & AR technology.
@@ -20,9 +20,9 @@
 
         <!-- Intro Card -->
         <div class="col-lg-6">
-            <div class="card bg-dark border-0 shadow-lg h-100">
+            <div class="card border-0 shadow-lg h-100" style="background-color: #1a1a1a;">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold text-primary mb-3">Who We Are</h4>
+                    <h4 class="fw-bold text-accent mb-3">Who We Are</h4>
                     <p class="text-secondary" style="line-height: 1.8;">
                         TryMyWatch is an innovative e-commerce platform that transforms
                         how people shop for watches online. Our FYP focuses on merging
@@ -35,9 +35,9 @@
 
         <!-- Technology Description -->
         <div class="col-lg-6">
-            <div class="card bg-dark border-0 shadow-lg h-100">
+            <div class="card border-0 shadow-lg h-100" style="background-color: #1a1a1a;">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold text-primary mb-3">What We Do</h4>
+                    <h4 class="fw-bold text-accent mb-3">What We Do</h4>
                     <ul class="text-secondary" style="line-height: 1.8;">
                         <li><strong>AR Wrist Preview:</strong> Try watches virtually on your wrist before buying.</li>
                         <li><strong>AI Smart Detection:</strong> Automatic wrist detection + watch placement.</li>
@@ -50,9 +50,9 @@
     </div>
 
     <!-- Technology Section -->
-    <div class="card bg-dark border-0 shadow-lg mt-5">
+    <div class="card border-0 shadow-lg mt-5" style="background-color: #1a1a1a;">
         <div class="card-body p-4">
-            <h3 class="fw-bold text-primary mb-3">Our Technology</h3>
+            <h3 class="fw-bold text-accent mb-3">Our Technology</h3>
             <p class="text-secondary mb-3" style="font-size: 16px;">
                 TryMyWatch integrates three powerful AI-driven models:
             </p>

@@ -1432,6 +1432,8 @@
     </script>
     @yield('scripts')
 
+    <!-- Chatbot Widget -->
+    @include('partials.chatbot')
 </body>
 
 </html>

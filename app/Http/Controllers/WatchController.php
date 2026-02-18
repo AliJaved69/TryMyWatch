@@ -13,7 +13,7 @@ class WatchController extends Controller
         return view('watch.form');
     }
 
-    public function try($id)
+    public function try($id=3)
     {
         $watch = Watch::findOrFail($id);
         return view('watch.try', compact('watch'));
@@ -22,13 +22,13 @@ class WatchController extends Controller
     public function store(Request $request)
     {
         // 1. VALIDATION
-        // We removed 'mimes:glb' because it often fails on Windows. 
-        // We rely on 'file' and extension checking instead.
+        // We use 'mimes:glb' for security, assuming the production environment (Linux)
+        // has the php-fileinfo extension enabled.
         $request->validate([
             'name'      => 'required|string|max:255',
             'price'     => 'required|numeric',
             'image'     => 'required|image|max:10240', // 10MB
-            'glb_model' => 'required|file|max:102400'   // 100MB
+            'glb_model' => 'required|file|mimes:glb|max:102400'   // 100MB
         ]);
 
         // 2. IMAGE UPLOAD
@@ -40,11 +40,6 @@ class WatchController extends Controller
         // Clean filename: "Apple Watch Ultra.glb" -> "apple_watch_ultra.glb"
         $cleanName = Str::slug(pathinfo($glbFile->getClientOriginalName(), PATHINFO_FILENAME));
         $fileName  = time() . '_' . $cleanName . '.glb';
-
-        // Check Extension Manually
-        if (strtolower($glbFile->getClientOriginalExtension()) !== 'glb') {
-            return back()->withErrors(['glb_model' => 'The file must be a .glb file.']);
-        }
 
         // Store file
         $glbPath = $glbFile->storeAs('watches', $fileName, 'public');

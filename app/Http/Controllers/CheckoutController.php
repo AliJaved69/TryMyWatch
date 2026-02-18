@@ -69,14 +69,21 @@ class CheckoutController extends Controller
 
         // Redirect to success page with message
         if ($validated['payment_method'] === 'card') {
-            return redirect()->route('checkout.success')->with('success', 'Payment successful! Your order has been placed.');
+            return redirect()->route('checkout.success', ['order' => $order->id])->with('success', 'Payment successful! Your order has been placed.');
         } else {
-            return redirect()->route('checkout.success')->with('success', 'Order placed successfully with Cash on Delivery!');
+            return redirect()->route('checkout.success', ['order' => $order->id])->with('success', 'Order placed successfully with Cash on Delivery!');
         }
     }
 
-    public function success()
+    public function success(Request $request)
     {
-        return view('checkout_success');
+        $orderId = $request->query('order');
+        $order = Order::find($orderId);
+        
+        if (!$order) {
+            return redirect()->route('home')->with('error', 'Order not found.');
+        }
+        
+        return view('checkout_success', compact('order'));
     }
 }

@@ -10,85 +10,14 @@ class ProductController extends Controller
 {
     public function shop()
     {
-        try {
-            $products = Cache::remember('watches_products', 3600, function () {
-                Log::info('Fetching all products from DummyJSON API...');
-                $response = Http::timeout(30)->get('https://dummyjson.com/products?limit=100');
-
-                if ($response->failed()) {
-                    Log::error('Failed to fetch all products', ['status' => $response->status()]);
-                    return collect();
-                }
-
-                $data = $response->json();
-
-                if (!isset($data['products']) || !is_array($data['products'])) {
-                    Log::warning('API response missing products key or products is not array.');
-                    return collect();
-                }
-
-                $allProducts = collect($data['products']);
-                Log::info('Total products fetched: ' . $allProducts->count());
-
-                // Filter products by 'watch' keyword in title or category (case insensitive)
-                $watches = $allProducts->filter(function ($product) {
-                    $title = strtolower($product['title'] ?? '');
-                    $category = strtolower($product['category'] ?? '');
-                    return str_contains($title, 'watch') || str_contains($category, 'watch');
-                });
-
-                Log::info('Watches filtered count: ' . $watches->count());
-
-                $validProducts = collect();
-
-                foreach ($watches as $product) {
-                    $validated = $this->validateAndTransformProduct($product);
-                    if ($validated) {
-                        $validProducts->push($validated);
-                    }
-                }
-
-                Log::info('Valid products count after validation: ' . $validProducts->count());
-
-                // Return up to 50 watches
-                return $validProducts->take(50);
-            });
-
-            return view('shop', ['products' => $products]);
-
-        } catch (\Exception $e) {
-            Log::error('Error in shop method: ' . $e->getMessage());
-            return view('shop', ['products' => collect()]);
-        }
+        $products = \App\Models\Product::limit(50)->get();
+        return view('shop', ['products' => $products]);
     }
 
     public function product($id)
     {
-        try {
-            if (!is_numeric($id) || $id <= 0) {
-                abort(404, "Invalid product ID");
-            }
-
-            $product = Cache::remember("product_{$id}", 3600, function () use ($id) {
-                $response = Http::timeout(30)->get("https://dummyjson.com/products/{$id}");
-
-                if ($response->failed()) {
-                    return null;
-                }
-
-                return $this->validateAndTransformProduct($response->json());
-            });
-
-            if (!$product) {
-                abort(404, "Product not found");
-            }
-
-            return view('product', ['product' => $product]);
-
-        } catch (\Exception $e) {
-            Log::error('Error in product method: ' . $e->getMessage());
-            abort(404, "Product not found");
-        }
+        $product = \App\Models\Product::findOrFail($id);
+        return view('product', ['product' => $product]);
     }
 
     private function validateAndTransformProduct($productData)
