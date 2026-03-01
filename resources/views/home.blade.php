@@ -3,62 +3,163 @@
 @section('title', 'Home')
 
 @section('content')
-<section class="hero">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Left content: Headline + Description + Buttons -->
-            <div class="col-lg-6" style="margin-top: 30px;">
-                <h1 class="hero-title animate-fade-in">
-                    Discover the Future of Watch Shopping with 
-                    <span class="text-accent gradient-text">AI-Powered AR</span>
-                </h1>
-                <p class="hero-description text-secondary-custom slide-in-left">
-                    Experience luxury watch shopping like never before. Our cutting-edge AI technology combined with augmented reality lets you try on premium watches virtually, seeing exactly how they look on your wrist in real-time from the comfort of your home.
-                </p>
-                <ul class="mb-4 text-secondary-custom feature-list" style="list-style: none; padding-left: 0;">
-                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Photorealistic virtual try-on with 98% accuracy</li>
-                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>Curated collection of 50+ luxury watch brands</li>
-                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i>AI-powered size & fit recommendations</li>
-                    <li class="feature-item"><i class="fas fa-check-circle text-accent me-2"></i><a href="{{ route('watch.try', $watch->id) }}" class="text-decoration-none">Try Now</a></li>   
-                </ul>
-                <!-- <div class="d-flex flex-wrap gap-3 button-group">
-                    <a href="{{ url('/shop') }}" class="btn btn-primary-custom btn-glow">Try It Now</a>
-                    <a href="#features" class="btn btn-outline-custom btn-slide">Learn More</a>
-                </div> -->
-            </div>
-
-            <!-- Right content: Enhanced Watch animation -->
-            <div class="col-lg-6 text-center">
-                <div class="watch-container mx-auto" style="max-width: 320px;">
-                    <div class="watch-face">
-                        <div class="watch-dial">
-                            <div class="watch-brand">TRYMYWATCH</div>
-                            <div class="watch-indicators">
-                                @for($i = 1; $i <= 12; $i++)
-                                    <div class="watch-indicator indicator-{{ $i }}"></div>
-                                @endfor
-                            </div>
-                        </div>
-                        <div class="watch-hands">
-                            <div class="hand hour-hand"></div>
-                            <div class="hand minute-hand"></div>
-                            <div class="hand second-hand"></div>
-                        </div>
-                        <div class="watch-crown"></div>
-                        <div class="watch-bezel"></div>
+<!-- Hero Slider Section -->
+<section class="hero-slider-section">
+    <div class="swiper hero-swiper">
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide hero-slide" style="background: linear-gradient(rgba(11, 12, 16, 0.7), rgba(11, 12, 16, 0.7)), url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&q=80'); background-size: cover; background-position: center;">
+                <div class="container h-100 d-flex align-items-center">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Timeless <span class="text-accent">Elegance</span></h1>
+                        <p class="hero-subtitle">Discover the curated collection of luxury timepieces.</p>
+                        <a href="{{ url('/shop') }}" class="btn btn-primary-custom">Explore Collection</a>
                     </div>
-                    <div class="watch-glow"></div>
-                    <div class="ar-overlay">
-                        <div class="ar-text">
-                            <i class="fas fa-cube fa-bounce"></i>
-                            AR Try-On Experience
+                </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="swiper-slide hero-slide" style="background: linear-gradient(rgba(11, 12, 16, 0.7), rgba(11, 12, 16, 0.7)), url('https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&q=80'); background-size: cover; background-position: center;">
+                <div class="container h-100 d-flex align-items-center">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Virtual <span class="text-accent">Try-On</span></h1>
+                        <p class="hero-subtitle">Experience our AI-powered AR technology today.</p>
+                        <a href="{{ url('/shop') }}" class="btn btn-primary-custom">Try it Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+
+<!-- Luxury Introduction Section -->
+<section class="luxury-intro-section py-5">
+    <div class="container">
+        <div class="glass-card p-5 animate-fade-in shadow-lg">
+            <div class="row align-items-center">
+                <!-- Content (Left) -->
+                <div class="col-lg-7 text-start">
+                    <h2 class="section-title gradient-text mb-4 text-start">A New Vision in Luxury</h2>
+                    <p class="lead text-silver mb-4 pe-lg-5">
+                        At TryMyWatch, we bridge the gap between digital convenience and the tactile allure of fine watchmaking. Our "New Idea" is simple yet revolutionary: **Real-time AI wrist synthesis**.
+                    </p>
+                    <p class="text-secondary-custom mb-5 pe-lg-5">
+                        Gone are the days of guessing. With our advanced AR models and newly launched **AI Static Try-On**, you can instantly see a variety of premium watches rendered with photorealistic accuracy, lighting, and fit on your own wrist.
+                    </p>
+                    <div class="d-flex justify-content-start gap-4 flex-wrap">
+                        <div class="feature-badge">
+                            <i class="fas fa-microchip mb-2"></i>
+                            <span>AI Powered</span>
                         </div>
+                        <div class="feature-badge">
+                            <i class="fas fa-vr-cardboard mb-2"></i>
+                            <span>AR Experience</span>
+                        </div>
+                        <div class="feature-badge">
+                            <i class="fas fa-fingerprint mb-2"></i>
+                            <span>Personalized</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image (Right) -->
+                <div class="col-lg-5 text-center mt-5 mt-lg-0">
+                    <div class="intro-image-container">
+                        <img src="{{ asset('images/luxury-intro.png') }}" class="img-fluid rounded-4 shadow-accent-glow" alt="Luxury AR Try-On">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+    .hero-slider-section {
+        height: 80vh;
+        margin-top: 70px;
+    }
+    .hero-swiper {
+        width: 100%;
+        height: 100%;
+    }
+    .hero-slide {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    .hero-content {
+        max-width: 600px;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease;
+    }
+    .swiper-slide-active .hero-content {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 1.5rem;
+    }
+    .hero-subtitle {
+        font-size: 1.5rem;
+        color: var(--text);
+        margin-bottom: 2.5rem;
+    }
+    .glass-card {
+        background: rgba(31, 40, 51, 0.4);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(241, 229, 172, 0.1);
+        border-radius: 30px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .shadow-accent-glow {
+        box-shadow: 0 0 30px rgba(241, 229, 172, 0.2);
+        border: 1px solid rgba(241, 229, 172, 0.1);
+    }
+    .rounded-4 {
+        border-radius: 1.5rem !important;
+    }
+    .feature-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 1rem;
+        border-radius: 15px;
+        background: rgba(241, 229, 172, 0.05);
+        min-width: 120px;
+        transition: transform 0.3s ease;
+    }
+    .feature-badge:hover {
+        transform: translateY(-5px);
+        background: rgba(241, 229, 172, 0.1);
+    }
+    .swiper-pagination-bullet {
+        background: var(--accent) !important;
+    }
+    .swiper-button-next, .swiper-button-prev {
+        color: var(--accent) !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const swiper = new Swiper('.hero-swiper', {
+            loop: true,
+            effect: 'fade',
+            fadeEffect: { crossFade: true },
+            autoplay: { delay: 5000 },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        });
+    });
+</script>
 
 <!-- Features Section -->
 <section id="features" class="py-5 features-section">
@@ -132,6 +233,84 @@
         </div>
     </div>
 </section>
+
+<!-- Dynamic Featured Products Section -->
+<section id="featured-products" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title gradient-text">Featured Timepieces</h2>
+            <p class="text-secondary-custom">Exquisite craftsmanship meet modern technology.</p>
+        </div>
+        <div class="row g-4">
+            @foreach($products as $product)
+                <div class="col-md-4">
+                    <div class="glass-card p-3 h-100 product-card animate-fade-in" style="animation-delay: {{ $loop->index * 0.1 }}s">
+                        <div class="product-img-container mb-3">
+                            <img src="{{ $product->thumbnail }}" alt="{{ $product->title }}" class="img-fluid rounded">
+                            <div class="product-overlay">
+                                <a href="{{ route('product.show', $product->id) }}" class="btn btn-primary-custom btn-sm">View Details</a>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h5 class="text-accent">{{ $product->title }}</h5>
+                            <p class="text-silver mb-3">${{ number_format($product->price, 2) }}</p>
+                            <button 
+                                class="btn btn-outline-custom w-100 add-to-cart-btn"
+                                data-id="{{ $product->id }}" 
+                                data-title="{{ $product->title }}" 
+                                data-price="{{ $product->price }}" 
+                                data-thumbnail="{{ $product->thumbnail }}"
+                            >
+                                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<style>
+    .product-card {
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    }
+    .product-img-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        aspect-ratio: 1/1;
+    }
+    .product-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .product-card:hover .product-img-container img {
+        transform: scale(1.1);
+    }
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(11, 12, 16, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+</style>
 
 <!-- Testimonials Section -->
 <section id="testimonials" class="py-5">

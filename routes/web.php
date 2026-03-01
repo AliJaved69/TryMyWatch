@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 // Public Routes
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::get('/contact', [ContactController::class, 'showForm'])->name('contact.form');
+Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'sendMessage'])->name('contact.send');
 
 // Chatbot Route
@@ -47,6 +47,14 @@ Route::middleware('auth')->group(function () {
 // Virtual Try-On Routes
 Route::get('/product/{id}/ar', [\App\Http\Controllers\VirtualTryOnController::class, 'ar'])->name('product.ar');
 Route::get('/product/{id}/try-on-upload', [\App\Http\Controllers\VirtualTryOnController::class, 'showUploadForm'])->name('product.try-on-upload');
+
+// AI Static Try-On (New)
+Route::prefix('static-try-on')->name('static.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\StaticTryOnController::class, 'index'])->name('index');
+    Route::post('/generate', [\App\Http\Controllers\StaticTryOnController::class, 'generate'])
+        ->middleware('credits')
+        ->name('generate');
+});
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

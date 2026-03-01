@@ -7,8 +7,9 @@ class PageController extends Controller
 {
     public function home()
     {
-        $watch = Watch::findOrFail(3);
-        return view('home', compact('watch'));
+        $watch = Watch::find(3) ?? Watch::first();
+        $products = \App\Models\Product::latest()->take(6)->get();
+        return view('home', compact('watch', 'products'));
     }
 
     public function about()

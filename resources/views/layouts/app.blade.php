@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet" />
@@ -17,12 +19,13 @@
     <style>
         /* === YOUR FULL EXISTING CSS === */
         :root {
-            --primary: #0f0f0f;
-            --secondary: #1a1a1a;
-            --accent: #c9a96e;
-            --accent-light: #e6d2a9;
-            --text: #f5f5f5;
-            --text-secondary: #a0a0a0;
+            --primary: #0B0C10;
+            --secondary: #1F2833;
+            --accent: #F1E5AC;
+            --accent-light: #E0BFB8;
+            --text: #C5C6C7;
+            --text-secondary: #9BA4B4;
+            --highlight: #0F52BA;
         }
 
         body {
@@ -345,39 +348,71 @@
             animation: spin 1s linear infinite;
         }
 
-        /* Particle animation */
-        @keyframes float-particle {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
+        /* === GLOBAL LUXURY UTILITIES === */
+        .glass-card {
+            background: rgba(31, 40, 51, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(241, 229, 172, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+        .glass-card:hover {
+            border-color: rgba(241, 229, 172, 0.3);
+            box-shadow: 0 20px 45px rgba(241, 229, 172, 0.05);
         }
 
-        .particle {
-            position: absolute;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: float-particle linear infinite;
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+
+        .shadow-accent-glow {
+            box-shadow: 0 0 25px rgba(241, 229, 172, 0.15);
+        }
+
+        .premium-input {
+            background: rgba(11, 12, 16, 0.8) !important;
+            border: 1px solid rgba(197, 198, 199, 0.2) !important;
+            color: var(--text) !important;
+            border-radius: 12px !important;
+            padding: 12px 20px !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .premium-input:focus {
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 15px rgba(241, 229, 172, 0.2) !important;
+            outline: none !important;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .text-silver {
+            color: var(--text) !important;
+        }
+
+        .bg-onyx {
+            background-color: var(--primary);
+        }
+
+        .bg-slate {
+            background-color: var(--secondary);
+        }
+
+        /* Responsive Mobile Tweak */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
         }
 
         /* Header Styles */
@@ -1430,6 +1465,8 @@
         // Expose utility functions
         window.showLoading = showLoading;
     </script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     @yield('scripts')
 
     <!-- Chatbot Widget -->

@@ -1,7 +1,15 @@
 <div id="chatbot-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; max-width: 350px;">
+    <!-- Chat Engagement Bubble -->
+    <div id="chatbot-bubble" class="glass-card p-3 mb-3 d-none animate-fade-in" style="position: absolute; bottom: 70px; right: 0; width: 220px; border-radius: 15px; border: 1px solid rgba(241, 229, 172, 0.2); box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        <button id="close-bubble" class="btn-close btn-close-white position-absolute" style="top: 8px; right: 10px; font-size: 0.6rem;" aria-label="Close"></button>
+        <p class="text-silver-dim mb-0 small" style="line-height: 1.4; padding-right: 15px;">
+            Want to know more about our <span class="text-accent fw-bold">AR features</span>?
+        </p>
+    </div>
+
     <!-- Chat Button -->
-    <button id="chatbot-btn" class="btn btn-primary rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: #c9a96e; border: none;">
-        <i class="fas fa-comments fa-2x text-dark"></i>
+    <button id="chatbot-btn" class="btn btn-primary rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center shadow-accent-glow" style="width: 60px; height: 60px; background-color: var(--accent); border: none;">
+        <i class="fas fa-comments fa-2x text-primary"></i>
     </button>
 
     <!-- Chat Window -->
@@ -30,21 +38,37 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('chatbot-btn');
-    const window = document.getElementById('chatbot-window');
+    const chatWindow = document.getElementById('chatbot-window');
     const close = document.getElementById('chatbot-close');
     const form = document.getElementById('chatbot-form');
     const input = document.getElementById('chatbot-input');
     const messages = document.getElementById('chatbot-messages');
+    const bubble = document.getElementById('chatbot-bubble');
+    const closeBubble = document.getElementById('close-bubble');
+
+    // Show bubble after delay
+    setTimeout(() => {
+        if (chatWindow.classList.contains('d-none')) {
+            bubble.classList.remove('d-none');
+        }
+    }, 3000);
+
+    closeBubble.addEventListener('click', (e) => {
+        e.stopPropagation();
+        bubble.classList.add('d-none');
+    });
 
     // Toggle Window
     btn.addEventListener('click', () => {
         btn.classList.add('d-none');
-        window.classList.remove('d-none');
+        bubble.classList.add('d-none');
+        chatWindow.classList.remove('d-none');
     });
 
     close.addEventListener('click', () => {
-        window.classList.add('d-none');
+        chatWindow.classList.add('d-none');
         btn.classList.remove('d-none');
+        // Don't reshown the bubble once they close it or open the chat
     });
 
     // Send Message

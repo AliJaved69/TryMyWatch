@@ -60,39 +60,8 @@
 </style>
 @endsection
 
-@section('navbar')
-<nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: #121212;">
-    <div class="container">
-        <a class="navbar-brand text-light" href="{{ url('/home') }}">
-            <i class="fas fa-crown me-2"></i>TryMy<span>Watch</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-                <li class="nav-item"><a class="nav-link text-light" href="{{ url('/home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link text-light" href="{{ url('/shop') }}">Shop</a></li>
-                <li class="nav-item"><a class="nav-link text-light" href="{{ url('/about') }}">About Us</a></li>
-                <li class="nav-item"><a class="nav-link text-light" href="{{ url('/contact') }}">Contact</a></li>
-                <!-- Cart Icon -->
-                <li class="nav-item ms-3">
-                    <a href="#" class="nav-link position-relative text-light" data-bs-toggle="modal" data-bs-target="#cartModal" style="font-size:1.3rem;">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">
-                            0
-                        </span>
-                    </a>
-                </li>
-            </ul>
-            <a href="{{ url('/shop') }}" class="btn btn-primary-custom ms-lg-3">Try It Now</a>
-        </div>
-    </div>
-</nav>
-@endsection
-
 @section('content')
-<section class="py-5" style="margin-top: 80px;">
+<section class="py-5 bg-onyx min-vh-100" style="margin-top: 80px;">
     <div class="container">
         @php
             $productPrice = $product['price'] ?? 0;
@@ -102,55 +71,84 @@
             $productRating = $product['rating'] ?? 0;
         @endphp
 
-        <div class="row">
-            <div class="col-md-6 text-center">
-                @if(!empty($productThumbnail) && is_string($productThumbnail))
-                    <img src="{{ $productThumbnail }}" class="img-fluid rounded" alt="{{ $productTitleSafe }}">
-                @else
-                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 400px;">
-                        <span class="text-muted">No Image Available</span>
-                    </div>
-                @endif
-            </div>
-            <div class="col-md-6">
-                <h1>{{ $productTitleSafe }}</h1>
-                <p class="lead text-secondary-custom">
-                    ${{ number_format((float)$productPrice, 2) }}
-                </p>
-                <p>{{ $productDescription }}</p>
-                
-                <p><strong>Brand:</strong> {{ $productBrand }}</p>
-                
-                @if($productRating > 0)
-                    <p><strong>Rating:</strong> ⭐ {{ number_format((float)$productRating, 1) }}/5</p>
-                @endif
-                
-                <button 
-                    class="btn btn-primary-custom add-to-cart-btn mb-3" 
-                    data-id="{{ $product['id'] ?? '' }}" 
-                    data-title="{{ $productTitleSafe }}" 
-                    data-price="{{ $productPrice }}" 
-                    data-thumbnail="{{ $productThumbnail }}"
-                >
-                    Add to Cart
-                </button>
-
-                <!-- AR & Virtual Try-On Buttons -->
-                <div class="d-grid gap-2">
-                    @if(!empty($product['model_3d']))
-                        <a href="{{ route('product.ar', $product['id']) }}" class="btn btn-outline-custom">
-                            <i class="fas fa-cube me-2"></i> View in AR (Camera)
-                        </a>
+        <div class="row g-5">
+            <!-- Product Image -->
+            <div class="col-md-6 text-center animate-fade-in">
+                <div class="glass-card p-3 shadow-accent-glow">
+                    @if(!empty($productThumbnail) && is_string($productThumbnail))
+                        <img src="{{ $productThumbnail }}" class="img-fluid rounded-3 w-100 object-fit-cover shadow-lg" alt="{{ $productTitleSafe }}">
+                    @else
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 450px;">
+                            <span class="text-muted">No Image Available</span>
+                        </div>
                     @endif
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-md-6 slide-in-left">
+                <div class="glass-card p-5 h-100">
+                    <h1 class="gradient-text mb-2">{{ $productTitleSafe }}</h1>
+                    <p class="text-accent fs-4 fw-bold mb-4">${{ number_format((float)$productPrice, 2) }}</p>
                     
-                    <a href="{{ route('product.try-on-upload', $product['id']) }}" class="btn btn-outline-light">
-                        <i class="fas fa-camera me-2"></i> Artificial Intelligence Try-On (Upload Photo)
-                    </a>
+                    <div class="mb-4">
+                        <label class="text-silver-dim small text-uppercase fw-bold mb-2">Description</label>
+                        <p class="text-silver opacity-75 lead">{{ $productDescription }}</p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <label class="text-silver-dim small text-uppercase fw-bold mb-1 d-block">Brand</label>
+                            <span class="text-silver fw-bold">{{ $productBrand }}</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            @if($productRating > 0)
+                                <label class="text-silver-dim small text-uppercase fw-bold mb-1 d-block">Rating</label>
+                                <span class="text-accent fw-bold"><i class="fas fa-star me-1"></i>{{ number_format((float)$productRating, 1) }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-3 mb-5">
+                        <button 
+                            class="btn btn-primary-custom py-3 add-to-cart-btn" 
+                            data-id="{{ $product['id'] ?? '' }}" 
+                            data-title="{{ $productTitleSafe }}" 
+                            data-price="{{ $productPrice }}" 
+                            data-thumbnail="{{ $productThumbnail }}"
+                        >
+                            <i class="fas fa-shopping-bag me-2"></i> Add to Cart
+                        </button>
+                    </div>
+
+                    <hr class="border-silver-dim mb-4">
+
+                    <!-- AI & AR Features -->
+                    <div class="ai-features bg-dark rounded-4 p-4 border border-silver-dim shadow-sm">
+                        <h6 class="text-accent text-uppercase small fw-bold mb-3"><i class="fas fa-magic me-2"></i>Virtual Experience</h6>
+                        <div class="d-grid gap-2">
+                            @if(!empty($product['model_3d']))
+                                <a href="{{ route('product.ar', $product['id']) }}" class="btn btn-outline-custom">
+                                    <i class="fas fa-cube me-2"></i> View in AR (Camera)
+                                </a>
+                            @endif
+                            <a href="{{ route('product.try-on-upload', $product['id']) }}" class="btn btn-outline-light py-2">
+                                <i class="fas fa-robot me-2"></i> AI Static Try-On
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+    .text-silver-dim { color: rgba(197, 198, 199, 0.5); }
+    .border-silver-dim { border-color: rgba(197, 198, 199, 0.1) !important; }
+    .rounded-4 { border-radius: 1rem !important; }
+    .object-fit-cover { object-fit: cover; }
+</style>
 
 <!-- Cart Modal -->
 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
