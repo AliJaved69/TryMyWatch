@@ -126,7 +126,7 @@
                 @endif
                 
                 <button 
-                    class="btn btn-primary-custom add-to-cart-btn" 
+                    class="btn btn-primary-custom add-to-cart-btn mb-3" 
                     data-id="{{ $product['id'] ?? '' }}" 
                     data-title="{{ $productTitleSafe }}" 
                     data-price="{{ $productPrice }}" 
@@ -134,6 +134,19 @@
                 >
                     Add to Cart
                 </button>
+
+                <!-- AR & Virtual Try-On Buttons -->
+                <div class="d-grid gap-2">
+                    @if(!empty($product['model_3d']))
+                        <a href="{{ route('product.ar', $product['id']) }}" class="btn btn-outline-custom">
+                            <i class="fas fa-cube me-2"></i> View in AR (Camera)
+                        </a>
+                    @endif
+                    
+                    <a href="{{ route('product.try-on-upload', $product['id']) }}" class="btn btn-outline-light">
+                        <i class="fas fa-camera me-2"></i> Artificial Intelligence Try-On (Upload Photo)
+                    </a>
+                </div>
             </div>
         </div>
     </div>

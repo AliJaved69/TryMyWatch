@@ -44,6 +44,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/watch/upload', [WatchController::class, 'store'])->name('watch.store');
 });
 
+// Virtual Try-On Routes
+Route::get('/product/{id}/ar', [\App\Http\Controllers\VirtualTryOnController::class, 'ar'])->name('product.ar');
+Route::get('/product/{id}/try-on-upload', [\App\Http\Controllers\VirtualTryOnController::class, 'showUploadForm'])->name('product.try-on-upload');
+
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
