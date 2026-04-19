@@ -5,15 +5,19 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@theme {
-    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+@font-face {
+    font-family: 'Outfit';
+    src: url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+}
 
-    /* Luxury Color Palette */
+@theme {
+    --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+
+    /* Luxury Color Palette Standardized */
     --color-onyx: #0B0C10;
     --color-slate: #1F2833;
     --color-champagne: #F1E5AC;
-    --color-rose: #E0BFB8;
+    --color-rose: #F9F1D2; /* Standardized to match Admin better */
     --color-sapphire: #0F52BA;
     --color-silver: #C5C6C7;
     
@@ -23,4 +27,54 @@
     --accent: var(--color-champagne);
     --accent-light: var(--color-rose);
     --text: var(--color-silver);
+    --text-bright: #FFFFFF;
 }
+
+/* Global Root Variables for non-tailwind usage */
+:root {
+    --primary: #0B0C10;
+    --secondary: #1F2833;
+    --accent: #F1E5AC;
+    --accent-light: #F9F1D2;
+    --text: #C5C6C7;
+    --text-bright: #FFFFFF;
+    --text-secondary: #9BA4B4;
+    --highlight: #0F52BA;
+    --glass: rgba(31, 40, 51, 0.7);
+}
+
+/* Base Body Style */
+body {
+    background-color: var(--primary);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Shared Brand Utilities */
+.gradient-text {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+.glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(241, 229, 172, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.text-accent { color: var(--accent) !important; }
+.bg-onyx { background-color: var(--primary) !important; }

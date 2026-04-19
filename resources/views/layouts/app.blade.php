@@ -13,27 +13,12 @@
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         /* === YOUR FULL EXISTING CSS === */
-        :root {
-            --primary: #0B0C10;
-            --secondary: #1F2833;
-            --accent: #F1E5AC;
-            --accent-light: #E0BFB8;
-            --text: #C5C6C7;
-            --text-secondary: #9BA4B4;
-            --highlight: #0F52BA;
-        }
-
-        body {
-            background-color: var(--primary);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
 
         /* === ENHANCED ANIMATIONS SECTION === */
 
@@ -146,28 +131,6 @@
 
         .ar-text i {
             animation: wave 2s ease-in-out infinite;
-        }
-
-        /* Slide-in animation for page load */
-        @keyframes slide-in-bg {
-            from {
-                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-            }
-            to {
-                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            }
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            z-index: -1;
-            animation: slide-in-bg 1.5s ease-out forwards;
         }
 
         /* Typewriter effect for hero text */
@@ -416,55 +379,6 @@
         }
 
         /* Header Styles */
-        .navbar {
-            background: rgba(15, 15, 15, 0.95) !important;
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            padding: 0.75rem 0;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text) !important;
-        }
-
-        .navbar-brand span {
-            color: var(--accent);
-        }
-
-        .nav-link {
-            color: var(--text) !important;
-            font-weight: 500;
-            margin: 0 0.5rem;
-            position: relative;
-            font-size: 0.95rem;
-        }
-
-        .nav-link:hover {
-            color: var(--accent) !important;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
         /* Button Styles */
         .btn-primary-custom {
             background: var(--accent);
@@ -1084,7 +998,7 @@
             animation: handsReload 2s ease-out;
         }
 
-        @keyframes handsReload {
+    @keyframes handsReload {
             0% {
                 opacity: 0;
                 transform: rotate(180deg);
@@ -1094,13 +1008,123 @@
                 transform: rotate(0deg);
             }
         }
+
+/* ========================================= */
+/* GLOBAL SHOP GRID (Imported from shop template) */
+/* ========================================= */
+
+.shop-wrapper {
+    padding: 0 52px 60px;
+}
+@media (max-width: 992px) {
+    .shop-wrapper { padding: 0 20px 40px; }
+}
+
+/* SHOP */
+.shop-head{padding:80px 0 0;display:flex;align-items:flex-end;justify-content:space-between; margin-bottom:20px;}
+.section-tag{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:14px; font-weight:700;}
+.section-tag::before{content:'';width:30px;height:2px;background:var(--accent)}
+.section-h{margin:0;}
+.section-h em{font-style:normal; font-weight:300; opacity:0.8;}
+.see-all{font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;gap:8px;text-decoration:none;transition:color 0.3s;font-weight:600;}
+.see-all:hover{color:var(--accent)}
+
+/* PRODUCT GRID */
+.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:32px 0 0;margin-bottom:2px}
+@media (max-width: 992px) {
+    .shop-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .shop-grid { grid-template-columns: 1fr; }
+}
+
+.shop-card{
+    background: rgba(31, 40, 51, 0.4);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(241, 229, 172, 0.08);
+    border-radius: 20px;
+    padding:36px 28px 28px;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    text-decoration:none; 
+    display:flex; 
+    flex-direction:column; 
+    height: 100%;
+}
+.shop-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transform-origin:center;transition:transform 0.5s}
+.shop-card:hover{
+    background:rgba(31, 40, 51, 0.8); 
+    transform: translateY(-10px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+    border-color: rgba(241, 229, 172, 0.25);
+}
+.shop-card:hover::before{transform:scaleX(1)}
+
+.card-num{position:absolute;top:20px;right:20px;font-size:4rem;font-weight:900;color:rgba(255,255,255,0.02);line-height:1;pointer-events:none;user-select:none;}
+.card-tag{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:700; opacity:0.9;}
+
+.watch-img-container {
+    width:100%;
+    height:220px;
+    margin:0 auto 24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position: relative;
+    z-index: 2;
+}
+
+.watch-img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain; 
+    background: transparent;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
+}
+.shop-card:hover .watch-img{transform:scale(1.08) translateY(-5px);}
+
+.card-name{font-size:1.3rem;font-weight:600;color:var(--text);margin-bottom:20px;line-height:1.4; z-index: 2; position: relative;}
+.card-bottom{display:flex;justify-content:space-between;align-items:center; margin-top:auto; z-index: 2; position: relative;}
+.card-price{font-size:1.3rem;font-weight:700;}
+.card-arrow{
+    width:44px;height:44px;
+    border-radius:50%;
+    border:1px solid rgba(241, 229, 172, 0.2);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-secondary);font-size:16px;transition:all 0.3s;
+}
+.shop-card:hover .card-arrow{
+    background:var(--accent);
+    color:var(--primary);
+    border-color:var(--accent);
+    transform: rotate(45deg);
+}
+
+/* Wide card */
+.card-wide{grid-column:span 2;display:grid;grid-template-columns:1.2fr 1fr; padding:0;}
+@media (max-width: 992px) {
+    .card-wide { grid-column: span 1; grid-template-columns: 1fr; }
+}
+.card-wide-img{
+    background: rgba(0,0,0,0.15);
+    display:flex;align-items:center;justify-content:center;
+    padding:40px; 
+    min-height:300px;
+    position: relative;
+}
+.card-wide-content{padding:48px 40px;display:flex;flex-direction:column;justify-content:center; position:relative;}
+.card-wide-content .card-name{font-size:2.2rem;margin-bottom:16px; font-weight:800; background:linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+.card-wide-desc{font-size:0.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:32px;}
     </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     @include('partials.navbar')
 
-    <main>
+    <main class="flex-grow-1 d-flex flex-column">
         @yield('content')
     </main>
 

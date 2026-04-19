@@ -3,8 +3,8 @@
 @section('title', 'About Us')
 
 @section('content')
-<div class="bg-onyx min-vh-100 py-5">
-    <div class="container" style="margin-top: 120px;">
+<div class="bg-onyx flex-grow-1 d-flex flex-column pb-5" style="padding-top: 120px;">
+    <div class="container flex-grow-1 d-flex flex-column justify-content-center">
 
         <!-- Header Section -->
         <div class="text-center mb-5 animate-fade-in">
@@ -20,7 +20,7 @@
             <!-- Intro Card -->
             <div class="col-lg-6 slide-in-left">
                 <div class="glass-card p-5 h-100 border border-silver-dim shadow-accent-glow">
-                    <h4 class="text-accent fw-bold mb-4"><i class="fas fa-history me-2"></i>Our Heritage</h4>
+                    <h4 class="text-accent fw-bold mb-4"><i class="fas fa-history me-2"></i>About Us</h4>
                     <p class="text-silver opacity-75 lead" style="line-height: 1.8;">
                         TryMyWatch is an innovative e-commerce platform that transforms how people shop for watches online. Our mission is to merge advanced Artificial Intelligence and Augmented Reality to deliver a smart, interactive, and premium buying experience.
                     </p>

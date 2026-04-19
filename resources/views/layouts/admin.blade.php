@@ -11,25 +11,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     
-    <style>
-        :root {
-            --primary: #0b0c10;
-            --secondary: #1f2833;
-            --accent: #f1e5ac; /* Champagne Gold */
-            --accent-light: #f9f1d2;
-            --text: #c5c6c7;
-            --text-bright: #ffffff;
-            --sidebar-width: 280px;
-            --glass: rgba(31, 40, 51, 0.7);
-        }
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        body {
-            background-color: var(--primary);
-            color: var(--text);
-            font-family: 'Outfit', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    <style>
 
         /* Glassmorphic Sidebar */
         .sidebar {
@@ -208,19 +192,19 @@
         
         <nav class="nav flex-column mb-auto">
             <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                <i class="fas fa-chart-line me-3"></i> Intelligence
+                <i class="fas fa-chart-line me-3"></i> Dashboard
             </a>
             <a href="{{ route('admin.products.index') }}" class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-                <i class="fas fa-gem me-3"></i> Inventory
+                <i class="fas fa-watch me-3"></i> Inventory
             </a>
             <a href="{{ route('admin.categories.index') }}" class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                 <i class="fas fa-layer-group me-3"></i> Categories
             </a>
             <a href="{{ route('admin.orders.index') }}" class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-                <i class="fas fa-shopping-bag me-3"></i> Boutique Orders
+                <i class="fas fa-shopping-bag me-3"></i> Orders
             </a>
             <a href="{{ route('admin.contact.index') }}" class="nav-link {{ request()->routeIs('admin.contact.*') ? 'active' : '' }}">
-                <i class="fas fa-concierge-bell me-3"></i> Concierge
+                <i class="fas fa-concierge-bell me-3"></i> Messages
             </a>
         </nav>
         

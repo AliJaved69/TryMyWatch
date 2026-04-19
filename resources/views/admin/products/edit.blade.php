@@ -88,8 +88,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="model_3d" class="form-label">3D Model (.glb/.gltf)</label>
-                <input type="file" class="form-control @error('model_3d') is-invalid @enderror" id="model_3d" name="model_3d" accept=".glb,.gltf">
+                <label for="model_3d" class="form-label">3D Model (.glb/.gltf/.obj)</label>
+                <input type="file" class="form-control @error('model_3d') is-invalid @enderror" id="model_3d" name="model_3d" accept=".glb,.gltf,.obj">
                 @if($product->model_3d)
                     <div class="mt-2 text-secondary">
                         <i class="fas fa-cube me-1"></i> Current Model: {{ basename($product->model_3d) }}

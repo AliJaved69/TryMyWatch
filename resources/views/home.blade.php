@@ -235,82 +235,62 @@
 </section>
 
 <!-- Dynamic Featured Products Section -->
-<section id="featured-products" class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title gradient-text">Featured Timepieces</h2>
-            <p class="text-secondary-custom">Exquisite craftsmanship meet modern technology.</p>
-        </div>
-        <div class="row g-4">
-            @foreach($products as $product)
-                <div class="col-md-4">
-                    <div class="glass-card p-3 h-100 product-card animate-fade-in" style="animation-delay: {{ $loop->index * 0.1 }}s">
-                        <div class="product-img-container mb-3">
-                            <img src="{{ $product->thumbnail }}" alt="{{ $product->title }}" class="img-fluid rounded">
-                            <div class="product-overlay">
-                                <a href="{{ route('product.show', $product->id) }}" class="btn btn-primary-custom btn-sm">View Details</a>
+<section id="featured-products" class="py-5 mt-5">
+    <div class="container text-center mb-5">
+        <h2 class="section-title gradient-text">Featured Timepieces</h2>
+        <p class="text-secondary-custom">Exquisite craftsmanship meets modern technology.</p>
+    </div>
+    
+    <div class="container pb-5">
+        <div class="shop-grid">
+            @foreach($products as $index => $product)
+                @php
+                    $productId = $product->id ?? 1;
+                    $productTitle = $product->title ?? 'No Title';
+                    $productPrice = $product->price ?? 0;
+                    $productThumbnail = $product->thumbnail ?? '';
+                    $productCategory = $product->category->name ?? 'Watch';
+                    $productDesc = implode(' ', array_slice(explode(' ', strip_tags($product->description ?? $productTitle)), 0, 15)).'...';
+                @endphp
+
+                @if($index === 0)
+                    <a href="{{ route('product.show', $productId) }}" class="shop-card card-wide animate-fade-in" style="animation-delay: 0.1s">
+                        <div class="card-wide-img">
+                            @if(!empty($productThumbnail))
+                                <img src="{{ $productThumbnail }}" class="watch-img" style="height:260px;" alt="{{ $productTitle }}">
+                            @endif
+                        </div>
+                        <div class="card-wide-content">
+                            <div class="card-num">01</div>
+                            <div class="card-tag">{{ $productCategory }}</div>
+                            <div class="card-name">{{ $productTitle }}</div>
+                            <div class="card-wide-desc">{{ $productDesc }}</div>
+                            <div class="card-bottom">
+                                <div class="card-price gradient-text">${{ number_format((float)$productPrice, 2) }}</div>
+                                <div class="card-arrow"><i class="fas fa-arrow-up"></i></div>
                             </div>
                         </div>
-                        <div class="text-center">
-                            <h5 class="text-accent">{{ $product->title }}</h5>
-                            <p class="text-silver mb-3">${{ number_format($product->price, 2) }}</p>
-                            <button 
-                                class="btn btn-outline-custom w-100 add-to-cart-btn"
-                                data-id="{{ $product->id }}" 
-                                data-title="{{ $product->title }}" 
-                                data-price="{{ $product->price }}" 
-                                data-thumbnail="{{ $product->thumbnail }}"
-                            >
-                                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
-                            </button>
+                    </a>
+                @else
+                    <a href="{{ route('product.show', $productId) }}" class="shop-card animate-fade-in" style="animation-delay: {{ 0.1 * ($index + 1) }}s">
+                        <div class="card-num">{{ sprintf('%02d', $index + 1) }}</div>
+                        <div class="card-tag">{{ $productCategory }}</div>
+                        <div class="watch-img-container">
+                            @if(!empty($productThumbnail))
+                                <img src="{{ $productThumbnail }}" class="watch-img" alt="{{ $productTitle }}">
+                            @endif
                         </div>
-                    </div>
-                </div>
+                        <div class="card-name">{{ $productTitle }}</div>
+                        <div class="card-bottom">
+                            <div class="card-price gradient-text">${{ number_format((float)$productPrice, 2) }}</div>
+                            <div class="card-arrow"><i class="fas fa-arrow-up"></i></div>
+                        </div>
+                    </a>
+                @endif
             @endforeach
         </div>
     </div>
 </section>
-
-<style>
-    .product-card {
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-    .product-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-    }
-    .product-img-container {
-        position: relative;
-        overflow: hidden;
-        border-radius: 15px;
-        aspect-ratio: 1/1;
-    }
-    .product-img-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-    .product-card:hover .product-img-container img {
-        transform: scale(1.1);
-    }
-    .product-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(11, 12, 16, 0.6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    .product-card:hover .product-overlay {
-        opacity: 1;
-    }
-</style>
 
 <!-- Testimonials Section -->
 <section id="testimonials" class="py-5">

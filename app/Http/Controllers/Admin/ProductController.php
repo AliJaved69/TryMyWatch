@@ -41,7 +41,7 @@ class ProductController extends Controller
             'thumbnail' => 'required|image|max:10240', // 10MB
             'gallery.*' => 'nullable|image|max:10240', // 10MB
             // Use 'extensions' instead of 'mimes' for better compatibility with 3D files
-            'model_3d' => 'nullable|file|extensions:glb,gltf|max:102400', // 100MB
+            'model_3d' => 'nullable|file|extensions:glb,gltf,obj|max:102400', // 100MB
         ]);
 
         // Handle Thumbnail
@@ -64,8 +64,10 @@ class ProductController extends Controller
 
         // Handle 3D Model
         if ($request->hasFile('model_3d')) {
-            // Store relative path
-            $validated['model_3d'] = $request->file('model_3d')->store('products/models', 'public');
+            // Store relative path but explicitly force the original extension
+            $extension = $request->file('model_3d')->getClientOriginalExtension();
+            $filename = uniqid('model_') . '.' . $extension;
+            $validated['model_3d'] = $request->file('model_3d')->storeAs('products/models', $filename, 'public');
         }
 
         Product::create($validated);
@@ -103,7 +105,7 @@ class ProductController extends Controller
             'brand' => 'nullable',
             'thumbnail' => 'nullable|image|max:10240', // 10MB
             'gallery.*' => 'nullable|image|max:10240', // 10MB
-            'model_3d' => 'nullable|file|extensions:glb,gltf|max:102400', // 100MB
+            'model_3d' => 'nullable|file|extensions:glb,gltf,obj|max:102400', // 100MB
         ]);
 
         // Handle Thumbnail
@@ -126,7 +128,9 @@ class ProductController extends Controller
 
         // Handle 3D Model
         if ($request->hasFile('model_3d')) {
-            $validated['model_3d'] = $request->file('model_3d')->store('products/models', 'public');
+            $extension = $request->file('model_3d')->getClientOriginalExtension();
+            $filename = uniqid('model_') . '.' . $extension;
+            $validated['model_3d'] = $request->file('model_3d')->storeAs('products/models', $filename, 'public');
         } else {
              unset($validated['model_3d']); // Keep existing
         }

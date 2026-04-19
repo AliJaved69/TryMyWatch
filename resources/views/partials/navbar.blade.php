@@ -24,6 +24,7 @@
         font-weight: 500;
         letter-spacing: 0.3px;
         padding: 0.5rem 1.2rem !important;
+        color: var(--text) !important;
         opacity: 0.8;
         transition: all 0.3s ease;
     }
@@ -52,29 +53,37 @@
         border-radius: 2px;
     }
 
-    @media (max-width: 991.98px) {
-        .navbar-collapse {
-            background: rgba(11, 12, 16, 0.98);
-            backdrop-filter: blur(20px);
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            padding: 2rem;
-            border-bottom: 1px solid rgba(241, 229, 172, 0.1);
-            max-height: 80vh;
-            overflow-y: auto;
+        @media (min-width: 992px) {
+            .navbar-collapse {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
         }
-        
-        .nav-item {
-            margin-bottom: 1rem;
-            text-align: center;
+
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: rgba(11, 12, 16, 0.98);
+                backdrop-filter: blur(20px);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 2rem;
+                border-bottom: 1px solid rgba(241, 229, 172, 0.1);
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            
+            .nav-item {
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+            
+            .nav-link {
+                font-size: 1.2rem;
+            }
         }
-        
-        .nav-link {
-            font-size: 1.2rem;
-        }
-    }
 </style>
 
 <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
@@ -93,23 +102,23 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Heritage</a>
+                    <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('shop*') ? 'active' : '' }}" href="{{ route('shop') }}">Boutique</a>
+                    <a class="nav-link {{ request()->is('shop*') ? 'active' : '' }}" href="{{ route('shop') }}">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">Aspiration</a>
+                    <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('contact*') ? 'active' : '' }}" href="{{ route('contact') }}">Concierge</a>
+                    <a class="nav-link {{ request()->is('contact*') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
                 </li>
 
                 <!-- Cart Icon -->
                 <li class="nav-item ms-lg-3">
                     <a href="#" class="nav-link position-relative glass-card px-3 py-2 border-0" data-bs-toggle="modal" data-bs-target="#cartModal">
                         <i class="fas fa-shopping-bag text-accent"></i>
-                        <span id="cartCount" class="badge rounded-pill bg-accent text-dark position-absolute top-0 start-100 translate-middle border border-onyx shadow-accent-glow" style="display:none; font-size: 0.75rem; padding: 0.4em 0.6em; min-width: 1.8em; font-weight: 800;">0</span>
+                        <span id="cartCount" class="badge rounded-pill bg-accent text-dark position-absolute top-0 start-100 translate-middle border border-onyx shadow-accent-glow" style="display:none; color: var(--accent) !important; font-size: 0.75rem; padding: 0.4em 0.6em; min-width: 1.8em; font-weight: 800;">0</span>
                     </a>
                 </li>
 

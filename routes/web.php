@@ -7,11 +7,15 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WatchController;
-
+use App\Http\Controllers\VirtualTryOnController;
+use App\Http\Controllers\StaticTryOnController;
+use App\Http\Controllers\ChatbotController;
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
 
 // Public Routes
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -20,7 +24,7 @@ Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'sendMessage'])->name('contact.send');
 
 // Chatbot Route
-Route::post('/chatbot', [\App\Http\Controllers\ChatbotController::class, 'handle'])->name('chatbot.handle');
+Route::post('/chatbot', [ChatbotController::class, 'handle'])->name('chatbot.handle');
 
 Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 Route::get('/product/{id}', [ProductController::class, 'product'])->name('product.show');
@@ -45,13 +49,13 @@ Route::middleware('auth')->group(function () {
 });
 
 // Virtual Try-On Routes
-Route::get('/product/{id}/ar', [\App\Http\Controllers\VirtualTryOnController::class, 'ar'])->name('product.ar');
-Route::get('/product/{id}/try-on-upload', [\App\Http\Controllers\VirtualTryOnController::class, 'showUploadForm'])->name('product.try-on-upload');
+Route::get('/product/{id}/ar', [VirtualTryOnController::class, 'ar'])->name('product.ar');
+Route::get('/product/{id}/try-on-upload', [VirtualTryOnController::class, 'showUploadForm'])->name('product.try-on-upload');
 
 // AI Static Try-On (New)
 Route::prefix('static-try-on')->name('static.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\StaticTryOnController::class, 'index'])->name('index');
-    Route::post('/generate', [\App\Http\Controllers\StaticTryOnController::class, 'generate'])
+    Route::get('/', [StaticTryOnController::class, 'index'])->name('index');
+    Route::post('/generate', [StaticTryOnController::class, 'generate'])
         ->middleware('credits')
         ->name('generate');
 });
@@ -61,6 +65,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('products', AdminProductController::class);
     Route::resource('orders', AdminOrderController::class)->only(['index', 'show', 'update']);
-    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
-    Route::resource('contact', \App\Http\Controllers\Admin\ContactController::class)->only(['index', 'show', 'destroy']);
+    Route::resource('categories',   CategoryController::class);
+    Route::resource('contact',  AdminContactController::class)->only(['index', 'show', 'destroy']);
 });

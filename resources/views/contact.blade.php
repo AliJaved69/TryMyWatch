@@ -3,8 +3,8 @@
 @section('title', 'Contact')
 
 @section('content')
-<div class="bg-onyx min-vh-100 py-5">
-    <div class="container" style="margin-top: 120px;">
+<div class="bg-onyx flex-grow-1 d-flex flex-column pb-5" style="padding-top: 120px;">
+    <div class="container flex-grow-1 d-flex flex-column justify-content-center">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="glass-card p-5 animate-fade-in border border-silver-dim shadow-accent-glow">

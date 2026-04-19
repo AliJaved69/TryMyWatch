@@ -9,19 +9,19 @@
 
     <!-- Chat Button -->
     <button id="chatbot-btn" class="btn btn-primary rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center shadow-accent-glow" style="width: 60px; height: 60px; background-color: var(--accent); border: none;">
-        <i class="fas fa-comments fa-2x text-primary"></i>
+        <i class="fas fa-comments fa-2x" style="color: var(--primary);"></i>
     </button>
 
     <!-- Chat Window -->
-    <div id="chatbot-window" class="card shadow-lg mt-3 d-none" style="border-radius: 15px; overflow: hidden; border: 1px solid #333;">
-        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center p-3" style="border-bottom: 1px solid #444;">
+    <div id="chatbot-window" class="card shadow-lg mt-3 d-none border-0" style="border-radius: 15px; overflow: hidden; background: var(--secondary);">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center p-3" style="border-bottom: 1px solid rgba(241, 229, 172, 0.1);">
             <h5 class="mb-0 fs-6"><i class="fas fa-robot me-2 text-warning"></i>Watch Assistant</h5>
             <button id="chatbot-close" class="btn btn-sm btn-link text-white p-0"><i class="fas fa-times"></i></button>
         </div>
-        <div id="chatbot-messages" class="card-body bg-light p-3" style="height: 300px; overflow-y: auto; background-color: #f8f9fa;">
+        <div id="chatbot-messages" class="card-body p-3" style="height: 300px; overflow-y: auto; background-color: var(--primary);">
             <!-- Messages go here -->
             <div class="d-flex mb-2">
-                <div class="bg-warning text-dark p-2 rounded-3" style="max-width: 80%; font-size: 0.9rem;">
+                <div class="p-2 rounded-3" style="max-width: 80%; font-size: 0.9rem; background-color: var(--accent); color: var(--primary);">
                     Hello! Ask me anything about our watches. ⌚
                 </div>
             </div>
@@ -109,7 +109,10 @@ document.addEventListener('DOMContentLoaded', function() {
         div.className = `d-flex mb-2 ${sender === 'user' ? 'justify-content-end' : ''}`;
         
         const bubble = document.createElement('div');
-        bubble.className = `p-2 rounded-3 ${sender === 'user' ? 'bg-dark text-white' : 'bg-warning text-dark'}`;
+        bubble.className = `p-2 rounded-3`;
+        bubble.style.backgroundColor = sender === 'user' ? 'var(--secondary)' : 'var(--accent)';
+        bubble.style.color = sender === 'user' ? 'var(--text)' : 'var(--primary)';
+        bubble.style.border = sender === 'user' ? '1px solid rgba(241, 229, 172, 0.1)' : 'none';
         bubble.style.maxWidth = '80%';
         bubble.style.fontSize = '0.9rem';
         bubble.textContent = text;

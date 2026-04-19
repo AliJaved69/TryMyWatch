@@ -1,4 +1,4 @@
-<footer class="bg-onyx text-silver pt-5 pb-4" role="contentinfo" aria-label="Site Footer" style="border-top: 1px solid rgba(241, 229, 172, 0.05); margin-top: 100px; position: relative; z-index: 10;">
+<footer class="bg-onyx text-silver pt-5 pb-4" role="contentinfo" aria-label="Site Footer" style="border-top: 1px solid rgba(241, 229, 172, 0.05); position: relative; z-index: 10;">
     <div class="container">
         <div class="row g-5">
             <!-- Brand & Philosophy -->
@@ -52,16 +52,16 @@
                 <h6 class="text-accent text-uppercase fw-bold mb-4" style="letter-spacing: 2px; font-size: 0.8rem;">Discover</h6>
                 <ul class="list-unstyled">
                     <li class="mb-2">
-                        <a href="{{ url('/') }}" class="footer-link">Heritage</a>
+                        <a href="{{ url('/') }}" class="footer-link">Home</a>
                     </li>
                     <li class="mb-2">
-                        <a href="{{ url('/shop') }}" class="footer-link">The Boutique</a>
+                        <a href="{{ url('/shop') }}" class="footer-link">Shop</a>
                     </li>
                     <li class="mb-2">
-                        <a href="{{ url('/about') }}" class="footer-link">Our Aspiration</a>
+                        <a href="{{ url('/about') }}" class="footer-link">About Us</a>
                     </li>
                     <li>
-                        <a href="{{ url('/contact') }}" class="footer-link">Client Concierge</a>
+                        <a href="{{ url('/contact') }}" class="footer-link">Contact Us</a>
                     </li>
                 </ul>
             </div>
