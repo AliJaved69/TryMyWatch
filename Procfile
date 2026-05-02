@@ -1,1 +1,1 @@
-web: mkdir -p storage/framework/{sessions,views,cache} && chmod -R 775 storage bootstrap/cache && php -S 0.0.0.0:8080 -t public/
+web: php artisan migrate --force && php -S 0.0.0.0:8080 -t public/
