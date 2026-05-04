@@ -1,0 +1,15 @@
+.env
+node_modules
+vendor
+storage/*.key
+.git
+.gitignore
+Dockerfile
+docker/
+cloudbuild.yaml
+tests/
+phpunit.xml
+.editorconfig
+.gitattributes
+README.md
+Procfile
