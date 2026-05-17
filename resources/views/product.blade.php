@@ -149,116 +149,11 @@
     .rounded-4 { border-radius: 1rem !important; }
     .object-fit-cover { object-fit: cover; }
 </style>
-
-<!-- Cart Modal -->
-<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div id="cartItems">
-          <p>Your cart is empty.</p>
-        </div>
-      </div>
-     <div class="modal-footer">
-    <button type="button" id="clearCartBtn" class="btn btn-danger">Clear Cart</button>
-    <a href="{{ route('checkout') }}" class="btn btn-primary">Checkout</a>
-</div>
-    </div>
-  </div>
-</div>
 @endsection
 
 @section('scripts')
 <script>
-    // console.log("Cart script loaded");
-
 document.addEventListener('DOMContentLoaded', function () {
-    const cartCount = document.getElementById('cartCount');
-    const cartItemsContainer = document.getElementById('cartItems');
-    const clearCartBtn = document.getElementById('clearCartBtn');
-
-    function loadCart() {
-        return JSON.parse(localStorage.getItem('cart')) || [];
-    }
-
-    function saveCart(cart) {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    function updateCartCount() {
-        const cart = loadCart();
-        let totalCount = 0;
-        cart.forEach(item => totalCount += item.quantity);
-        if(cartCount) {
-            cartCount.textContent = totalCount;
-            cartCount.style.display = totalCount > 0 ? 'inline-block' : 'none';
-        }
-    }
-
-    function renderCartItems() {
-        const cart = loadCart();
-        if(cart.length === 0) {
-            cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-            return;
-        }
-
-        let html = '<ul class="list-group">';
-        cart.forEach(item => {
-            html += `
-                <li class="list-group-item d-flex align-items-center">
-                    <img src="${item.thumbnail}" alt="${item.title}" style="width:50px; height:auto; margin-right:15px;">
-                    <div class="flex-grow-1">
-                        <strong>${item.title}</strong><br>
-                        $${item.price.toFixed(2)} x ${item.quantity}
-                    </div>
-                    <button class="btn btn-sm btn-danger remove-item-btn" data-id="${item.id}">&times;</button>
-                </li>
-            `;
-        });
-        html += '</ul>';
-        cartItemsContainer.innerHTML = html;
-
-        // Attach remove handlers
-        document.querySelectorAll('.remove-item-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const id = this.getAttribute('data-id');
-                removeFromCart(id);
-            });
-        });
-    }
-
-    function addToCart(product) {
-        console.log('Adding product:', product);  // DEBUG LOG
-        const cart = loadCart();
-        const existing = cart.find(item => item.id == product.id);
-        if(existing) {
-            existing.quantity += 1;
-        } else {
-            product.quantity = 1;
-            cart.push(product);
-        }
-        saveCart(cart);
-        updateCartCount();
-    }
-
-    function removeFromCart(id) {
-        let cart = loadCart();
-        cart = cart.filter(item => item.id != id);
-        saveCart(cart);
-        updateCartCount();
-        renderCartItems();
-    }
-
-    clearCartBtn.addEventListener('click', function() {
-        localStorage.removeItem('cart');
-        updateCartCount();
-        renderCartItems();
-    });
-
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const product = {
@@ -270,24 +165,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Check for missing data
             if(!product.id || !product.title || isNaN(product.price)) {
-                alert('Product data missing or invalid!');
-                console.error('Product data missing:', product);
+                if (window.showToast) {
+                    window.showToast('Product data is invalid!', 'fas fa-exclamation-circle');
+                } else {
+                    alert('Product data is invalid!');
+                }
                 return;
             }
 
-            addToCart(product);
-            alert(`${product.title} added to cart!`);
+            // Call global layout addToCart
+            if (typeof window.addToCart === 'function') {
+                window.addToCart(product);
+            } else {
+                let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                const existing = cart.find(item => item.id == product.id);
+                if(existing) {
+                    existing.quantity += 1;
+                } else {
+                    product.quantity = 1;
+                    cart.push(product);
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                if (window.showToast) {
+                    window.showToast(`${product.title} added to cart!`);
+                } else {
+                    alert(`${product.title} added to cart!`);
+                }
+            }
         });
     });
-
-    // Render items when modal opens
-    const cartModal = document.getElementById('cartModal');
-    cartModal.addEventListener('show.bs.modal', function () {
-        renderCartItems();
-    });
-
-    updateCartCount();
 });
-
 </script>
 @endsection

@@ -235,16 +235,21 @@ Swal.fire({
         }
     });
 
-    const form = document.getElementById('payment-form');
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault();
-
+    function populateOrderSummary() {
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         const summaryItems = document.getElementById('summary-items');
         const summaryTotal = document.getElementById('summary-total');
-        
-        if(cart.length === 0){
-            summaryItems.innerHTML = '<p class="text-silver-dim small">No items selected.</p>';
+        const totalPriceInput = document.getElementById('totalPriceInput');
+        const cartItemsInput = document.getElementById('cartItemsInput');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if(cart.length === 0) {
+            summaryItems.innerHTML = '<p class="text-silver-dim small">Your cart is empty.</p>';
+            summaryTotal.textContent = '$0.00';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Cart is Empty';
+            }
         } else {
             let html = '';
             let total = 0;
@@ -259,8 +264,26 @@ Swal.fire({
             });
             summaryItems.innerHTML = html;
             summaryTotal.textContent = `$${total.toFixed(2)}`;
-            document.getElementById('totalPriceInput').value = total.toFixed(2);
-            document.getElementById('cartItemsInput').value = JSON.stringify(cart);
+            if (totalPriceInput) totalPriceInput.value = total.toFixed(2);
+            if (cartItemsInput) cartItemsInput.value = JSON.stringify(cart);
+        }
+    }
+
+    // Initialize on page load
+    populateOrderSummary();
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (cart.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cart is Empty',
+                text: 'Please add items to your cart before checking out.',
+            });
+            return;
         }
 
         const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;

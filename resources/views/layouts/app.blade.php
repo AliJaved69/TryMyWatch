@@ -1111,6 +1111,66 @@
 .card-wide-content{padding:48px 40px;display:flex;flex-direction:column;justify-content:center; position:relative;}
 .card-wide-content .card-name{font-size:2.2rem;margin-bottom:16px; font-weight:800; background:linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
 .card-wide-desc{font-size:0.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:32px;}
+
+        /* === PREMIUM CUSTOM TOAST === */
+        .custom-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(31, 40, 51, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(241, 229, 172, 0.25);
+            color: var(--text);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(241, 229, 172, 0.1);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .custom-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .custom-toast i {
+            color: var(--accent);
+            font-size: 1.25rem;
+        }
+        @media (max-width: 768px) {
+            .custom-toast {
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                justify-content: center;
+                text-align: center;
+            }
+            /* Hide swiper navigation arrows on mobile */
+            .swiper-button-next, .swiper-button-prev {
+                display: none !important;
+            }
+            /* Card-Wide Mobile Optimization */
+            .card-wide-img {
+                min-height: 200px !important;
+                padding: 20px !important;
+            }
+            .card-wide-content {
+                padding: 24px 20px !important;
+            }
+            .card-wide-content .card-name {
+                font-size: 1.6rem !important;
+                margin-bottom: 12px !important;
+            }
+            .card-wide-desc {
+                margin-bottom: 20px !important;
+                font-size: 0.85rem !important;
+            }
+        }
     </style>
 </head>
 
@@ -1406,6 +1466,11 @@
                 }
                 saveCart(cart);
                 updateCartCount();
+                
+                // Trigger premium custom toast notification
+                if (window.showToast) {
+                    window.showToast(`${product.title} added to cart!`);
+                }
             }
 
             function removeFromCart(id) {
@@ -1479,8 +1544,37 @@
             };
         }
 
+        // === GLOBAL CUSTOM TOAST ===
+        function showToast(message, iconClass = 'fas fa-check-circle') {
+            // Remove existing toast if present
+            const oldToast = document.querySelector('.custom-toast');
+            if (oldToast) {
+                oldToast.remove();
+            }
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'custom-toast';
+            toast.innerHTML = `<i class="${iconClass}"></i><span>${message}</span>`;
+            document.body.appendChild(toast);
+
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 50);
+
+            // Auto dismiss after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }, 3000);
+        }
+
         // Expose utility functions
         window.showLoading = showLoading;
+        window.showToast = showToast;
     </script>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
