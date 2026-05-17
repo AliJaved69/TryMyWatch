@@ -161,17 +161,10 @@
                 blink-caret 0.75s step-end infinite;
         }
 
-        /* Fade-in stagger for nav items */
+        /* Nav items - no global opacity override (handled per-context) */
         .nav-item {
-            opacity: 0;
-            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 1;
         }
-
-        .nav-item:nth-child(1) { animation-delay: 0.2s; }
-        .nav-item:nth-child(2) { animation-delay: 0.3s; }
-        .nav-item:nth-child(3) { animation-delay: 0.4s; }
-        .nav-item:nth-child(4) { animation-delay: 0.5s; }
-        .nav-item:nth-child(5) { animation-delay: 0.6s; }
 
         /* Hover ripple effect for buttons */
         .btn-ripple {

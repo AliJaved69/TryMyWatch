@@ -1,16 +1,29 @@
 <style>
+    /* ===== NAVBAR BASE ===== */
     .navbar {
-        background: rgba(11, 12, 16, 0.8) !important;
+        background: rgba(11, 12, 16, 0.9) !important;
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         border-bottom: 1px solid rgba(241, 229, 172, 0.05);
         padding: 0.8rem 0;
         transition: all 0.4s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
     }
-    
+
     .navbar.scrolled {
         padding: 0.5rem 0;
-        background: rgba(11, 12, 16, 0.95) !important;
+        background: rgba(11, 12, 16, 0.98) !important;
+    }
+
+    .navbar .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: nowrap;
     }
 
     .navbar-brand {
@@ -18,6 +31,20 @@
         letter-spacing: -0.5px;
         font-size: 1.4rem;
         color: var(--text-bright) !important;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    /* ===== DESKTOP NAV ===== */
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        gap: 0.2rem;
     }
 
     .nav-link {
@@ -27,158 +54,278 @@
         color: var(--text) !important;
         opacity: 0.8;
         transition: all 0.3s ease;
+        text-decoration: none;
+        display: block;
     }
 
-    .nav-link:hover, .nav-link.active {
+    .nav-link:hover,
+    .nav-link.active {
         opacity: 1;
         color: var(--accent) !important;
     }
 
-    .navbar-toggler {
+    /* ===== HAMBURGER BUTTON ===== */
+    .nav-toggler {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 5px;
+        background: transparent;
         border: none;
-        padding: 0;
+        padding: 6px;
+        cursor: pointer;
+        z-index: 10001;
+        flex-shrink: 0;
     }
 
-    .navbar-toggler:focus {
-        box-shadow: none;
-    }
-
-    .toggler-icon {
-        width: 30px;
+    .nav-toggler .bar {
+        width: 28px;
         height: 2px;
         background-color: var(--accent);
-        display: block;
-        margin: 6px 0;
-        transition: all 0.3s ease;
         border-radius: 2px;
+        transition: all 0.3s ease;
+        display: block;
     }
 
-        @media (min-width: 992px) {
-            .navbar-collapse {
-                display: flex !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
+    .nav-toggler .bar:nth-child(2) {
+        width: 20px;
+    }
+
+    /* Animate hamburger to X when open */
+    .nav-toggler.open .bar:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+        width: 28px;
+    }
+
+    .nav-toggler.open .bar:nth-child(2) {
+        opacity: 0;
+        width: 0;
+    }
+
+    .nav-toggler.open .bar:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+        width: 28px;
+    }
+
+    /* ===== MOBILE DRAWER ===== */
+    @media (max-width: 991.98px) {
+        .nav-toggler {
+            display: flex;
         }
 
-        @media (max-width: 991.98px) {
-            .navbar-collapse {
-                background: rgba(11, 12, 16, 0.98);
-                backdrop-filter: blur(20px);
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                padding: 2rem;
-                border-bottom: 1px solid rgba(241, 229, 172, 0.1);
-                max-height: 80vh;
-                overflow-y: auto;
-                /* Ensure collapse state works correctly */
-                display: none;
-            }
-
-            .navbar-collapse.show,
-            .navbar-collapse.collapsing {
-                display: block !important;
-            }
-            
-            .nav-item {
-                margin-bottom: 1rem;
-                text-align: center;
-                opacity: 1 !important;
-                animation: none !important;
-            }
-            
-            .nav-link {
-                font-size: 1.2rem;
-            }
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 12, 16, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 10000;
+            /* Hidden by default */
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            pointer-events: none;
         }
+
+        /* Open state */
+        .nav-menu.open {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .nav-menu .nav-item {
+            opacity: 1 !important;
+            animation: none !important;
+            width: 100%;
+            text-align: center;
+        }
+
+        .nav-menu .nav-link {
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding: 0.8rem 2rem !important;
+            opacity: 1 !important;
+        }
+
+        .nav-menu .nav-link:hover {
+            color: var(--accent) !important;
+        }
+
+        /* Stagger animation for items when menu opens */
+        .nav-menu.open .nav-item {
+            animation: mobileNavFadeIn 0.4s ease forwards !important;
+        }
+
+        .nav-menu.open .nav-item:nth-child(1) { animation-delay: 0.05s !important; }
+        .nav-menu.open .nav-item:nth-child(2) { animation-delay: 0.10s !important; }
+        .nav-menu.open .nav-item:nth-child(3) { animation-delay: 0.15s !important; }
+        .nav-menu.open .nav-item:nth-child(4) { animation-delay: 0.20s !important; }
+        .nav-menu.open .nav-item:nth-child(5) { animation-delay: 0.25s !important; }
+        .nav-menu.open .nav-item:nth-child(6) { animation-delay: 0.30s !important; }
+
+        @keyframes mobileNavFadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile divider line */
+        .nav-divider {
+            width: 60px;
+            height: 1px;
+            background: rgba(241, 229, 172, 0.2);
+            margin: 1rem auto;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .nav-menu {
+            /* Always visible on desktop */
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: none !important;
+            pointer-events: auto !important;
+        }
+    }
 </style>
 
-<nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+<nav class="navbar" id="navbar">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
+        <a class="navbar-brand" href="{{ url('/') }}">
             <i class="fas fa-crown text-accent me-2 fs-5"></i>
             <span class="gradient-text">TryMyWatch</span>
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="toggler-icon"></span>
-            <span class="toggler-icon" style="width: 20px; margin-left: auto;"></span>
-            <span class="toggler-icon"></span>
+        {{-- Hamburger toggler --}}
+        <button class="nav-toggler" id="navToggler" aria-label="Toggle navigation" aria-expanded="false">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('shop*') ? 'active' : '' }}" href="{{ route('shop') }}">Shop</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('contact*') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
-                </li>
+        {{-- Nav menu --}}
+        <ul class="nav-menu" id="navMenu" role="list">
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('shop*') ? 'active' : '' }}" href="{{ route('shop') }}">Shop</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('contact*') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
+            </li>
 
-                <!-- Cart Icon -->
-                <li class="nav-item ms-lg-3">
-                    <a href="#" class="nav-link position-relative glass-card px-3 py-2 border-0" data-bs-toggle="modal" data-bs-target="#cartModal">
-                        <i class="fas fa-shopping-bag text-accent"></i>
-                        <span id="cartCount" class="badge rounded-pill bg-accent text-dark position-absolute top-0 start-100 translate-middle border border-onyx shadow-accent-glow" style="display:none; color: var(--accent) !important; font-size: 0.75rem; padding: 0.4em 0.6em; min-width: 1.8em; font-weight: 800;">0</span>
+            {{-- Mobile divider --}}
+            <li class="nav-item d-lg-none">
+                <div class="nav-divider"></div>
+            </li>
+
+            {{-- Cart Icon --}}
+            <li class="nav-item">
+                <a href="#" class="nav-link position-relative" data-bs-toggle="modal" data-bs-target="#cartModal">
+                    <i class="fas fa-shopping-bag text-accent"></i>
+                    <span id="cartCount" class="badge rounded-pill position-absolute top-0 start-100 translate-middle border border-onyx shadow-accent-glow"
+                          style="display:none; background: var(--accent); color: var(--primary) !important; font-size: 0.75rem; padding: 0.4em 0.6em; min-width: 1.8em; font-weight: 800;">0</span>
+                </a>
+            </li>
+
+            {{-- Auth --}}
+            <li class="nav-item">
+                @guest
+                    <a href="{{ route('login') }}" class="btn btn-primary-custom shadow-accent-glow px-4">
+                        <i class="fas fa-user-lock me-2 small"></i> Client Portal
                     </a>
-                </li>
-
-                <li class="nav-item ms-lg-4 mt-3 mt-lg-0">
-                    @guest
-                        <a href="{{ route('login') }}" class="btn btn-primary-custom shadow-accent-glow px-4">
-                            <i class="fas fa-user-lock me-2 small"></i> Client Portal
-                        </a>
-                    @else
-                        <div class="d-flex align-items-center gap-3">
-                            @if(Auth::user()->is_admin)
-                                <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-custom border-0 text-accent">
-                                    <i class="fas fa-shield-halved me-1"></i> Admin
-                                </a>
-                            @endif
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button class="btn btn-primary-custom px-4">Terminate Session</button>
-                            </form>
-                        </div>
-                    @endguest
-                </li>
-            </ul>
-        </div>
+                @else
+                    <div class="d-flex align-items-center gap-3 flex-wrap justify-content-center">
+                        @if(Auth::user()->is_admin)
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-custom border-0 text-accent">
+                                <i class="fas fa-shield-halved me-1"></i> Admin
+                            </a>
+                        @endif
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="btn btn-primary-custom px-4">Terminate Session</button>
+                        </form>
+                    </div>
+                @endguest
+            </li>
+        </ul>
     </div>
 </nav>
 
 <script>
-    window.addEventListener('scroll', function() {
-        const nav = document.getElementById('navbar');
-        if (window.scrollY > 50) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
-    });
-
-    // Close mobile menu when a nav link is clicked
-    document.addEventListener('DOMContentLoaded', function () {
-        const navLinks = document.querySelectorAll('#navbarNav .nav-link');
-        const navbarCollapse = document.getElementById('navbarNav');
-
-        navLinks.forEach(function (link) {
-            link.addEventListener('click', function () {
-                if (navbarCollapse.classList.contains('show')) {
-                    const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-                    if (bsCollapse) {
-                        bsCollapse.hide();
-                    }
-                }
-            });
+    (function () {
+        // Scroll effect
+        window.addEventListener('scroll', function () {
+            const nav = document.getElementById('navbar');
+            nav.classList.toggle('scrolled', window.scrollY > 50);
         });
-    });
+
+        // Mobile menu toggle
+        const toggler = document.getElementById('navToggler');
+        const menu    = document.getElementById('navMenu');
+
+        function openMenu() {
+            menu.classList.add('open');
+            toggler.classList.add('open');
+            toggler.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden'; // prevent background scroll
+        }
+
+        function closeMenu() {
+            menu.classList.remove('open');
+            toggler.classList.remove('open');
+            toggler.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        toggler.addEventListener('click', function () {
+            if (menu.classList.contains('open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        // Close when a nav link is clicked
+        menu.querySelectorAll('.nav-link').forEach(function (link) {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close when clicking outside the menu
+        document.addEventListener('click', function (e) {
+            if (menu.classList.contains('open') &&
+                !menu.contains(e.target) &&
+                !toggler.contains(e.target)) {
+                closeMenu();
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && menu.classList.contains('open')) {
+                closeMenu();
+            }
+        });
+
+        // On window resize: close menu & restore scroll if switching to desktop
+        window.addEventListener('resize', function () {
+            if (window.innerWidth >= 992 && menu.classList.contains('open')) {
+                closeMenu();
+            }
+        });
+    })();
 </script>
