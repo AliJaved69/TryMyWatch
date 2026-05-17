@@ -73,11 +73,20 @@
                 border-bottom: 1px solid rgba(241, 229, 172, 0.1);
                 max-height: 80vh;
                 overflow-y: auto;
+                /* Ensure collapse state works correctly */
+                display: none;
+            }
+
+            .navbar-collapse.show,
+            .navbar-collapse.collapsing {
+                display: block !important;
             }
             
             .nav-item {
                 margin-bottom: 1rem;
                 text-align: center;
+                opacity: 1 !important;
+                animation: none !important;
             }
             
             .nav-link {
@@ -93,7 +102,7 @@
             <span class="gradient-text">TryMyWatch</span>
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="toggler-icon"></span>
             <span class="toggler-icon" style="width: 20px; margin-left: auto;"></span>
             <span class="toggler-icon"></span>
@@ -154,5 +163,22 @@
         } else {
             nav.classList.remove('scrolled');
         }
+    });
+
+    // Close mobile menu when a nav link is clicked
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('#navbarNav .nav-link');
+        const navbarCollapse = document.getElementById('navbarNav');
+
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', function () {
+                if (navbarCollapse.classList.contains('show')) {
+                    const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                    if (bsCollapse) {
+                        bsCollapse.hide();
+                    }
+                }
+            });
+        });
     });
 </script>
