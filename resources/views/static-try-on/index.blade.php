@@ -74,11 +74,11 @@
                                             <img src="{{ $wristImageUrl }}" class="wrist-bg" alt="Your Wrist">
                                             <!-- The Watch overlayed (Simulated with CSS) -->
                                             <div class="watch-overlay">
-                                                <img src="{{ asset('storage/' . $watch->image) }}" class="watch-img" alt="{{ $watch->name }}">
+                                                <img src="{{ $watch->thumbnail }}" class="watch-img" alt="{{ $watch->title }}">
                                             </div>
                                         </div>
                                         <div class="mt-3">
-                                            <h5 class="text-accent">{{ $watch->name }}</h5>
+                                            <h5 class="text-accent">{{ $watch->title }}</h5>
                                             <p class="text-silver">${{ number_format($watch->price, 2) }}</p>
                                             <a href="{{ route('product.show', $watch->id) }}" class="btn btn-sm btn-outline-custom">View Details</a>
                                         </div>

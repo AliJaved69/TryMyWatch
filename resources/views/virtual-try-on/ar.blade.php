@@ -16,7 +16,7 @@
     #video {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         object-fit: cover; transform: scaleX(-1);
-        z-index: 0; display: none;
+        z-index: 0; opacity: 0; pointer-events: none;
     }
     #three-canvas {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -71,7 +71,7 @@
     </div>
 
     <!-- The mediapipe/video setup -->
-    <video id="video" playsinline></video>
+    <video id="video" autoplay playsinline muted></video>
     <canvas id="three-canvas"></canvas>
 </div>
 @endsection
@@ -97,6 +97,7 @@
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+    import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
     // CONFIGURATION
     const CONFIG = {
@@ -164,6 +165,13 @@
 
     const watchGroup = new THREE.Group();
     scene.add(watchGroup);
+
+    // Create a cylindrical occluder representing the wrist (hides strap parts that go behind wrist)
+    const occluderGeom = new THREE.CylinderGeometry(0.43, 0.43, 1.5, 32);
+    const occluderMat = new THREE.MeshBasicMaterial({ colorWrite: false });
+    const occluder = new THREE.Mesh(occluderGeom, occluderMat);
+    occluder.position.set(0, 0, -0.42);
+    watchGroup.add(occluder);
     
     status.innerText = 'Loading 3D Model...';
 
@@ -219,7 +227,11 @@
             }
         );
     } else {
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+
         const loader = new GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
         loader.load(
             CONFIG.modelUrl,
             (gltf) => processLoadedModel(gltf.scene, 'GLTF'),
@@ -321,7 +333,7 @@
     /* ---------------- CAMERA SETUP ---------------- */
     const cameraUtils = new Camera(video, {
         onFrame: async () => { await hands.send({ image: video }); },
-        width: 1280, height: 720
+        width: 640, height: 480
     });
     cameraUtils.start();
 

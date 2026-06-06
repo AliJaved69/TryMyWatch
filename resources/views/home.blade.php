@@ -249,7 +249,7 @@
                     $productTitle = $product->title ?? 'No Title';
                     $productPrice = $product->price ?? 0;
                     $productThumbnail = $product->thumbnail ?? '';
-                    $productCategory = $product->category->name ?? 'Watch';
+                    $productCategory = is_object($product->category) ? ($product->category->name ?? 'Watch') : ($product->category ?? 'Watch');
                     $productDesc = implode(' ', array_slice(explode(' ', strip_tags($product->description ?? $productTitle)), 0, 15)).'...';
                 @endphp
 

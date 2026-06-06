@@ -65,7 +65,7 @@
         #video {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; transform: scaleX(-1); /* Mirror effect */
-            z-index: 0; display: none; /* Hidden, we render to texture or background */
+            z-index: 0; opacity: 0; pointer-events: none; /* Hidden, we render to texture or background */
         }
         #three-canvas {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -95,20 +95,19 @@
 </head>
 <body>
 
-    <video id="video" playsinline></video>
+    <video id="video" autoplay playsinline muted></video>
     <canvas id="three-canvas"></canvas>
     <div id="status">Initializing...</div>
 
     <script type="module">
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
         // CONFIGURATION
         const CONFIG = {
             // Replace with your GLB/GLTF URL
-            modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/SheenChair/glTF-Binary/SheenChair.glb', 
-            // NOTE: I'm using a placeholder chair because I don't have your watch URL. 
-            // REPLACE the URL above with your watch model.
+            modelUrl: "{{ filter_var($watch->glb_model, FILTER_VALIDATE_URL) ? $watch->glb_model : asset('storage/' . $watch->glb_model) }}",
             
             scaleMultiplier: 5.0, // Adjust this to make watch bigger/smaller
             zOffset: 0.2, // Pushes watch 'out' of the wrist (Visual wrap fix)
@@ -144,9 +143,21 @@
         // We use a Group to handle the tracking position/rotation
         const watchGroup = new THREE.Group();
         scene.add(watchGroup);
+
+        // Create a cylindrical occluder representing the wrist (hides strap parts that go behind wrist)
+        const occluderGeom = new THREE.CylinderGeometry(0.43, 0.43, 1.5, 32);
+        const occluderMat = new THREE.MeshBasicMaterial({ colorWrite: false });
+        const occluder = new THREE.Mesh(occluderGeom, occluderMat);
+        occluder.position.set(0, 0, -0.42);
+        watchGroup.add(occluder);
         
         let watchModel = null;
+        
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+
         const loader = new GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
 
         status.innerText = 'Loading model...';
 
@@ -298,8 +309,8 @@
             onFrame: async () => {
                 await hands.send({ image: video });
             },
-            width: 1280,
-            height: 720
+            width: 640,
+            height: 480
         });
         cameraUtils.start();
 
