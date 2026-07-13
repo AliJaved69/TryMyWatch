@@ -127,11 +127,9 @@
                     <div class="ai-features bg-dark rounded-4 p-4 border border-silver-dim shadow-sm">
                         <h6 class="text-accent text-uppercase small fw-bold mb-3"><i class="fas fa-magic me-2"></i>Virtual Experience</h6>
                         <div class="d-grid gap-2">
-                            @if(!empty($product['model_3d']))
-                                <a href="{{ route('product.ar', $product['id']) }}" class="btn btn-outline-custom">
-                                    <i class="fas fa-cube me-2"></i> View in AR (Camera)
-                                </a>
-                            @endif
+                            <a href="{{ route('product.ar', $product['id']) }}" class="btn btn-outline-custom">
+                                <i class="fas fa-cube me-2"></i> View in AR (Camera)
+                            </a>
                             <a href="{{ route('product.try-on-upload', $product['id']) }}" class="btn btn-outline-light py-2">
                                 <i class="fas fa-robot me-2"></i> AI Static Try-On
                             </a>

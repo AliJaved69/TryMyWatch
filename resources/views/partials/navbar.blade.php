@@ -202,6 +202,9 @@
                 <a class="nav-link {{ request()->is('shop*') ? 'active' : '' }}" href="{{ route('shop') }}">Shop</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ request()->is('static-try-on*') ? 'active' : '' }}" href="{{ route('static.index') }}">AI Try-On</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
             </li>
             <li class="nav-item">
@@ -255,6 +258,9 @@
     </a>
     <a class="drawer-link {{ request()->is('shop*') ? 'active' : '' }}" href="{{ route('shop') }}">
         <i class="fas fa-store text-accent me-3 fs-4"></i>Shop
+    </a>
+    <a class="drawer-link {{ request()->is('static-try-on*') ? 'active' : '' }}" href="{{ route('static.index') }}">
+        <i class="fas fa-magic text-accent me-3 fs-4"></i>AI Try-On
     </a>
     <a class="drawer-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">
         <i class="fas fa-info-circle text-accent me-3 fs-4"></i>About Us

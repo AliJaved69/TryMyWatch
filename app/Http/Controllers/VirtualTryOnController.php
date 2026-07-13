@@ -14,9 +14,9 @@ class VirtualTryOnController extends Controller
     {
         $product = Product::findOrFail($id);
         
-        // Ensure we have a 3D model
+        // Fall back to a default local watch model if none is assigned in the database
         if (!$product->model_3d) {
-            return redirect()->back()->with('error', 'This product does not have a 3D model yet.');
+            $product->model_3d = 'products/models/classic-watch.glb';
         }
 
         return view('virtual-try-on.ar', compact('product'));

@@ -33,6 +33,169 @@
     .tuning-row label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 6px; }
     .tuning-row input { width: 100%; accent-color: var(--accent); cursor: pointer; }
     .tuning-val { float: right; font-family: monospace; color: white; opacity: 0.7; }
+
+    /* Loading Overlay Styles */
+    #loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, #1F2833 0%, #0B0C10 100%);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        font-family: 'Outfit', sans-serif;
+    }
+
+    #loading-overlay.fade-out {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .loader-content {
+        text-align: center;
+        max-width: 450px;
+        width: 90%;
+        padding: 30px;
+        background: rgba(11, 12, 16, 0.4);
+        border-radius: 24px;
+        border: 1px solid rgba(241, 229, 172, 0.15);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .watch-skeleton {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 25px auto;
+        border: 3px solid var(--accent);
+        border-radius: 50%;
+        box-shadow: 0 0 30px rgba(241, 229, 172, 0.15), inset 0 0 15px rgba(241, 229, 172, 0.05);
+        background: rgba(11, 12, 16, 0.6);
+    }
+
+    /* Watch ticks */
+    .watch-skeleton::before {
+        content: '';
+        position: absolute;
+        top: 5px;
+        bottom: 5px;
+        left: 50%;
+        width: 2px;
+        background: linear-gradient(to bottom, var(--accent) 8px, transparent 8px, transparent calc(100% - 8px), var(--accent) calc(100% - 8px));
+        transform: translateX(-50%);
+    }
+
+    .watch-skeleton::after {
+        content: '';
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 50%;
+        height: 2px;
+        background: linear-gradient(to right, var(--accent) 8px, transparent 8px, transparent calc(100% - 8px), var(--accent) calc(100% - 8px));
+        transform: translateY(-50%);
+    }
+
+    .watch-skeleton-hand {
+        position: absolute;
+        background: var(--accent-light);
+        border-radius: 4px;
+        transform-origin: bottom center;
+        left: 50%;
+        bottom: 50%;
+        box-shadow: 0 0 5px rgba(249, 241, 210, 0.5);
+    }
+
+    .watch-skeleton-hand.hour {
+        width: 4px;
+        height: 32px;
+        margin-left: -2px;
+        animation: spin-hand 12s linear infinite;
+    }
+
+    .watch-skeleton-hand.minute {
+        width: 2.5px;
+        height: 48px;
+        margin-left: -1.25px;
+        animation: spin-hand 1.5s linear infinite;
+    }
+
+    .center-pin {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: var(--accent);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 8px var(--accent);
+        z-index: 5;
+    }
+
+    @keyframes spin-hand {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .brand-title {
+        color: #FFFFFF;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 4px;
+        margin: 0 0 5px 0;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-subtitle {
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        margin: 0 0 35px 0;
+        opacity: 0.9;
+    }
+
+    .progress-bar-wrapper {
+        width: 100%;
+        height: 6px;
+        background: rgba(197, 198, 199, 0.15);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 15px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+        border-radius: 3px;
+        transition: width 0.3s ease-out;
+        box-shadow: 0 0 10px rgba(241, 229, 172, 0.6);
+    }
+
+    .status-text {
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 400;
+        margin-bottom: 8px;
+        min-height: 20px;
+        letter-spacing: 0.5px;
+    }
+
+    .percentage-text {
+        color: var(--accent-light);
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
 </style>
 
 <div class="ar-container d-flex justify-content-center align-items-center">
@@ -67,6 +230,31 @@
             <a href="{{ route('product.show', $product->id) }}" class="btn btn-outline-custom text-white btn-sm">
                 <i class="fas fa-arrow-left me-2"></i>Back to Product
             </a>
+        </div>
+    </div>
+
+    <!-- Premium Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="loader-content">
+            <div class="watch-skeleton">
+                <div class="watch-skeleton-hand hour"></div>
+                <div class="watch-skeleton-hand minute"></div>
+                <div class="center-pin"></div>
+            </div>
+            <h2 class="brand-title">TRY MY WATCH</h2>
+            <p class="brand-subtitle">Trying On: {{ $product->title }}</p>
+            
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+            
+            <div class="status-text" id="status-text">Initializing Camera & Assets...</div>
+            <div class="percentage-text" id="percentage-text">0%</div>
+            <div id="retry-button-container" style="display: none; margin-top: 20px;">
+                <button onclick="window.location.reload()" style="background: var(--accent); color: var(--primary); border: none; padding: 10px 20px; border-radius: 20px; font-family: 'Outfit', sans-serif; font-weight: 600; cursor: pointer; box-shadow: 0 0 15px rgba(241, 229, 172, 0.4);">
+                    <i class="fas fa-redo-alt" style="margin-right: 8px;"></i>Try Again
+                </button>
+            </div>
         </div>
     </div>
 
@@ -141,6 +329,51 @@
     const canvas = document.getElementById('three-canvas');
     const status = document.getElementById('status');
 
+    /* ---------------- LOADING STATE MANAGEMENT ---------------- */
+    let isModelLoaded = false;
+    let isCameraReady = false;
+
+    const progressFill = document.getElementById('progress-fill');
+    const statusText = document.getElementById('status-text');
+    const percentageText = document.getElementById('percentage-text');
+    const overlay = document.getElementById('loading-overlay');
+    const retryContainer = document.getElementById('retry-button-container');
+
+    function updateProgress(percent) {
+        if (progressFill) progressFill.style.width = percent + '%';
+        if (percentageText) percentageText.innerText = percent + '%';
+    }
+
+    function checkInitComplete() {
+        if (isModelLoaded && isCameraReady) {
+            if (overlay) {
+                overlay.classList.add('fade-out');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 800);
+            }
+        }
+    }
+
+    // Safety timeout (8 seconds) to prevent permanent loading loop if camera permissions hang
+    setTimeout(() => {
+        if (!isCameraReady && isModelLoaded) {
+            console.warn("Camera ready state timed out, resolving to start session.");
+            isCameraReady = true;
+            checkInitComplete();
+        }
+    }, 8000);
+
+    // Listen for video playing to confirm camera stream is active
+    video.addEventListener('playing', () => {
+        console.log("Camera feed active.");
+        isCameraReady = true;
+        if (statusText && !isModelLoaded) {
+            statusText.innerText = "Camera ready. Downloading 3D watch assets...";
+        }
+        checkInitComplete();
+    });
+
     let width = container.clientWidth;
     let height = container.clientHeight;
 
@@ -174,6 +407,7 @@
     watchGroup.add(occluder);
     
     status.innerText = 'Loading 3D Model...';
+    if (statusText) statusText.innerText = 'Downloading 3D watch assets...';
 
     const isObj = CONFIG.modelUrl.toLowerCase().includes('.obj');
     console.log("Model URL loaded inside AR module:", CONFIG.modelUrl);
@@ -213,6 +447,11 @@
         watchGroup.add(model);
         watchGroup.visible = false;
         status.innerText = 'Show your wrist to camera';
+
+        isModelLoaded = true;
+        updateProgress(100);
+        if (statusText) statusText.innerText = 'Assets loaded! Calibrating wrist space...';
+        setTimeout(checkInitComplete, 400);
     }
 
     if (isObj) {
@@ -220,10 +459,23 @@
         loader.load(
             CONFIG.modelUrl,
             (obj) => processLoadedModel(obj, 'OBJ'),
-            undefined,
+            (xhr) => {
+                if (xhr.lengthComputable) {
+                    const percentComplete = Math.round((xhr.loaded / xhr.total) * 100);
+                    updateProgress(percentComplete);
+                    if (statusText) statusText.innerText = `Downloading 3D model: ${percentComplete}%`;
+                } else {
+                    const loadedMB = (xhr.loaded / (1024 * 1024)).toFixed(1);
+                    if (statusText) statusText.innerText = `Downloading 3D model: ${loadedMB} MB loaded`;
+                    const simulatedPercent = Math.min(Math.round(xhr.loaded / 150000), 95);
+                    updateProgress(simulatedPercent);
+                }
+            },
             (err) => {
                 console.error(err);
-                status.innerText = 'Error loading OBJ model (Check console)';
+                status.innerText = 'Error loading model';
+                if (statusText) statusText.innerText = 'Failed to load the 3D model.';
+                if (retryContainer) retryContainer.style.display = 'block';
             }
         );
     } else {
@@ -235,10 +487,23 @@
         loader.load(
             CONFIG.modelUrl,
             (gltf) => processLoadedModel(gltf.scene, 'GLTF'),
-            undefined,
+            (xhr) => {
+                if (xhr.lengthComputable) {
+                    const percentComplete = Math.round((xhr.loaded / xhr.total) * 100);
+                    updateProgress(percentComplete);
+                    if (statusText) statusText.innerText = `Downloading 3D model: ${percentComplete}%`;
+                } else {
+                    const loadedMB = (xhr.loaded / (1024 * 1024)).toFixed(1);
+                    if (statusText) statusText.innerText = `Downloading 3D model: ${loadedMB} MB loaded`;
+                    const simulatedPercent = Math.min(Math.round(xhr.loaded / 150000), 95);
+                    updateProgress(simulatedPercent);
+                }
+            },
             (err) => {
                 console.error(err);
-                status.innerText = 'Error loading GLB/GLTF model (Check console)';
+                status.innerText = 'Error loading model';
+                if (statusText) statusText.innerText = 'Failed to load the 3D model.';
+                if (retryContainer) retryContainer.style.display = 'block';
             }
         );
     }

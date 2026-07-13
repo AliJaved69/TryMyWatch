@@ -49,6 +49,6 @@ class Product extends Model
         if (filter_var($value, FILTER_VALIDATE_URL)) {
             return $value;
         }
-        return $value ? asset('storage/' . $value) : null;
+        return $value ? '/storage/' . $value : null;
     }
 }
