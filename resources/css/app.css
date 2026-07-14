@@ -41,6 +41,7 @@
     --text-secondary: #9BA4B4;
     --highlight: #0F52BA;
     --glass: rgba(31, 40, 51, 0.7);
+    --sidebar-width: 280px;
 }
 
 /* Base Body Style */
