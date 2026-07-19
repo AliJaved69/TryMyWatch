@@ -15,7 +15,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 
     <style>
         /* === YOUR FULL EXISTING CSS === */
@@ -1006,8 +1006,20 @@
 /* GLOBAL SHOP GRID (Imported from shop template) */
 /* ========================================= */
 
+#lightfall-store {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+}
+
 .shop-wrapper {
     padding: 0 52px 60px;
+    position: relative;
+    z-index: 1;
 }
 @media (max-width: 992px) {
     .shop-wrapper { padding: 0 20px 40px; }
@@ -1046,14 +1058,12 @@
     flex-direction:column; 
     height: 100%;
 }
-.shop-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transform-origin:center;transition:transform 0.5s}
 .shop-card:hover{
     background:rgba(31, 40, 51, 0.8); 
     transform: translateY(-10px);
     box-shadow: 0 20px 45px rgba(0,0,0,0.5);
     border-color: rgba(241, 229, 172, 0.25);
 }
-.shop-card:hover::before{transform:scaleX(1)}
 
 .card-num{position:absolute;top:20px;right:20px;font-size:4rem;font-weight:900;color:rgba(255,255,255,0.02);line-height:1;pointer-events:none;user-select:none;}
 .card-tag{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:700; opacity:0.9;}
@@ -1082,19 +1092,6 @@
 .card-name{font-size:1.3rem;font-weight:600;color:var(--text);margin-bottom:20px;line-height:1.4; z-index: 2; position: relative;}
 .card-bottom{display:flex;justify-content:space-between;align-items:center; margin-top:auto; z-index: 2; position: relative;}
 .card-price{font-size:1.3rem;font-weight:700;}
-.card-arrow{
-    width:44px;height:44px;
-    border-radius:50%;
-    border:1px solid rgba(241, 229, 172, 0.2);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--text-secondary);font-size:16px;transition:all 0.3s;
-}
-.shop-card:hover .card-arrow{
-    background:var(--accent);
-    color:var(--primary);
-    border-color:var(--accent);
-    transform: rotate(45deg);
-}
 
 /* Wide card */
 .card-wide{grid-column:span 2;display:grid;grid-template-columns:1.2fr 1fr; padding:0;}

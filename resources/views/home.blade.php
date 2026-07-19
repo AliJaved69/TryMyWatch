@@ -3,34 +3,29 @@
 @section('title', 'Home')
 
 @section('content')
-<!-- Hero Slider Section -->
-<section class="hero-slider-section">
-    <div class="swiper hero-swiper">
-        <div class="swiper-wrapper">
-            <!-- Slide 1 -->
-            <div class="swiper-slide hero-slide" style="background: linear-gradient(rgba(11, 12, 16, 0.7), rgba(11, 12, 16, 0.7)), url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&q=80'); background-size: cover; background-position: center;">
-                <div class="container h-100 d-flex align-items-center">
-                    <div class="hero-content">
-                        <h1 class="hero-title">Timeless <span class="text-accent">Elegance</span></h1>
-                        <p class="hero-subtitle">Discover the curated collection of luxury timepieces.</p>
-                        <a href="{{ url('/shop') }}" class="btn btn-primary-custom">Explore Collection</a>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div id="lightfall-hero"></div>
+    <div class="container h-100 d-flex align-items-center position-relative" style="z-index: 3;">
+        <div class="row w-100 align-items-center">
+            <!-- Left Column: Content -->
+            <div class="col-lg-7 text-start">
+                <div class="hero-content">
+                    <h1 class="hero-title animate-fade-in">Timeless <span class="text-accent">Elegance</span> & AI Innovation</h1>
+                    <p class="hero-subtitle animate-fade-in" style="animation-delay: 0.2s;">Discover a curated collection of luxury timepieces and experience real-time AI-powered AR try-on directly on your wrist.</p>
+                    <div class="d-flex gap-3 animate-fade-in" style="animation-delay: 0.4s;">
+                        <a href="{{ url('/shop') }}" class="btn btn-primary-custom shadow-accent-glow px-4 py-3">Explore Collection</a>
+                        <a href="{{ route('static.index') }}" class="btn btn-outline-custom px-4 py-3">AI Try-On</a>
                     </div>
                 </div>
             </div>
-            <!-- Slide 2 -->
-            <div class="swiper-slide hero-slide" style="background: linear-gradient(rgba(11, 12, 16, 0.7), rgba(11, 12, 16, 0.7)), url('https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&q=80'); background-size: cover; background-position: center;">
-                <div class="container h-100 d-flex align-items-center">
-                    <div class="hero-content">
-                        <h1 class="hero-title">Virtual <span class="text-accent">Try-On</span></h1>
-                        <p class="hero-subtitle">Experience our AI-powered AR technology today.</p>
-                        <a href="{{ url('/shop') }}" class="btn btn-primary-custom">Try it Now</a>
-                    </div>
+            <!-- Right Column: Floating Watch Display -->
+            <div class="col-lg-5 text-center mt-5 mt-lg-0 animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="hero-watch-container">
+                    <img src="{{ asset('images/hero_watch_display.png') }}" class="hero-watch-img img-fluid" alt="Luxury Display Watch">
                 </div>
             </div>
         </div>
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
     </div>
 </section>
 
@@ -75,39 +70,65 @@
 </section>
 
 <style>
-    .hero-slider-section {
-        height: 80vh;
+    .hero-section {
+        height: 85vh;
         margin-top: 70px;
-    }
-    .hero-swiper {
-        width: 100%;
-        height: 100%;
-    }
-    .hero-slide {
+        position: relative;
+        overflow: hidden;
+        background: #06070a;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+    }
+    #lightfall-hero {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
     }
     .hero-content {
-        max-width: 600px;
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.8s ease;
-    }
-    .swiper-slide-active .hero-content {
-        opacity: 1;
-        transform: translateY(0);
+        max-width: 750px;
+        position: relative;
+        z-index: 3;
+        text-align: left;
     }
     .hero-title {
         font-size: 4rem;
         font-weight: 800;
         color: #fff;
         margin-bottom: 1.5rem;
+        line-height: 1.15;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9), 0 2px 5px rgba(0, 0, 0, 0.7);
     }
     .hero-subtitle {
-        font-size: 1.5rem;
-        color: var(--text);
+        font-size: 1.35rem;
+        color: var(--text-secondary);
         margin-bottom: 2.5rem;
+        line-height: 1.6;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.7);
+    }
+    @keyframes float-watch {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+    .hero-watch-container {
+        position: relative;
+        display: inline-block;
+        animation: float-watch 6s ease-in-out infinite;
+        z-index: 3;
+    }
+    .hero-watch-img {
+        max-width: 100%;
+        max-height: 480px;
+        filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 30px rgba(241, 229, 172, 0.15));
+        border-radius: 24px;
+        transition: transform 0.5s ease;
+    }
+    .hero-watch-container:hover .hero-watch-img {
+        transform: scale(1.05) rotate(3deg);
     }
     .glass-card {
         background: rgba(31, 40, 51, 0.4);
@@ -140,26 +161,9 @@
         transform: translateY(-5px);
         background: rgba(241, 229, 172, 0.1);
     }
-    .swiper-pagination-bullet {
-        background: var(--accent) !important;
-    }
-    .swiper-button-next, .swiper-button-prev {
-        color: var(--accent) !important;
-    }
 </style>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const swiper = new Swiper('.hero-swiper', {
-            loop: true,
-            effect: 'fade',
-            fadeEffect: { crossFade: true },
-            autoplay: { delay: 5000 },
-            pagination: { el: '.swiper-pagination', clickable: true },
-            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-        });
-    });
-</script>
+
 
 <!-- Features Section -->
 <section id="features" class="py-5 features-section">
@@ -254,7 +258,7 @@
                 @endphp
 
                 @if($index === 0)
-                    <a href="{{ route('product.show', $productId) }}" class="shop-card card-wide animate-fade-in" style="animation-delay: 0.1s">
+                    <a href="{{ route('product.show', $productId) }}" class="shop-card card-wide animate-fade-in glare-hover" style="animation-delay: 0.1s">
                         <div class="card-wide-img">
                             @if(!empty($productThumbnail))
                                 <img src="{{ $productThumbnail }}" class="watch-img" style="height:260px;" alt="{{ $productTitle }}">
@@ -267,12 +271,11 @@
                             <div class="card-wide-desc">{{ $productDesc }}</div>
                             <div class="card-bottom">
                                 <div class="card-price gradient-text">${{ number_format((float)$productPrice, 2) }}</div>
-                                <div class="card-arrow"><i class="fas fa-arrow-up"></i></div>
                             </div>
                         </div>
                     </a>
                 @else
-                    <a href="{{ route('product.show', $productId) }}" class="shop-card animate-fade-in" style="animation-delay: {{ 0.1 * ($index + 1) }}s">
+                    <a href="{{ route('product.show', $productId) }}" class="shop-card animate-fade-in glare-hover" style="animation-delay: {{ 0.1 * ($index + 1) }}s">
                         <div class="card-num">{{ sprintf('%02d', $index + 1) }}</div>
                         <div class="card-tag">{{ $productCategory }}</div>
                         <div class="watch-img-container">
@@ -283,7 +286,6 @@
                         <div class="card-name">{{ $productTitle }}</div>
                         <div class="card-bottom">
                             <div class="card-price gradient-text">${{ number_format((float)$productPrice, 2) }}</div>
-                            <div class="card-arrow"><i class="fas fa-arrow-up"></i></div>
                         </div>
                     </a>
                 @endif

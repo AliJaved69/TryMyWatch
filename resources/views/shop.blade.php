@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div id="lightfall-store"></div>
 <div class="shop-wrapper container-fluid min-vh-100">
     <div class="shop-head" style="margin-top: 40px;">
         <div>
@@ -30,7 +31,7 @@
                 @endphp
 
                 @if($index === 0)
-                    <a href="{{ route('product.show', $productId) }}" class="shop-card card-wide">
+                    <a href="{{ route('product.show', $productId) }}" class="shop-card card-wide glare-hover">
                         <div class="card-wide-img">
                             @if(!empty($productThumbnail) && is_string($productThumbnail))
                                 <img src="{{ $productThumbnail }}" class="watch-img" style="height:260px;" alt="{{ $productTitle }}">
@@ -45,12 +46,11 @@
                             <div class="card-wide-desc">{{ \Illuminate\Support\Str::limit($productDesc, 120) }}</div>
                             <div class="card-bottom">
                                 <div class="card-price gradient-text">${{ number_format((float)$productPrice, 2) }}</div>
-                                <div class="card-arrow"><i class="fas fa-arrow-up"></i></div>
                             </div>
                         </div>
                     </a>
                 @else
-                    <a href="{{ route('product.show', $productId) }}" class="shop-card">
+                    <a href="{{ route('product.show', $productId) }}" class="shop-card glare-hover">
                         <div class="card-num">{{ sprintf('%02d', $index + 1) }}</div>
                         <div class="card-tag">{{ $productCategory }}</div>
                         <div class="watch-img-container">
@@ -63,7 +63,6 @@
                         <div class="card-name">{{ $productTitle }}</div>
                         <div class="card-bottom">
                             <div class="card-price gradient-text">${{ number_format((float)$productPrice, 2) }}</div>
-                            <div class="card-arrow"><i class="fas fa-arrow-up"></i></div>
                         </div>
                     </a>
                 @endif
