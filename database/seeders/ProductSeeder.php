@@ -12,46 +12,73 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        // Clear old products to ensure a clean catalog of 5 working watches
+        \App\Models\Product::truncate();
+
         $demoWatches = [
             [
-                'title' => 'Omega Speedmaster Classic',
-                'description' => 'A timeless masterpiece featuring a stainless steel case, black dial, and chronometer functions. Perfect for both formal and casual settings.',
+                'title' => 'Omega Speedmaster Steel',
+                'description' => 'A premium steel chronometer watch featuring a polished metallic link bracelet, black rotating bezel, and highly detailed black face dial. Engineered for timeless style.',
                 'price' => 5200.00,
-                'thumbnail' => 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&q=80&w=600',
+                'thumbnail' => 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&q=80&w=600',
                 'category' => 'Luxury Watches',
                 'brand' => 'Omega',
                 'rating' => 4.9,
                 'model_3d' => 'https://asset-samples.threepipe.org/demos/classic-watch.glb',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&q=80&w=600',
                     'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&q=80&w=600'
                 ]
             ],
             [
-                'title' => 'Tag Heuer Chronograph Watch',
-                'description' => 'Engineering precision meets luxury design. This chronograph features a detailed mechanical dial, sapphire crystal, and premium leather strap.',
+                'title' => 'Tag Heuer Chronograph Leather',
+                'description' => 'Luxury chronograph watch featuring a genuine brown leather strap, silver tachymeter casing, and multi-dial stopwatch functions. Classical design meets modern engineering.',
                 'price' => 3100.00,
-                'thumbnail' => 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&q=80&w=600',
+                'thumbnail' => 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=600',
                 'category' => 'Luxury Watches',
                 'brand' => 'Tag Heuer',
                 'rating' => 4.8,
                 'model_3d' => 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/ChronographWatch/glTF-Binary/ChronographWatch.glb',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&q=80&w=600',
                     'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=600'
                 ]
             ],
             [
-                'title' => 'Minimalist Gold Wristwatch',
-                'description' => 'Sleek gold-plated case with a white minimalist face and genuine brown leather strap. Express your style with subtle elegance.',
+                'title' => 'Cartier Minimalist Gold',
+                'description' => 'Sleek gold-plated case with a clean white minimalist face and genuine black leather strap. A subtle luxury watch designed for sophisticated settings.',
                 'price' => 1850.00,
-                'thumbnail' => 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=600',
+                'thumbnail' => 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&q=80&w=600',
                 'category' => 'Luxury Watches',
                 'brand' => 'Cartier',
                 'rating' => 4.7,
                 'model_3d' => 'https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=600'
+                    'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&q=80&w=600'
+                ]
+            ],
+            [
+                'title' => 'Tissot Midnight Edition',
+                'description' => 'A high-end luxury dark-themed chronograph watch with a matte black steel case, sapphire crystal, and black leather strap.',
+                'price' => 2800.00,
+                'thumbnail' => 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&q=80&w=600',
+                'category' => 'Sport Watches',
+                'brand' => 'Tissot',
+                'rating' => 4.6,
+                'model_3d' => 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/ChronographWatch/glTF-Binary/ChronographWatch.glb',
+                'gallery' => [
+                    'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&q=80&w=600'
+                ]
+            ],
+            [
+                'title' => 'Rolex Oyster Perpetual',
+                'description' => 'A stunning luxury steel watch with a polished oyster link bracelet, clear dial face, and silver indices. The epitome of refined metal link aesthetics.',
+                'price' => 6400.00,
+                'thumbnail' => 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&q=80&w=600',
+                'category' => 'Luxury Watches',
+                'brand' => 'Rolex',
+                'rating' => 4.9,
+                'model_3d' => 'https://asset-samples.threepipe.org/demos/classic-watch.glb',
+                'gallery' => [
+                    'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&q=80&w=600'
                 ]
             ]
         ];
@@ -131,33 +158,6 @@ class ProductSeeder extends Seeder
                     'gallery' => $localGallery,
                 ]
             );
-        }
-
-        try {
-            $response = \Illuminate\Support\Facades\Http::get('https://dummyjson.com/products?limit=100');
-            
-            if ($response->successful()) {
-                $products = $response->json()['products'];
-                
-                foreach ($products as $product) {
-                    // Filter for watches
-                    if (str_contains(strtolower($product['title']), 'watch') || str_contains(strtolower($product['category']), 'watch')) {
-                         \App\Models\Product::updateOrCreate(
-                            ['title' => $product['title']],
-                            [
-                                'description' => $product['description'],
-                                'price' => $product['price'],
-                                'thumbnail' => $product['thumbnail'],
-                                'category' => $product['category'],
-                                'brand' => $product['brand'] ?? 'Unknown',
-                                'rating' => $product['rating'],
-                            ]
-                        );
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::warning("Failed to fetch dummyjson products: " . $e->getMessage());
         }
     }
 }

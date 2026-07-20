@@ -47,11 +47,11 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if(isset($item['image']))
-                                                <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" width="50" class="rounded me-3">
+                                            @if(isset($item['thumbnail']) || isset($item['image']))
+                                                <img src="{{ $item['thumbnail'] ?? $item['image'] }}" alt="{{ $item['title'] ?? $item['name'] ?? 'Product' }}" width="50" class="rounded me-3">
                                             @endif
                                             <div>
-                                                <div class="text-white">{{ $item['name'] }}</div>
+                                                <div class="text-white">{{ $item['title'] ?? $item['name'] ?? 'Product' }}</div>
                                                 <small class="text-secondary">Price: ${{ number_format($item['price'], 2) }}</small>
                                             </div>
                                         </div>

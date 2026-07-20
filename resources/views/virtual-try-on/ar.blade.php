@@ -28,6 +28,37 @@
         padding: 20px; border-radius: 12px; font-family: inherit;
         border: 1px solid rgba(241, 229, 172, 0.2); width: 280px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+    }
+    #ar-ui.hidden-ui {
+        transform: translateX(-340px);
+        opacity: 0;
+        pointer-events: none;
+    }
+    .btn-toggle-ui {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: var(--glass);
+        border: 1px solid rgba(241, 229, 172, 0.3);
+        color: var(--accent);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: background 0.3s, color 0.3s;
+    }
+    .btn-toggle-ui:hover {
+        background: var(--accent);
+        color: var(--primary);
     }
     .tuning-row { margin-bottom: 15px; }
     .tuning-row label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 6px; }
@@ -199,6 +230,11 @@
 </style>
 
 <div class="ar-container d-flex justify-content-center align-items-center">
+    <!-- UI Toggle Button -->
+    <button id="toggle-ui-btn" class="btn-toggle-ui" title="Toggle Controls">
+        <i class="fas fa-sliders-h"></i>
+    </button>
+
     <div id="ar-ui">
         <h4 class="mb-1">{{ $product->title }}</h4>
         <div id="status" class="mb-3 badge bg-onyx text-accent border border-silver-dim">Initializing AR...</div>
@@ -214,11 +250,11 @@
             </div>
             <div class="tuning-row">
                 <label>Rotation Z <span class="tuning-val" id="val-rz">0</span></label>
-                <input type="range" id="tune-rz" min="-180" max="180" value="-90">
+                <input type="range" id="tune-rz" min="-180" max="180" value="0">
             </div>
             <div class="tuning-row">
-                <label>Scale <span class="tuning-val" id="val-scale">5.0</span></label>
-                <input type="range" id="tune-scale" min="1" max="20" step="0.5" value="5">
+                <label>Scale <span class="tuning-val" id="val-scale">1.5</span></label>
+                <input type="range" id="tune-scale" min="0.5" max="10" step="0.1" value="1.5">
             </div>
             <div class="tuning-row">
                 <label>Z-Offset <span class="tuning-val" id="val-z">0.2</span></label>
@@ -289,11 +325,11 @@
 
     // CONFIGURATION
     const CONFIG = {
-        modelUrl: "{{ $product->model_3d }}", 
-        scaleMultiplier: 5.0,
+        modelUrl: "{{ str_starts_with($product->model_3d, 'http') ? $product->model_3d : asset(ltrim($product->model_3d, '/')) }}", 
+        scaleMultiplier: 1.5,
         zOffset: 0.2,
         smoothFactor: 0.15,
-        rotationOffset: new THREE.Euler(0, 0, -Math.PI / 2) // Default orientation fix
+        rotationOffset: new THREE.Euler(0, 0, 0) // Default orientation prefill
     };
 
     // TUNING HANDLERS
@@ -368,11 +404,77 @@
     video.addEventListener('playing', () => {
         console.log("Camera feed active.");
         isCameraReady = true;
+
+        // Auto-detect mirroring based on camera facingMode
+        if (video.srcObject) {
+            const track = video.srcObject.getVideoTracks()[0];
+            if (track) {
+                const settings = track.getSettings();
+                if (settings && settings.facingMode === 'environment') {
+                    isMirrored = false;
+                    console.log("Back camera detected. Mirroring disabled.");
+                } else {
+                    isMirrored = true;
+                    console.log("Front camera/webcam detected. Mirroring enabled.");
+                }
+            }
+        }
+
+        updateCameraAndBackground();
+
         if (statusText && !isModelLoaded) {
             statusText.innerText = "Camera ready. Downloading 3D watch assets...";
         }
         checkInitComplete();
     });
+
+    let isMirrored = true;
+    const PHYSICAL_FOV = 50; // Approximated vertical FOV of the webcam
+
+    function updateCameraAndBackground() {
+        if (!video.videoWidth || !video.videoHeight) return;
+
+        width = container.clientWidth;
+        height = container.clientHeight;
+
+        const videoAspect = video.videoWidth / video.videoHeight;
+        const canvasAspect = width / height;
+
+        // 1. Update Video Texture for "object-fit: cover"
+        videoTexture.matrixAutoUpdate = false;
+        
+        let scaleX = 1;
+        let scaleY = 1;
+        
+        if (canvasAspect < videoAspect) {
+            // Portrait (mobile): crop left/right
+            scaleX = canvasAspect / videoAspect;
+        } else {
+            // Landscape (laptop): crop top/bottom
+            scaleY = videoAspect / canvasAspect;
+        }
+
+        // Apply mirroring to scaleX if isMirrored is true
+        const textureScaleX = isMirrored ? -scaleX : scaleX;
+        
+        // setUvTransform(tx, ty, sx, sy, rotation, cx, cy)
+        videoTexture.matrix.setUvTransform(0, 0, textureScaleX, scaleY, 0, 0.5, 0.5);
+
+        // 2. Adjust Camera projection matrix and FOV
+        camera.aspect = canvasAspect;
+        if (canvasAspect < videoAspect) {
+            // Portrait: height is not cropped, vertical FOV matches physical camera vertical FOV
+            camera.fov = PHYSICAL_FOV;
+        } else {
+            // Landscape: height is cropped, vertical FOV must be increased to match the canvas aspect ratio
+            const radAngle = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(PHYSICAL_FOV) / 2) * (canvasAspect / videoAspect));
+            camera.fov = THREE.MathUtils.radToDeg(radAngle);
+        }
+        camera.updateProjectionMatrix();
+
+        // 3. Update Renderer size
+        renderer.setSize(width, height);
+    }
 
     let width = container.clientWidth;
     let height = container.clientHeight;
@@ -382,7 +484,7 @@
     const videoTexture = new THREE.VideoTexture(video);
     scene.background = videoTexture;
 
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(PHYSICAL_FOV, width / height, 0.1, 100);
     camera.position.z = 10;
 
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
@@ -456,6 +558,9 @@
 
     if (isObj) {
         const loader = new OBJLoader();
+        if (CONFIG.modelUrl.includes(window.location.hostname) || !CONFIG.modelUrl.startsWith('http')) {
+            loader.setRequestHeader({ 'ngrok-skip-browser-warning': 'true' });
+        }
         loader.load(
             CONFIG.modelUrl,
             (obj) => processLoadedModel(obj, 'OBJ'),
@@ -484,6 +589,9 @@
 
         const loader = new GLTFLoader();
         loader.setDRACOLoader(dracoLoader);
+        if (CONFIG.modelUrl.includes(window.location.hostname) || !CONFIG.modelUrl.startsWith('http')) {
+            loader.setRequestHeader({ 'ngrok-skip-browser-warning': 'true' });
+        }
         loader.load(
             CONFIG.modelUrl,
             (gltf) => processLoadedModel(gltf.scene, 'GLTF'),
@@ -548,7 +656,24 @@
         const handWidth2D = p1.distanceTo(p2);
         const estimatedDepth = 0.8 / handWidth2D; 
 
-        const ndc = new THREE.Vector3((wrist.x - 0.5) * -2, -(wrist.y - 0.5) * 2, 0.5);
+        let xc = wrist.x;
+        let yc = wrist.y;
+
+        if (video.videoWidth && video.videoHeight) {
+            const videoAspect = video.videoWidth / video.videoHeight;
+            const canvasAspect = width / height;
+
+            if (canvasAspect < videoAspect) {
+                // Portrait (mobile): crop left/right
+                xc = (wrist.x - 0.5) * (videoAspect / canvasAspect) + 0.5;
+            } else {
+                // Landscape (laptop): crop top/bottom
+                yc = (wrist.y - 0.5) * (canvasAspect / videoAspect) + 0.5;
+            }
+        }
+
+        const signX = isMirrored ? -2 : 2;
+        const ndc = new THREE.Vector3((xc - 0.5) * signX, -(yc - 0.5) * 2, 0.5);
         ndc.unproject(camera);
         ndc.sub(camera.position).normalize();
         const finalPos = camera.position.clone().add(ndc.multiplyScalar(estimatedDepth));
@@ -566,7 +691,12 @@
         const zAxis = new THREE.Vector3().crossVectors(xAxis, yAxis).normalize();
         xAxis.crossVectors(yAxis, zAxis).normalize();
 
-        const matrix = new THREE.Matrix4().makeBasis(xAxis, yAxis.negate(), zAxis);
+        const matrix = new THREE.Matrix4();
+        if (isMirrored) {
+            matrix.makeBasis(xAxis, yAxis.negate(), zAxis);
+        } else {
+            matrix.makeBasis(xAxis.clone().negate(), yAxis.negate(), zAxis);
+        }
         targetQuat.setFromRotationMatrix(matrix);
 
         // Apply Custom Rotation Tuning
@@ -598,16 +728,29 @@
     /* ---------------- CAMERA SETUP ---------------- */
     const cameraUtils = new Camera(video, {
         onFrame: async () => { await hands.send({ image: video }); },
-        width: 640, height: 480
+        width: 640, height: 480,
+        facingMode: 'environment'
     });
     cameraUtils.start();
 
     window.addEventListener('resize', () => {
-        width = container.clientWidth;
-        height = container.clientHeight;
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        renderer.setSize(width, height);
+        updateCameraAndBackground();
     });
+
+    /* ---------------- UI TOGGLE LOGIC ---------------- */
+    const toggleBtn = document.getElementById('toggle-ui-btn');
+    const arUi = document.getElementById('ar-ui');
+    if (toggleBtn && arUi) {
+        toggleBtn.addEventListener('click', () => {
+            arUi.classList.toggle('hidden-ui');
+            if (arUi.classList.contains('hidden-ui')) {
+                toggleBtn.style.color = '#ffffff';
+                toggleBtn.style.background = 'rgba(255, 255, 255, 0.15)';
+            } else {
+                toggleBtn.style.color = 'var(--accent)';
+                toggleBtn.style.background = 'var(--glass)';
+            }
+        });
+    }
 </script>
 @endsection

@@ -29,28 +29,4 @@ document.addEventListener('DOMContentLoaded', () => {
             />
         );
     }
-
-    const lightfallStoreEl = document.getElementById('lightfall-store');
-    if (lightfallStoreEl) {
-        const root = createRoot(lightfallStoreEl);
-        root.render(
-            <Lightfall
-                colors={['#F1E5AC', '#F9F1D2', '#C5C6C7', '#FFFFFF', '#0F52BA']}
-                backgroundColor="#06070a"
-                speed={0.35}
-                streakCount={4}
-                streakWidth={1.0}
-                streakLength={1.0}
-                glow={1.1}
-                density={0.4}
-                twinkle={0.8}
-                zoom={2.0}
-                backgroundGlow={0.2}
-                opacity={0.5}
-                mouseInteraction={true}
-                mouseStrength={0.5}
-                mouseRadius={0.6}
-            />
-        );
-    }
 });

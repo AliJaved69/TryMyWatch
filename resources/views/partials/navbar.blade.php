@@ -115,7 +115,8 @@
         left: 0;
         width: 100%;
         height: 100vh;
-        background: #0b0c10 !important; /* Solid luxury dark background */
+        background: #0b0c10 !important;
+        /* Solid luxury dark background */
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -202,20 +203,20 @@
                 <a class="nav-link {{ request()->is('shop*') ? 'active' : '' }}" href="{{ route('shop') }}">Shop</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('static-try-on*') ? 'active' : '' }}" href="{{ route('static.index') }}">AI Try-On</a>
+                <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">About
+                    Us</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('contact*') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
+                <a class="nav-link {{ request()->is('contact*') ? 'active' : '' }}"
+                    href="{{ route('contact') }}">Contact Us</a>
             </li>
 
             <li class="nav-item">
                 <a href="#" class="nav-link position-relative" data-bs-toggle="modal" data-bs-target="#cartModal">
                     <i class="fas fa-shopping-bag text-accent"></i>
-                    <span id="cartCount" class="badge rounded-pill position-absolute top-0 start-100 translate-middle border border-onyx shadow-accent-glow"
-                          style="display:none; background: var(--accent); color: var(--primary) !important; font-size: 0.75rem; padding: 0.4em 0.6em; min-width: 1.8em; font-weight: 800;">0</span>
+                    <span id="cartCount"
+                        class="badge rounded-pill position-absolute top-0 start-100 translate-middle border border-onyx shadow-accent-glow"
+                        style="display:none; background: var(--accent); color: var(--primary) !important; font-size: 0.75rem; padding: 0.4em 0.6em; min-width: 1.8em; font-weight: 800;">0</span>
                 </a>
             </li>
 
@@ -268,14 +269,15 @@
     <a class="drawer-link {{ request()->is('contact*') ? 'active' : '' }}" href="{{ route('contact') }}">
         <i class="fas fa-envelope text-accent me-3 fs-4"></i>Contact Us
     </a>
-    
+
     <div class="drawer-divider"></div>
 
     <!-- Mobile Cart Button -->
-    <a href="#" class="drawer-link position-relative" data-bs-toggle="modal" data-bs-target="#cartModal" id="mobileCartBtn">
+    <a href="#" class="drawer-link position-relative" data-bs-toggle="modal" data-bs-target="#cartModal"
+        id="mobileCartBtn">
         <i class="fas fa-shopping-bag text-accent me-3 fs-4"></i>Cart
-        <span id="mobileCartCount" class="badge rounded-pill bg-accent text-primary ms-2" 
-              style="display:none; font-size: 0.75rem; padding: 0.4em 0.6em; font-weight: 800;">0</span>
+        <span id="mobileCartCount" class="badge rounded-pill bg-accent text-primary ms-2"
+            style="display:none; font-size: 0.75rem; padding: 0.4em 0.6em; font-weight: 800;">0</span>
     </a>
 
     <!-- Mobile Auth Option -->
@@ -310,7 +312,7 @@
 
         // Mobile drawer toggling
         const toggler = document.getElementById('navToggler');
-        const drawer  = document.getElementById('mobileDrawer');
+        const drawer = document.getElementById('mobileDrawer');
         const closeBtn = document.getElementById('drawerClose');
         const mobileCartBtn = document.getElementById('mobileCartBtn');
 

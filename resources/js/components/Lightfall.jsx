@@ -98,7 +98,7 @@ vec2 sceneC(vec2 frag, vec2 r) {
   float z = 0.0;
   float d = 1e3;
   vec4 O = vec4(0.0);
-  for (int k = 0; k < 39; k++) {
+  for (int k = 0; k < 24; k++) {
     if (d <= 1e-4) break;
     O = z * normalize(vec4(P, uZoom, 0.0)) - vec4(0.0, 4.0, 1.0, 0.0) / 4.5;
     d = 1.0 - sqrt(length(O * O));
@@ -202,7 +202,7 @@ const Lightfall = ({
     if (!container) return;
 
     const renderer = new Renderer({
-      dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
+      dpr: dpr ?? (typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 1.2) : 1),
       alpha: true,
       antialias: true
     });
@@ -279,8 +279,17 @@ const Lightfall = ({
       canvas.addEventListener('pointermove', onPointerMove);
     }
 
+    let isVisible = true;
+    let isLooping = false;
+
     const loop = t => {
+      if (!isVisible || paused) {
+        isLooping = false;
+        return;
+      }
+      isLooping = true;
       rafRef.current = requestAnimationFrame(loop);
+
       uniforms.iTime.value = t * 0.001;
       if (mouseDampening > 0) {
         if (!lastTimeRef.current) lastTimeRef.current = t;
@@ -296,7 +305,8 @@ const Lightfall = ({
       } else {
         lastTimeRef.current = t;
       }
-      if (!paused && programRef.current && meshRef.current) {
+
+      if (programRef.current && meshRef.current) {
         try {
           renderer.render({ scene: meshRef.current });
         } catch (e) {
@@ -304,9 +314,20 @@ const Lightfall = ({
         }
       }
     };
-    rafRef.current = requestAnimationFrame(loop);
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !isLooping && !paused) {
+          lastTimeRef.current = 0; // reset delta time
+          rafRef.current = requestAnimationFrame(loop);
+        }
+      });
+    }, { threshold: 0 });
+    io.observe(container);
 
     return () => {
+      io.disconnect();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (mouseInteraction) canvas.removeEventListener('pointermove', onPointerMove);
       ro.disconnect();

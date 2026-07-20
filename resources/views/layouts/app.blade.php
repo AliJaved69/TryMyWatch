@@ -1006,15 +1006,7 @@
 /* GLOBAL SHOP GRID (Imported from shop template) */
 /* ========================================= */
 
-#lightfall-store {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-}
+
 
 .shop-wrapper {
     padding: 0 52px 60px;
@@ -1167,6 +1159,236 @@
                 margin-bottom: 20px !important;
                 font-size: 0.85rem !important;
             }
+        }
+
+        /* === PREMIUM LUXURY CART MODAL STYLING === */
+        #cartModal {
+            z-index: 100005 !important;
+        }
+        
+        .modal-backdrop {
+            z-index: 100002 !important;
+        }
+
+        #cartModal .modal-dialog {
+            margin-top: 100px !important;
+            margin-bottom: 2rem !important;
+        }
+
+        #cartModal .modal-content {
+            background: rgba(11, 12, 16, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(241, 229, 172, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(241, 229, 172, 0.05);
+            color: var(--text);
+        }
+
+        #cartModal .modal-header {
+            border-bottom: 1px solid rgba(241, 229, 172, 0.1);
+            padding: 1.5rem 2rem;
+        }
+
+        #cartModal .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 1.25rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #cartModal .btn-close {
+            filter: invert(1) grayscale(1) brightness(1.5);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        #cartModal .btn-close:hover {
+            opacity: 1;
+        }
+
+        #cartModal .modal-body {
+            padding: 2rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        #cartModal .modal-footer {
+            border-top: 1px solid rgba(241, 229, 172, 0.1);
+            background: rgba(11, 12, 16, 0.4);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #cartModal .list-group-item {
+            background: rgba(31, 40, 51, 0.4);
+            border: 1px solid rgba(241, 229, 172, 0.08);
+            border-radius: 12px !important;
+            margin-bottom: 12px;
+            padding: 18px;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            color: var(--text);
+        }
+
+        #cartModal .list-group-item:hover {
+            border-color: rgba(241, 229, 172, 0.3);
+            background: rgba(31, 40, 51, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        #cartModal .list-group-item img {
+            border: 1px solid rgba(241, 229, 172, 0.15);
+            border-radius: 8px;
+            object-fit: cover;
+            padding: 2px;
+            background: rgba(11, 12, 16, 0.8);
+        }
+
+        #cartModal .list-group-item strong {
+            color: var(--text-bright);
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        #cartModal .list-group-item small {
+            color: var(--accent);
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        #cartModal .remove-item-btn {
+            background: rgba(255, 82, 82, 0.1);
+            border: 1px solid rgba(255, 82, 82, 0.2);
+            color: #ff5252;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        #cartModal .remove-item-btn:hover {
+            background: #ff5252;
+            border-color: #ff5252;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 82, 82, 0.4);
+        }
+
+        #clearCartBtn {
+            background: transparent;
+            border: 1px solid rgba(255, 82, 82, 0.4);
+            color: #ff5252;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        #clearCartBtn:hover {
+            background: #ff5252;
+            color: #ffffff;
+            border-color: #ff5252;
+            box-shadow: 0 0 15px rgba(255, 82, 82, 0.3);
+        }
+
+        #checkoutBtn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border: none;
+            color: var(--primary) !important;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            padding: 10px 24px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        #checkoutBtn:hover {
+            box-shadow: 0 0 20px rgba(241, 229, 172, 0.4);
+            transform: translateY(-1px);
+        }
+
+        #cartModal .empty-cart-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+        }
+
+        #cartModal .empty-cart-state i {
+            font-size: 3.5rem;
+            color: var(--accent);
+            opacity: 0.3;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        #cartModal .empty-cart-state p {
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        #cartModal .empty-cart-state span {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            display: block;
+        }
+
+        /* Quantity Controller styles */
+        #cartModal .quantity-controller {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(241, 229, 172, 0.15);
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 4px;
+        }
+
+        #cartModal .btn-qty {
+            background: transparent;
+            border: none;
+            color: var(--accent);
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        #cartModal .btn-qty:hover {
+            background: rgba(241, 229, 172, 0.15);
+            color: var(--accent-light);
+        }
+
+        #cartModal .qty-display {
+            color: var(--text-bright);
+            font-weight: 700;
+            font-size: 0.85rem;
+            min-width: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -1421,22 +1643,37 @@
             function renderCartItems() {
                 const cart = loadCart();
                 if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+                    cartItemsContainer.innerHTML = `
+                        <div class="empty-cart-state text-center">
+                            <i class="fas fa-shopping-bag mb-3"></i>
+                            <p>Your luxury collection is empty.</p>
+                            <span>Select watches from our showroom to add them to your cart.</span>
+                        </div>
+                    `;
                     return;
                 }
 
-                let html = '<ul class="list-group">';
+                let html = '<ul class="list-group list-group-flush bg-transparent border-0">';
                 cart.forEach(item => {
                     html += `
-                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <li class="list-group-item d-flex align-items-center justify-content-between bg-transparent">
                             <div class="d-flex align-items-center">
-                                <img src="${item.thumbnail}" alt="${item.title}" style="width:50px; height:auto; margin-right:15px; border-radius:5px;">
+                                <img src="${item.thumbnail}" alt="${item.title}" style="width:60px; height:60px; margin-right:15px;" class="object-fit-cover">
                                 <div>
                                     <strong>${item.title}</strong><br>
-                                    <small>$${item.price.toFixed(2)} x ${item.quantity}</small>
+                                    <div class="d-flex align-items-center mt-1">
+                                        <small class="text-accent me-3">$${item.price.toFixed(2)}</small>
+                                        <div class="quantity-controller d-flex align-items-center">
+                                            <button class="btn-qty decrease-qty-btn" data-id="${item.id}" aria-label="Decrease quantity">-</button>
+                                            <span class="qty-display">${item.quantity}</span>
+                                            <button class="btn-qty increase-qty-btn" data-id="${item.id}" aria-label="Increase quantity">+</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <button class="btn btn-sm btn-danger remove-item-btn" data-id="${item.id}" aria-label="Remove item">&times;</button>
+                            <button class="remove-item-btn" data-id="${item.id}" aria-label="Remove item">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </li>
                     `;
                 });
@@ -1450,6 +1687,44 @@
                         removeFromCart(id);
                     });
                 });
+
+                // Attach decrease handlers
+                document.querySelectorAll('.decrease-qty-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        const cart = loadCart();
+                        const item = cart.find(i => i.id == id);
+                        if (item) {
+                            updateCartItemQty(id, item.quantity - 1);
+                        }
+                    });
+                });
+
+                // Attach increase handlers
+                document.querySelectorAll('.increase-qty-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        const cart = loadCart();
+                        const item = cart.find(i => i.id == id);
+                        if (item) {
+                            updateCartItemQty(id, item.quantity + 1);
+                        }
+                    });
+                });
+            }
+
+            function updateCartItemQty(id, newQty) {
+                let cart = loadCart();
+                const item = cart.find(i => i.id == id);
+                if (item) {
+                    item.quantity = newQty;
+                    if (item.quantity <= 0) {
+                        cart = cart.filter(i => i.id != id);
+                    }
+                    saveCart(cart);
+                    updateCartCount();
+                    renderCartItems();
+                }
             }
 
             function addToCart(product) {

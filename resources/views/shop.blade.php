@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="lightfall-store"></div>
 <div class="shop-wrapper container-fluid min-vh-100">
     <div class="shop-head" style="margin-top: 40px;">
         <div>
