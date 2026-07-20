@@ -220,24 +220,22 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                @guest
-                    <a href="{{ route('login') }}" class="btn btn-primary-custom shadow-accent-glow px-4">
-                        <i class="fas fa-user-lock me-2 small"></i> Client Portal
-                    </a>
-                @else
-                    <div class="d-flex align-items-center gap-3 flex-wrap">
-                        @if(Auth::user()->is_admin)
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-custom border-0 text-accent">
-                                <i class="fas fa-shield-halved me-1"></i> Admin
-                            </a>
-                        @endif
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button class="btn btn-primary-custom px-4">Terminate Session</button>
-                        </form>
-                    </div>
-                @endguest
+            <li class="nav-item d-flex align-items-center gap-2">
+                <a href="{{ route('order.track') }}" class="btn btn-outline-custom px-3 py-2 me-2">
+                    <i class="fas fa-truck me-2 small"></i> Track Order
+                </a>
+
+                @auth
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-outline-custom border-0 text-accent me-2" title="Admin Dashboard">
+                            <i class="fas fa-shield-halved"></i>
+                        </a>
+                    @endif
+                    <form method="POST" action="{{ route('logout') }}" class="m-0">
+                        @csrf
+                        <button class="btn btn-sm btn-outline-custom px-3">Logout</button>
+                    </form>
+                @endauth
             </li>
         </ul>
 
@@ -279,27 +277,27 @@
         <span id="mobileCartCount" class="badge rounded-pill bg-accent text-primary ms-2"
             style="display:none; font-size: 0.75rem; padding: 0.4em 0.6em; font-weight: 800;">0</span>
     </a>
+    <a class="drawer-link {{ request()->is('track-order*') ? 'active' : '' }}" href="{{ route('order.track') }}">
+        <i class="fas fa-truck text-accent me-3 fs-4"></i>Track Order
+    </a>
 
     <!-- Mobile Auth Option -->
-    <div class="mt-3">
-        @guest
-            <a href="{{ route('login') }}" class="btn btn-primary-custom shadow-accent-glow px-5 py-3 fs-5">
-                <i class="fas fa-user-lock me-2"></i> Client Portal
-            </a>
-        @else
+    @auth
+        <div class="drawer-divider"></div>
+        <div class="mt-4 px-3">
             <div class="d-flex flex-column align-items-center gap-3">
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-custom text-accent fs-5">
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-custom text-accent fs-5 w-100">
                         <i class="fas fa-shield-halved me-2"></i>Admin Dashboard
                     </a>
                 @endif
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" class="w-100">
                     @csrf
-                    <button class="btn btn-primary-custom px-5 py-3 fs-5">Terminate Session</button>
+                    <button class="btn btn-primary-custom w-100 py-3 fs-5">Logout</button>
                 </form>
             </div>
-        @endguest
-    </div>
+        </div>
+    @endauth
 </div>
 
 <script>

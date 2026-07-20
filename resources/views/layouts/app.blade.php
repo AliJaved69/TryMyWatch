@@ -1773,18 +1773,12 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            const isLoggedIn = @json(Auth::check());
-            console.log('Is user logged in?', isLoggedIn);
-
             const checkoutBtn = document.getElementById('checkoutBtn');
-
-            checkoutBtn.addEventListener('click', function () {
-                if (isLoggedIn) {
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener('click', function () {
                     window.location.href = '{{ route('checkout') }}';
-                } else {
-                    window.location.href = '{{ route('login') }}';
-                }
-            });
+                });
+            }
         });
 
         // === SMOOTH SCROLLING FOR ANCHOR LINKS ===

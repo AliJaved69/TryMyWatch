@@ -6,7 +6,7 @@
         <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary mb-3">
             <i class="fas fa-arrow-left"></i> Back to Orders
         </a>
-        <h2 class="fw-bold">Order #{{ $order->id }} Details</h2>
+        <h2 class="fw-bold">Order #{{ $order->id }} Details <span class="fs-5 text-muted">({{ $order->order_number }})</span></h2>
     </div>
 </div>
 
@@ -23,29 +23,39 @@
                         <thead>
                             <tr>
                                 <th>Product Details</th>
-                                <th>Actions</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-end">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Note: Assuming items are stored as JSON and contain simplistic data for now -->
                              @php
                                 $items = json_decode($order->items, true);
                             @endphp
                             
                             @if(is_array($items))
                                 @foreach($items as $item)
+                                @php
+                                    $itemData = is_string($item) ? json_decode($item, true) : $item;
+                                @endphp
                                 <tr>
                                     <td>
-                                        <!-- Need to parse item string or object depending on how it's stored -->
-                                        {{ is_string($item) ? $item : json_encode($item) }}
+                                        <div class="d-flex align-items-center">
+                                            @if(isset($itemData['thumbnail']) || isset($itemData['image']))
+                                                <img src="{{ $itemData['thumbnail'] ?? $itemData['image'] }}" alt="{{ $itemData['title'] ?? $itemData['name'] ?? 'Product' }}" width="50" class="rounded me-3 border border-secondary" style="object-fit: cover; height: 50px;">
+                                            @endif
+                                            <div>
+                                                <div class="text-white fw-bold">{{ $itemData['title'] ?? $itemData['name'] ?? 'Product' }}</div>
+                                                <small class="text-accent">${{ number_format($itemData['price'] ?? 0, 2) }}</small>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td></td>
+                                    <td class="text-center text-white">x{{ $itemData['quantity'] ?? 1 }}</td>
+                                    <td class="text-end text-white">${{ number_format(($itemData['price'] ?? 0) * ($itemData['quantity'] ?? 1), 2) }}</td>
                                 </tr>
                                 @endforeach
                             @else
                                 <tr>
-                                    <td>{{ $order->items }}</td>
-                                    <td></td>
+                                    <td colspan="3" class="text-white">{{ $order->items }}</td>
                                 </tr>
                             @endif
                         </tbody>

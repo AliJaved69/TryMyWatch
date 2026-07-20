@@ -8,6 +8,21 @@
         <p class="text-silver-dim small text-uppercase fw-bold mb-0">Financial Oversight</p>
         <h4 class="text-bright fw-bold mb-0">Order Historique</h4>
     </div>
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        <form action="{{ route('admin.orders.index') }}" method="GET" class="d-inline-block" style="max-width: 350px;">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control form-control-sm bg-transparent border-secondary text-white font-monospace" placeholder="Search Tracking ID, name, email..." value="{{ request('search') }}" style="font-size: 0.85rem; border-color: rgba(197, 198, 199, 0.2) !important;">
+                <button class="btn class-button btn-sm btn-outline-light" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+                @if(request('search'))
+                    <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-times"></i>
+                    </a>
+                @endif
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="card border-silver-dim shadow-lg">
@@ -27,7 +42,7 @@
                 <tbody>
                     @forelse($orders as $order)
                     <tr class="align-middle">
-                        <td class="ps-4 fw-bold text-accent">#ORD-{{ $order->id }}</td>
+                        <td class="ps-4 fw-bold text-accent font-monospace">{{ $order->order_number }}</td>
                         <td class="text-silver-dim small">{{ $order->created_at->format('M d, Y • H:i') }}</td>
                         <td class="text-bright fw-600">{{ $order->name }}</td>
                         <td class="fw-bold">${{ number_format($order->total_price, 2) }}</td>

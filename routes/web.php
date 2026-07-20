@@ -10,6 +10,7 @@ use App\Http\Controllers\WatchController;
 use App\Http\Controllers\VirtualTryOnController;
 use App\Http\Controllers\StaticTryOnController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\OrderTrackingController;
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -36,13 +37,16 @@ Route::get('/signup', [AuthController::class, 'showSignup'])->name('signup');
 Route::post('/signup', [AuthController::class, 'signup'])->name('signup.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Checkout (Protected)
+// Checkout (Public)
+Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
+Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+
+// Order Tracking (Public)
+Route::get('/track-order', [OrderTrackingController::class, 'track'])->name('order.track');
+
+// Watch Try-on (Protected)
 Route::middleware('auth')->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
-    Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
-    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
-    
-    // Watch try-on feature
     Route::get('/watch/{id}/try', [WatchController::class, 'try'])->name('watch.try');
     Route::get('/watch/form', [WatchController::class, 'showForm'])->name('watch.form');  
     Route::post('/watch/upload', [WatchController::class, 'store'])->name('watch.store');

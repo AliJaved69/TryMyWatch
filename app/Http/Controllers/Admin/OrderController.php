@@ -11,9 +11,20 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::latest()->paginate(10);
+        $search = $request->query('search');
+        $query = Order::latest();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('order_number', 'like', '%' . trim($search) . '%')
+                  ->orWhere('name', 'like', '%' . trim($search) . '%')
+                  ->orWhere('email', 'like', '%' . trim($search) . '%');
+            });
+        }
+
+        $orders = $query->paginate(10)->withQueryString();
         return view('admin.orders.index', compact('orders'));
     }
 

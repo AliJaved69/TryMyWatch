@@ -23,6 +23,9 @@ class CheckoutController extends Controller
             'email' => 'required|email',
             'phone' => 'required',
             'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'zip' => 'required',
             'items' => 'required',
             'total_price' => 'required|numeric',
             'payment_method' => 'required|in:card,cod',
@@ -53,12 +56,19 @@ class CheckoutController extends Controller
             }
         }
 
+        // Generate unique tracking order number
+        do {
+            $orderNumber = 'TMW-' . strtoupper(\Illuminate\Support\Str::random(8));
+        } while (Order::where('order_number', $orderNumber)->exists());
+
         // Save order data
         $order = Order::create([
+            'order_number' => $orderNumber,
+            'status' => 'pending',
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'address' => $validated['address'],
+            'address' => $validated['address'] . ', ' . $validated['city'] . ', ' . $validated['state'] . ' ' . $validated['zip'],
             'items' => $validated['items'],
             'total_price' => $validated['total_price'],
             'payment_method' => $validated['payment_method'],
