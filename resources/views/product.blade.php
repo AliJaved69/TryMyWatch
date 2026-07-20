@@ -57,12 +57,26 @@
     .badge.bg-danger {
         background-color: #b33939;
     }
+
+    .hover-gold {
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
+    }
+    .hover-gold:hover {
+        color: var(--accent) !important;
+    }
 </style>
 @endsection
 
 @section('content')
 <section class="py-5 bg-onyx min-vh-100" style="margin-top: 80px;">
     <div class="container">
+        <!-- Back to Products Link -->
+        <div class="mb-4">
+            <a href="{{ route('shop') }}" class="text-silver hover-gold transition-all text-decoration-none d-inline-flex align-items-center">
+                <i class="fas fa-arrow-left me-2"></i> Back to all products
+            </a>
+        </div>
         @php
             $productPrice = $product['price'] ?? 0;
             $productThumbnail = $product['thumbnail'] ?? '';

@@ -212,11 +212,13 @@
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link position-relative" data-bs-toggle="modal" data-bs-target="#cartModal">
-                    <i class="fas fa-shopping-bag text-accent"></i>
-                    <span id="cartCount"
-                        class="badge rounded-pill position-absolute top-0 start-100 translate-middle border border-onyx shadow-accent-glow"
-                        style="display:none; background: var(--accent); color: var(--primary) !important; font-size: 0.75rem; padding: 0.4em 0.6em; min-width: 1.8em; font-weight: 800;">0</span>
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#cartModal">
+                    <span class="position-relative d-inline-block">
+                        <i class="fas fa-shopping-bag text-accent"></i>
+                        <span id="cartCount"
+                            class="badge rounded-pill position-absolute top-0 start-100 translate-middle border border-onyx shadow-accent-glow"
+                            style="display:none; background: var(--accent); color: var(--primary) !important; font-size: 0.7rem; padding: 0.25em 0.45em; min-width: 1.6em; font-weight: 800; transform: translate(-30%, -30%) !important;">0</span>
+                    </span>
                 </a>
             </li>
 

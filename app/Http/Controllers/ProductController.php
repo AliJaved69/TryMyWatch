@@ -10,8 +10,23 @@ class ProductController extends Controller
 {
     public function shop()
     {
-        $products = \App\Models\Product::limit(50)->get();
-        return view('shop', ['products' => $products]);
+        $query = \App\Models\Product::query();
+        
+        $selectedCategory = request()->query('category', 'all');
+        if ($selectedCategory && $selectedCategory !== 'all') {
+            $query->where('category', $selectedCategory);
+        }
+        
+        $products = $query->limit(50)->get();
+        
+        // Retrieve all unique categories from products to populate the filter
+        $categories = \App\Models\Product::distinct()->pluck('category')->filter()->values();
+        
+        return view('shop', [
+            'products' => $products,
+            'categories' => $categories,
+            'selectedCategory' => $selectedCategory
+        ]);
     }
 
     public function product($id)
