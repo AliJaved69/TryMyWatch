@@ -296,8 +296,8 @@
 
             <div class="tuning-panel pt-3 border-top border-silver-dim">
                 <div class="tuning-row">
-                    <label><span>Rotation X</span> <span class="tuning-val" id="val-rx">0</span></label>
-                    <input type="range" id="tune-rx" min="-180" max="180" value="0">
+                    <label><span>Rotation X</span> <span class="tuning-val" id="val-rx">90</span></label>
+                    <input type="range" id="tune-rx" min="-180" max="180" value="90">
                 </div>
                 <div class="tuning-row">
                     <label><span>Rotation Y</span> <span class="tuning-val" id="val-ry">0</span></label>
@@ -308,8 +308,8 @@
                     <input type="range" id="tune-rz" min="-180" max="180" value="-90">
                 </div>
                 <div class="tuning-row">
-                    <label><span>Scale</span> <span class="tuning-val" id="val-scale">4</span></label>
-                    <input type="range" id="tune-scale" min="0.5" max="15" step="0.1" value="4">
+                    <label><span>Scale</span> <span class="tuning-val" id="val-scale">12</span></label>
+                    <input type="range" id="tune-scale" min="0.5" max="50" step="0.5" value="12">
                 </div>
                 <div class="tuning-row">
                     <label><span>X-Offset (Side)</span> <span class="tuning-val" id="val-x">0</span></label>
@@ -399,7 +399,7 @@
         // CONFIGURATION
         const CONFIG = {
             modelUrl: "{{ str_starts_with($product->model_3d, 'http') ? $product->model_3d : (str_starts_with(ltrim($product->model_3d, '/'), 'storage/') ? asset(ltrim($product->model_3d, '/')) : asset('storage/' . ltrim($product->model_3d, '/'))) }}",
-            scaleMultiplier: 4.0,
+            scaleMultiplier: 12.0,
             xOffset: 0,
             yOffset: -0.15,
             zOffset: -0.2,
@@ -411,7 +411,7 @@
             oneEuroMinCutoff: 1.0,
             oneEuroBeta: 0.007,
             oneEuroDCutoff: 1.0,
-            rotationOffset: new THREE.Euler(0, 0, THREE.MathUtils.degToRad(-90))
+            rotationOffset: new THREE.Euler(THREE.MathUtils.degToRad(90), 0, THREE.MathUtils.degToRad(-90))
         };
 
         // TUNING HANDLERS
@@ -1178,7 +1178,8 @@
                 matrix.makeBasis(watchX, watchY, watchZ);
                 targetQuat.setFromRotationMatrix(matrix);
 
-                // Apply Custom Rotation Tuning
+                // Apply the custom rotation tuning offset on top of the arm-tracking quaternion.
+                // This rotates the watch model (and occluder together) to orient the dial correctly.
                 const tuneQuat = new THREE.Quaternion().setFromEuler(CONFIG.rotationOffset);
                 targetQuat.multiply(tuneQuat);
 
@@ -1197,13 +1198,11 @@
                 hasPrevQuat = true;
             }
 
-            // Position the watch model inside watchGroup
-            // X offset = CONFIG.xOffset (side-to-side across the wrist)
-            // Y offset = CONFIG.yOffset (down the arm from wrist landmark)
-            // Z offset = CONFIG.zOffset (above the wrist bone / skin surface)
+            // Position the watch model, shadow and occluder inside watchGroup
+            // X offset = side-to-side, Y offset = down the arm, Z offset = above skin
             modelGroup.position.set(CONFIG.xOffset, CONFIG.yOffset, CONFIG.zOffset);
-            contactShadow.position.set(CONFIG.xOffset, CONFIG.yOffset, CONFIG.zOffset - 0.05); // slightly below model
-            occluder.position.set(CONFIG.xOffset, CONFIG.yOffset, CONFIG.zOffset - 0.38);      // push inside wrist
+            contactShadow.position.set(CONFIG.xOffset, CONFIG.yOffset, CONFIG.zOffset - 0.05);
+            occluder.position.set(CONFIG.xOffset, CONFIG.yOffset, CONFIG.zOffset - 0.38);
 
             // 3. PHYSICAL SCALE & MIRRORING
             const baseHandWidth = 0.075; // average hand width (7.5 cm)

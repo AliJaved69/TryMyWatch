@@ -443,13 +443,12 @@
                 const armLen = Math.hypot(armDx, armDy);
 
                 // ── Rotation ─────────────────────────────────────────────────────────
-                // Product thumbnails have a horizontal strap (watch lying flat in photo).
-                // Perpendicular-to-arm rotation = armAngleDeg + 90°
-                //   Horizontal arm (θ≈0°)  → 90°  → strap vertical   ✓
-                //   Vertical arm   (θ≈-90°)→ 0°   → strap horizontal ✓
-                //   45° diagonal   (θ≈-45°)→ 45°  → strap diagonal   ✓
+                // Product thumbnails have a VERTICAL strap (strap runs top-to-bottom).
+                // So the watch rotation should directly follow the arm angle — no +90° offset.
+                //   Vertical arm   (θ≈-90°) → -90°  → strap runs along the arm ✓
+                //   Horizontal arm (θ≈0°)   →   0°  → strap horizontal ✓
                 const armAngleDeg = Math.atan2(armDy, armDx) * 180 / Math.PI;
-                rotation = Math.round(armAngleDeg + 90);
+                rotation = Math.round(armAngleDeg);
 
                 // ── Scale: Index MCP → Pinky MCP wrist width ─────────────────────────
                 const ix = indexMCP.x * vWidth;
