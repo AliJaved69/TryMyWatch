@@ -4,32 +4,60 @@
 
 @section('content')
     <!-- Hero Section -->
+    @php
+        // Build slides from the latest products' images; fall back to static assets.
+        $heroSlides = collect($products ?? [])
+            ->map(fn($p) => $p->thumbnail)
+            ->filter()
+            ->values();
+
+        if ($heroSlides->isEmpty()) {
+            $heroSlides = collect([
+                asset('images/hero_watch_display.png'),
+                asset('images/luxury-intro.png'),
+                asset('images/poster_ar_preview.png'),
+            ]);
+        }
+    @endphp
     <section class="hero-section">
-        <div id="lightfall-hero"></div>
-        <div class="container h-100 d-flex align-items-center position-relative" style="z-index: 3;">
-            <div class="row w-100 align-items-center">
-                <!-- Left Column: Content -->
-                <div class="col-lg-7 text-start">
-                    <div class="hero-content">
-                        <h1 class="hero-title animate-fade-in">Timeless <span class="text-accent">Elegance</span> & AI
-                            Innovation</h1>
-                        <p class="hero-subtitle animate-fade-in" style="animation-delay: 0.2s;">Discover a curated
-                            collection of luxury timepieces and experience real-time AI-powered AR try-on directly on your
-                            wrist.</p>
-                        <div class="d-flex gap-3 animate-fade-in" style="animation-delay: 0.4s;">
-                            <a href="{{ url('/shop') }}" class="btn btn-primary-custom shadow-accent-glow px-4 py-3">Explore
-                                Collection</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Right Column: Floating Watch Display -->
-                <div class="col-lg-5 text-center mt-5 mt-lg-0 animate-fade-in" style="animation-delay: 0.3s;">
-                    <div class="hero-watch-container">
-                        <img src="{{ asset('images/hero_watch_display.png') }}" class="hero-watch-img img-fluid"
-                            alt="Luxury Display Watch">
+        <div class="hero-slider" id="heroSlider" data-interval="4500">
+            <!-- Rotating background images -->
+            <div class="hero-slides">
+                @foreach ($heroSlides as $i => $img)
+                    <div class="hero-slide {{ $i === 0 ? 'active' : '' }}"
+                        style="background-image: url('{{ $img }}');"></div>
+                @endforeach
+            </div>
+            <div class="hero-slider-overlay"></div>
+
+            <!-- Text content (stays constant while images rotate) -->
+            <div class="container h-100 d-flex align-items-center position-relative" style="z-index: 3;">
+                <div class="hero-content">
+                    <h1 class="hero-title animate-fade-in">Timeless <span class="text-accent">Elegance</span> & AI
+                        Innovation</h1>
+                    <p class="hero-subtitle animate-fade-in" style="animation-delay: 0.2s;">Discover a curated
+                        collection of luxury timepieces and experience real-time AI-powered AR try-on directly on your
+                        wrist.</p>
+                    <div class="d-flex gap-3 animate-fade-in" style="animation-delay: 0.4s;">
+                        <a href="{{ url('/shop') }}" class="btn btn-primary-custom shadow-accent-glow px-4 py-3">Explore
+                            Collection</a>
                     </div>
                 </div>
             </div>
+
+            @if ($heroSlides->count() > 1)
+                <!-- Prev / Next controls -->
+                <button class="hero-arrow hero-arrow-prev" type="button" aria-label="Previous slide">&#10094;</button>
+                <button class="hero-arrow hero-arrow-next" type="button" aria-label="Next slide">&#10095;</button>
+
+                <!-- Dot indicators -->
+                <div class="hero-dots">
+                    @foreach ($heroSlides as $i => $img)
+                        <button class="hero-dot {{ $i === 0 ? 'active' : '' }}" type="button" data-index="{{ $i }}"
+                            aria-label="Go to slide {{ $i + 1 }}"></button>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
 
@@ -88,11 +116,124 @@
             align-items: center;
         }
 
-        #lightfall-hero {
+        /* Rotating image slider */
+        .hero-slider {
+            position: absolute;
+            inset: 0;
+        }
+
+        .hero-slides {
             position: absolute;
             inset: 0;
             z-index: 1;
-            pointer-events: none;
+        }
+
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+            animation: heroZoom 6s ease-out forwards;
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1.08);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .hero-slider-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(90deg, rgba(6, 7, 10, 0.92) 0%, rgba(6, 7, 10, 0.65) 42%, rgba(6, 7, 10, 0.25) 100%);
+        }
+
+        .hero-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 4;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid rgba(241, 229, 172, 0.4);
+            background: rgba(6, 7, 10, 0.4);
+            color: var(--accent);
+            font-size: 1.2rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .hero-arrow:hover {
+            background: rgba(241, 229, 172, 0.18);
+        }
+
+        .hero-arrow-prev {
+            left: 22px;
+        }
+
+        .hero-arrow-next {
+            right: 22px;
+        }
+
+        .hero-dots {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            display: flex;
+            gap: 10px;
+        }
+
+        .hero-dot {
+            width: 10px;
+            height: 10px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .hero-dot.active {
+            width: 26px;
+            border-radius: 6px;
+            background: var(--accent);
+        }
+
+        @media (max-width: 576px) {
+            .hero-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .hero-arrow-prev {
+                left: 10px;
+            }
+
+            .hero-arrow-next {
+                right: 10px;
+            }
         }
 
         .hero-content {
@@ -117,37 +258,6 @@
             margin-bottom: 2.5rem;
             line-height: 1.6;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.7);
-        }
-
-        @keyframes float-watch {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        .hero-watch-container {
-            position: relative;
-            display: inline-block;
-            animation: float-watch 6s ease-in-out infinite;
-            z-index: 3;
-        }
-
-        .hero-watch-img {
-            max-width: 100%;
-            max-height: 480px;
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 30px rgba(241, 229, 172, 0.15));
-            border-radius: 24px;
-            transition: transform 0.5s ease;
-        }
-
-        .hero-watch-container:hover .hero-watch-img {
-            transform: scale(1.05) rotate(3deg);
         }
 
         .glass-card {
@@ -186,6 +296,42 @@
             background: rgba(241, 229, 172, 0.1);
         }
     </style>
+
+    <script>
+        (function () {
+            const slider = document.getElementById('heroSlider');
+            if (!slider) return;
+
+            const slides = Array.from(slider.querySelectorAll('.hero-slide'));
+            const dots = Array.from(slider.querySelectorAll('.hero-dot'));
+            if (slides.length <= 1) return;
+
+            const interval = parseInt(slider.dataset.interval, 10) || 4500;
+            let current = 0;
+            let timer = null;
+
+            function show(index) {
+                current = (index + slides.length) % slides.length;
+                slides.forEach((s, i) => s.classList.toggle('active', i === current));
+                dots.forEach((d, i) => d.classList.toggle('active', i === current));
+            }
+
+            const next = () => show(current + 1);
+            const prev = () => show(current - 1);
+            const start = () => { stop(); timer = setInterval(next, interval); };
+            function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+            slider.querySelector('.hero-arrow-next')?.addEventListener('click', () => { next(); start(); });
+            slider.querySelector('.hero-arrow-prev')?.addEventListener('click', () => { prev(); start(); });
+            dots.forEach(d => d.addEventListener('click', () => { show(parseInt(d.dataset.index, 10)); start(); }));
+
+            // Pause auto-rotation while the user hovers the hero.
+            slider.addEventListener('mouseenter', stop);
+            slider.addEventListener('mouseleave', start);
+
+            start();
+        })();
+    </script>
 
 
 
