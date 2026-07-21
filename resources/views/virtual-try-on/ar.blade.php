@@ -49,7 +49,7 @@
             border-radius: 12px;
             font-family: inherit;
             border: 1px solid rgba(241, 229, 172, 0.2);
-            width: 280px;
+            width: 320px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
         }
@@ -92,10 +92,12 @@
         }
 
         .tuning-row label {
-            display: block;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             color: var(--accent);
             margin-bottom: 6px;
         }
@@ -107,10 +109,10 @@
         }
 
         .tuning-val {
-            float: right;
             font-family: monospace;
             color: white;
             opacity: 0.7;
+            font-size: 0.85rem;
         }
 
         /* Loading Overlay Styles */
@@ -294,28 +296,40 @@
 
             <div class="tuning-panel pt-3 border-top border-silver-dim">
                 <div class="tuning-row">
-                    <label>Rotation X <span class="tuning-val" id="val-rx">0</span></label>
+                    <label><span>Rotation X</span> <span class="tuning-val" id="val-rx">0</span></label>
                     <input type="range" id="tune-rx" min="-180" max="180" value="0">
                 </div>
                 <div class="tuning-row">
-                    <label>Rotation Y <span class="tuning-val" id="val-ry">0</span></label>
+                    <label><span>Rotation Y</span> <span class="tuning-val" id="val-ry">0</span></label>
                     <input type="range" id="tune-ry" min="-180" max="180" value="0">
                 </div>
                 <div class="tuning-row">
-                    <label>Rotation Z <span class="tuning-val" id="val-rz">-90</span></label>
+                    <label><span>Rotation Z</span> <span class="tuning-val" id="val-rz">-90</span></label>
                     <input type="range" id="tune-rz" min="-180" max="180" value="-90">
                 </div>
                 <div class="tuning-row">
-                    <label>Scale <span class="tuning-val" id="val-scale">1.5</span></label>
-                    <input type="range" id="tune-scale" min="0.5" max="10" step="0.1" value="1.5">
+                    <label><span>Scale</span> <span class="tuning-val" id="val-scale">4</span></label>
+                    <input type="range" id="tune-scale" min="0.5" max="15" step="0.1" value="4">
                 </div>
                 <div class="tuning-row">
-                    <label>Z-Offset <span class="tuning-val" id="val-z">0.02</span></label>
-                    <input type="range" id="tune-z" min="-0.2" max="0.2" step="0.005" value="0.02">
+                    <label><span>X-Offset (Side)</span> <span class="tuning-val" id="val-x">0</span></label>
+                    <input type="range" id="tune-x" min="-0.5" max="0.5" step="0.005" value="0">
                 </div>
                 <div class="tuning-row">
-                    <label>Rotation Smoothing <span class="tuning-val" id="val-rsmooth">0.08</span></label>
-                    <input type="range" id="tune-rsmooth" min="0.03" max="0.4" step="0.01" value="0.08">
+                    <label><span>Y-Offset (Arm)</span> <span class="tuning-val" id="val-y">-0.15</span></label>
+                    <input type="range" id="tune-y" min="-0.5" max="0.5" step="0.005" value="-0.15">
+                </div>
+                <div class="tuning-row">
+                    <label><span>Z-Offset (Depth)</span> <span class="tuning-val" id="val-z">-0.2</span></label>
+                    <input type="range" id="tune-z" min="-0.5" max="0.5" step="0.005" value="-0.2">
+                </div>
+                <div class="tuning-row">
+                    <label><span>Smoothing (minCutoff)</span> <span class="tuning-val" id="val-mincutoff">1.0</span></label>
+                    <input type="range" id="tune-mincutoff" min="0.1" max="5.0" step="0.1" value="1.0">
+                </div>
+                <div class="tuning-row">
+                    <label><span>Speed Adapt (beta)</span> <span class="tuning-val" id="val-beta">0.007</span></label>
+                    <input type="range" id="tune-beta" min="0.0" max="0.1" step="0.001" value="0.007">
                 </div>
             </div>
 
@@ -380,19 +394,24 @@
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
         import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
         // CONFIGURATION
         const CONFIG = {
             modelUrl: "{{ str_starts_with($product->model_3d, 'http') ? $product->model_3d : (str_starts_with(ltrim($product->model_3d, '/'), 'storage/') ? asset(ltrim($product->model_3d, '/')) : asset('storage/' . ltrim($product->model_3d, '/'))) }}",
-            scaleMultiplier: 1.5,
-            zOffset: 0.02,
-            // FIX: position, rotation and scale now use independent smoothing rates.
-            // Rotation noise from wrist-twist is much spikier than position noise,
-            // so it needs heavier damping or the model will "swim" during rotation.
-            smoothFactorPosition: 0.18,
-            smoothFactorRotation: 0.08,
-            smoothFactorScale: 0.15,
-            rotationOffset: new THREE.Euler(0, 0, THREE.MathUtils.degToRad(-90)) // Default orientation prefill
+            scaleMultiplier: 4.0,
+            xOffset: 0,
+            yOffset: -0.15,
+            zOffset: -0.2,
+            // Animation loop lerp/slerp factors (downstream of One Euro)
+            smoothFactorPosition: 0.25,
+            smoothFactorRotation: 0.15,
+            smoothFactorScale: 0.20,
+            // One Euro Filter parameters
+            oneEuroMinCutoff: 1.0,
+            oneEuroBeta: 0.007,
+            oneEuroDCutoff: 1.0,
+            rotationOffset: new THREE.Euler(0, 0, THREE.MathUtils.degToRad(-90))
         };
 
         // TUNING HANDLERS
@@ -401,8 +420,11 @@
             ry: document.getElementById('tune-ry'),
             rz: document.getElementById('tune-rz'),
             s: document.getElementById('tune-scale'),
+            x: document.getElementById('tune-x'),
+            y: document.getElementById('tune-y'),
             z: document.getElementById('tune-z'),
-            rsmooth: document.getElementById('tune-rsmooth')
+            mincutoff: document.getElementById('tune-mincutoff'),
+            beta: document.getElementById('tune-beta')
         };
 
         function updateTuning() {
@@ -412,15 +434,21 @@
                 THREE.MathUtils.degToRad(parseFloat(tuning.rz.value))
             );
             CONFIG.scaleMultiplier = parseFloat(tuning.s.value);
+            CONFIG.xOffset = parseFloat(tuning.x.value);
+            CONFIG.yOffset = parseFloat(tuning.y.value);
             CONFIG.zOffset = parseFloat(tuning.z.value);
-            CONFIG.smoothFactorRotation = parseFloat(tuning.rsmooth.value);
+            CONFIG.oneEuroMinCutoff = parseFloat(tuning.mincutoff.value);
+            CONFIG.oneEuroBeta = parseFloat(tuning.beta.value);
 
             document.getElementById('val-rx').innerText = tuning.rx.value;
             document.getElementById('val-ry').innerText = tuning.ry.value;
             document.getElementById('val-rz').innerText = tuning.rz.value;
             document.getElementById('val-scale').innerText = tuning.s.value;
+            document.getElementById('val-x').innerText = tuning.x.value;
+            document.getElementById('val-y').innerText = tuning.y.value;
             document.getElementById('val-z').innerText = tuning.z.value;
-            document.getElementById('val-rsmooth').innerText = tuning.rsmooth.value;
+            document.getElementById('val-mincutoff').innerText = tuning.mincutoff.value;
+            document.getElementById('val-beta').innerText = tuning.beta.value;
         }
 
         Object.values(tuning).forEach(input => input.addEventListener('input', updateTuning));
@@ -556,13 +584,38 @@
         const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
         renderer.setSize(width, height);
         renderer.setPixelRatio(window.devicePixelRatio);
+        // Photorealistic tone mapping — maps HDR lighting values to screen colors
+        // the way a real camera sensor would, preventing washed-out highlights
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+        // Environment Map for photorealistic reflections on metallic surfaces
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
         /* ---------------- LIGHTING ---------------- */
-        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 2.0);
+        // Key light — warm directional from upper-right to simulate indoor/outdoor light
+        const keyLight = new THREE.DirectionalLight(0xfff5e6, 2.2);
+        keyLight.position.set(2, 4, 5);
+        scene.add(keyLight);
+
+        // Fill light — soft hemisphere from below to simulate skin light bounce
+        const hemiLight = new THREE.HemisphereLight(
+            0xffffff,  // sky color (cool white)
+            0xd4a574,  // ground color (warm skin-tone bounce)
+            1.2
+        );
         scene.add(hemiLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 2.0);
-        dirLight.position.set(0, 5, 5);
-        scene.add(dirLight);
+
+        // Rim light — subtle backlight to separate watch from wrist
+        const rimLight = new THREE.DirectionalLight(0xc8d8ff, 0.6);
+        rimLight.position.set(-3, 1, -4);
+        scene.add(rimLight);
+
+        // Ambient fill — very subtle to avoid washing out
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
 
         const watchGroup = new THREE.Group();
         scene.add(watchGroup);
@@ -570,11 +623,41 @@
         const modelGroup = new THREE.Group();
         watchGroup.add(modelGroup);
 
-        // Create a cylindrical occluder representing the wrist (hides strap parts that go behind wrist)
-        const occluderGeom = new THREE.CylinderGeometry(0.43, 0.43, 1.5, 32);
-        const occluderMat = new THREE.MeshBasicMaterial({ colorWrite: false });
+        // --- CONTACT SHADOW ---
+        // A soft, dark ellipse that sits just below the watch case on the skin.
+        // Uses NormalBlending and alpha so it doesn't render as a solid black box.
+        const shadowGeom = new THREE.PlaneGeometry(1.2, 1.2);
+        const shadowCanvas = document.createElement('canvas');
+        shadowCanvas.width = 128;
+        shadowCanvas.height = 128;
+        const shadowCtx = shadowCanvas.getContext('2d');
+        const grad = shadowCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
+        grad.addColorStop(0, 'rgba(0, 0, 0, 0.6)');
+        grad.addColorStop(0.4, 'rgba(0, 0, 0, 0.2)');
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        shadowCtx.fillStyle = grad;
+        shadowCtx.fillRect(0, 0, 128, 128);
+        const shadowTex = new THREE.CanvasTexture(shadowCanvas);
+        const shadowMat = new THREE.MeshBasicMaterial({
+            map: shadowTex,
+            transparent: true,
+            depthWrite: false,
+            toneMapped: false // Prevents ACES tone mapping from turning black transparent pixels into grey blocks
+        });
+        const contactShadow = new THREE.Mesh(shadowGeom, shadowMat);
+        contactShadow.renderOrder = 0;
+        watchGroup.add(contactShadow);
+
+        // --- WRIST OCCLUDER ---
+        // Invisible cylinder that writes to the depth buffer only, hiding any
+        // strap geometry that should be "behind" the wrist.
+        const occluderGeom = new THREE.CylinderGeometry(0.38, 0.40, 1.4, 32);
+        const occluderMat = new THREE.MeshBasicMaterial({ 
+            colorWrite: false,
+            depthWrite: true
+        });
         const occluder = new THREE.Mesh(occluderGeom, occluderMat);
-        occluder.position.set(0, 0, -0.42);
+        occluder.renderOrder = 1;
         watchGroup.add(occluder);
 
         status.innerText = 'Loading 3D Model...';
@@ -585,17 +668,24 @@
         console.log("Evaluated isObj as:", isObj);
 
         function processLoadedModel(model, loaderType) {
-            // 1. Assign Default Material (Crucial for .obj without .mtl)
+            // 1. Assign / enhance materials for photorealistic rendering
             model.traverse((child) => {
                 if (child.isMesh) {
-                    // If it's an OBJ, enforce a material so it's not invisible/black
                     if (loaderType === 'OBJ' || !child.material) {
+                        // OBJ fallback: metallic watch material
                         child.material = new THREE.MeshStandardMaterial({
-                            color: 0xe0e0e0,
-                            metalness: 0.5,
-                            roughness: 0.5
+                            color: 0xd0d0d0,
+                            metalness: 0.8,
+                            roughness: 0.25
                         });
+                    } else {
+                        // GLTF models: ensure proper env-map and tone-mapping response
+                        if (child.material.isMeshStandardMaterial || child.material.isMeshPhysicalMaterial) {
+                            child.material.envMapIntensity = 1.0;
+                            child.material.needsUpdate = true;
+                        }
                     }
+                    child.renderOrder = 2; // Render after occluder
                 }
             });
 
@@ -700,48 +790,187 @@
         let isHandDetected = false;
 
         // FIX #1: Quaternion double-cover tracking.
-        // Every rotation has two equally valid quaternion representations (q and -q).
-        // Rebuilding the quaternion from scratch each frame with no continuity check
-        // lets it silently flip sign between frames — slerp then takes the LONG way
-        // around, producing the sudden snap/spin you see specifically while rotating
-        // the wrist. We fix this by always choosing the representation closest to
-        // the previous frame's quaternion before handing it to slerp.
         let prevTargetQuat = new THREE.Quaternion();
         let hasPrevQuat = false;
 
-        // FIX #5/#6 state: robust orientation basis (Newell-normal) and its
-        // frame-to-frame smoothing state. See the ORIENTATION section below for
-        // why this replaced the old 2-point cross-product approach.
+        // FIX #5/#6 state: robust orientation basis (Newell-normal)
         const smoothedYAxis = new THREE.Vector3();
         const smoothedZAxis = new THREE.Vector3();
         let hasSmoothedAxes = false;
 
-        // Exponential Moving Average Landmark Smoothing Maps
-        const smoothedLandmarks = {};
-        const smoothedWorldLandmarks = {};
+        /* ================================================================
+         * ONE EURO FILTER — Géry Casiez et al. (2012)
+         * "1€ Filter: A Simple Speed-based Low-pass Filter for Noisy Input"
+         *
+         * Key insight: when the signal moves slowly, jitter dominates and
+         * we want heavy smoothing (low cutoff). When it moves fast, lag
+         * dominates and we want light smoothing (high cutoff). The filter
+         * adapts its cutoff frequency every frame based on the estimated
+         * speed of the signal.
+         *
+         * Parameters:
+         *   minCutoff — minimum cutoff frequency in Hz (lower = smoother
+         *               when stationary, but more lag). Good range: 0.3–3.0
+         *   beta      — speed coefficient (higher = faster adaptation,
+         *               meaning fast movements bypass smoothing more
+         *               aggressively). Good range: 0.0–0.1
+         *   dCutoff   — cutoff for the derivative (speed) estimation.
+         *               Almost never needs tuning. Default 1.0 Hz.
+         * ================================================================ */
+        class LowPassFilter {
+            constructor(alpha, initval = 0) {
+                this.y = this.s = initval;
+                this.setAlpha(alpha);
+                this.initialized = false;
+            }
+            setAlpha(alpha) {
+                this.alpha = Math.max(0, Math.min(1, alpha));
+            }
+            filter(value) {
+                if (!this.initialized) {
+                    this.y = this.s = value;
+                    this.initialized = true;
+                    return value;
+                }
+                this.y = value;
+                this.s = this.alpha * value + (1 - this.alpha) * this.s;
+                return this.s;
+            }
+            lastValue() { return this.y; }
+            hatValue() { return this.s; }
+            reset(value) { this.y = this.s = value; this.initialized = false; }
+        }
+
+        class OneEuroFilter {
+            constructor(freq, minCutoff = 1.0, beta = 0.0, dCutoff = 1.0) {
+                this.freq = freq;
+                this.minCutoff = minCutoff;
+                this.beta = beta;
+                this.dCutoff = dCutoff;
+                this.x = new LowPassFilter(this._alpha(minCutoff));
+                this.dx = new LowPassFilter(this._alpha(dCutoff), 0.0);
+                this.lastTime = null;
+            }
+            _alpha(cutoff) {
+                const te = 1.0 / this.freq;
+                const tau = 1.0 / (2 * Math.PI * cutoff);
+                return 1.0 / (1.0 + tau / te);
+            }
+            filter(value, timestamp = null) {
+                // Update frequency from timestamp if available
+                if (timestamp !== null && this.lastTime !== null) {
+                    const dt = timestamp - this.lastTime;
+                    if (dt > 0) this.freq = 1.0 / dt;
+                }
+                if (timestamp !== null) this.lastTime = timestamp;
+
+                // Estimate derivative (speed)
+                const prevX = this.x.hatValue();
+                const dx = this.x.initialized ? (value - prevX) * this.freq : 0.0;
+                const edx = this.dx.filter(dx);
+                this.dx.setAlpha(this._alpha(this.dCutoff));
+
+                // Adaptive cutoff: faster motion → higher cutoff → less smoothing
+                const cutoff = this.minCutoff + this.beta * Math.abs(edx);
+                this.x.setAlpha(this._alpha(cutoff));
+                return this.x.filter(value);
+            }
+            reset() {
+                this.x.reset(0);
+                this.dx.reset(0);
+                this.lastTime = null;
+            }
+        }
+
+        // Per-landmark One Euro filter banks (3 axes each: x, y, z)
+        // We use separate banks for screen (2D) and world (3D) landmarks.
+        const screenFilters = {};  // { landmarkId: { x: OneEuroFilter, y: OneEuroFilter, z: OneEuroFilter } }
+        const worldFilters = {};   // { landmarkId: { x: OneEuroFilter, y: OneEuroFilter, z: OneEuroFilter } }
+        // Orientation basis axis filters (6 total: yAxis.xyz, zAxis.xyz)
+        const axisFilters = {
+            yx: null, yy: null, yz: null,
+            zx: null, zy: null, zz: null
+        };
+
+        const ASSUMED_FPS = 30; // Initial frequency estimate; auto-corrected by timestamps
+
+        function getOrCreateFilters(bank, id) {
+            if (!bank[id]) {
+                bank[id] = {
+                    x: new OneEuroFilter(ASSUMED_FPS, CONFIG.oneEuroMinCutoff, CONFIG.oneEuroBeta, CONFIG.oneEuroDCutoff),
+                    y: new OneEuroFilter(ASSUMED_FPS, CONFIG.oneEuroMinCutoff, CONFIG.oneEuroBeta, CONFIG.oneEuroDCutoff),
+                    z: new OneEuroFilter(ASSUMED_FPS, CONFIG.oneEuroMinCutoff, CONFIG.oneEuroBeta, CONFIG.oneEuroDCutoff)
+                };
+            }
+            return bank[id];
+        }
+
+        function applyOneEuroParams(filterBank) {
+            for (const id in filterBank) {
+                const f = filterBank[id];
+                if (f.x) { f.x.minCutoff = CONFIG.oneEuroMinCutoff; f.x.beta = CONFIG.oneEuroBeta; }
+                if (f.y) { f.y.minCutoff = CONFIG.oneEuroMinCutoff; f.y.beta = CONFIG.oneEuroBeta; }
+                if (f.z) { f.z.minCutoff = CONFIG.oneEuroMinCutoff; f.z.beta = CONFIG.oneEuroBeta; }
+            }
+        }
 
         function getSmoothedScreen(id, raw) {
-            if (!smoothedLandmarks[id]) {
-                smoothedLandmarks[id] = new THREE.Vector3(raw.x, raw.y, raw.z);
-            } else {
-                const alpha = 0.35; // balance between stability and latency
-                smoothedLandmarks[id].x += alpha * (raw.x - smoothedLandmarks[id].x);
-                smoothedLandmarks[id].y += alpha * (raw.y - smoothedLandmarks[id].y);
-                smoothedLandmarks[id].z += alpha * (raw.z - smoothedLandmarks[id].z);
-            }
-            return smoothedLandmarks[id].clone();
+            const f = getOrCreateFilters(screenFilters, id);
+            // Live-update filter params from CONFIG (tuning sliders)
+            f.x.minCutoff = CONFIG.oneEuroMinCutoff; f.x.beta = CONFIG.oneEuroBeta;
+            f.y.minCutoff = CONFIG.oneEuroMinCutoff; f.y.beta = CONFIG.oneEuroBeta;
+            f.z.minCutoff = CONFIG.oneEuroMinCutoff; f.z.beta = CONFIG.oneEuroBeta;
+            const t = performance.now() / 1000; // seconds
+            return new THREE.Vector3(
+                f.x.filter(raw.x, t),
+                f.y.filter(raw.y, t),
+                f.z.filter(raw.z, t)
+            );
         }
 
         function getSmoothedWorld(id, raw) {
-            if (!smoothedWorldLandmarks[id]) {
-                smoothedWorldLandmarks[id] = new THREE.Vector3(raw.x, raw.y, raw.z);
-            } else {
-                const alpha = 0.35; 
-                smoothedWorldLandmarks[id].x += alpha * (raw.x - smoothedWorldLandmarks[id].x);
-                smoothedWorldLandmarks[id].y += alpha * (raw.y - smoothedWorldLandmarks[id].y);
-                smoothedWorldLandmarks[id].z += alpha * (raw.z - smoothedWorldLandmarks[id].z);
+            const f = getOrCreateFilters(worldFilters, id);
+            f.x.minCutoff = CONFIG.oneEuroMinCutoff; f.x.beta = CONFIG.oneEuroBeta;
+            f.y.minCutoff = CONFIG.oneEuroMinCutoff; f.y.beta = CONFIG.oneEuroBeta;
+            f.z.minCutoff = CONFIG.oneEuroMinCutoff; f.z.beta = CONFIG.oneEuroBeta;
+            const t = performance.now() / 1000;
+            return new THREE.Vector3(
+                f.x.filter(raw.x, t),
+                f.y.filter(raw.y, t),
+                f.z.filter(raw.z, t)
+            );
+        }
+
+        function initAxisFilters() {
+            for (const key of ['yx', 'yy', 'yz', 'zx', 'zy', 'zz']) {
+                axisFilters[key] = new OneEuroFilter(ASSUMED_FPS, CONFIG.oneEuroMinCutoff, CONFIG.oneEuroBeta, CONFIG.oneEuroDCutoff);
             }
-            return smoothedWorldLandmarks[id].clone();
+        }
+        initAxisFilters();
+
+        function filterAxis(prefix, vec) {
+            const t = performance.now() / 1000;
+            const fx = axisFilters[prefix + 'x'];
+            const fy = axisFilters[prefix + 'y'];
+            const fz = axisFilters[prefix + 'z'];
+            fx.minCutoff = CONFIG.oneEuroMinCutoff; fx.beta = CONFIG.oneEuroBeta;
+            fy.minCutoff = CONFIG.oneEuroMinCutoff; fy.beta = CONFIG.oneEuroBeta;
+            fz.minCutoff = CONFIG.oneEuroMinCutoff; fz.beta = CONFIG.oneEuroBeta;
+            return new THREE.Vector3(
+                fx.filter(vec.x, t),
+                fy.filter(vec.y, t),
+                fz.filter(vec.z, t)
+            ).normalize();
+        }
+
+        function resetAllFilters() {
+            for (const id in screenFilters) {
+                screenFilters[id].x.reset(); screenFilters[id].y.reset(); screenFilters[id].z.reset();
+            }
+            for (const id in worldFilters) {
+                worldFilters[id].x.reset(); worldFilters[id].y.reset(); worldFilters[id].z.reset();
+            }
+            initAxisFilters();
         }
 
         hands.onResults((results) => {
@@ -751,9 +980,8 @@
                 isHandDetected = false;
                 watchGroup.visible = false;
                 status.innerText = 'Show your wrist';
-                // Clear landmark history to prevent jumping when hand transitions/reappears
-                for (const key in smoothedLandmarks) delete smoothedLandmarks[key];
-                for (const key in smoothedWorldLandmarks) delete smoothedWorldLandmarks[key];
+                // Reset all One Euro filters to prevent jumping when hand reappears
+                resetAllFilters();
                 hasPrevQuat = false;     // reset quaternion continuity on hand loss
                 hasSmoothedAxes = false; // reset basis smoothing on hand loss
                 return;
@@ -921,19 +1149,15 @@
                 if (rawNormal.dot(referenceNormal) < 0) rawNormal.negate();
                 const rawZAxis = rawNormal.normalize();
 
-                // FIX #6: smooth the basis vectors themselves (nlerp), one layer
-                // upstream of the quaternion slerp in the animation loop. This
-                // catches noise that survives Newell averaging but would still
-                // wobble frame-to-frame during fast rotation.
-                const AXIS_SMOOTH_ALPHA = 0.35;
-                if (!hasSmoothedAxes) {
-                    smoothedYAxis.copy(rawYAxis);
-                    smoothedZAxis.copy(rawZAxis);
-                    hasSmoothedAxes = true;
-                } else {
-                    smoothedYAxis.lerp(rawYAxis, AXIS_SMOOTH_ALPHA).normalize();
-                    smoothedZAxis.lerp(rawZAxis, AXIS_SMOOTH_ALPHA).normalize();
-                }
+                // FIX #6: smooth basis vectors with One Euro Filter instead of
+                // fixed-alpha nlerp. One Euro adapts: slow rotations get heavy
+                // smoothing (kills wobble), fast rotations get light smoothing
+                // (preserves responsiveness).
+                const filteredY = filterAxis('y', rawYAxis);
+                const filteredZ = filterAxis('z', rawZAxis);
+                smoothedYAxis.copy(filteredY);
+                smoothedZAxis.copy(filteredZ);
+                hasSmoothedAxes = true;
 
                 // Gram-Schmidt: re-orthogonalize so Y and Z are exactly perpendicular,
                 // then derive X from them. This is the standard trick to build a clean
@@ -958,6 +1182,12 @@
                 const tuneQuat = new THREE.Quaternion().setFromEuler(CONFIG.rotationOffset);
                 targetQuat.multiply(tuneQuat);
 
+                // Auto-flip for the right hand so the watch doesn't appear upside down
+                if (!isLeft) {
+                    const rightHandFlip = new THREE.Quaternion().setFromEuler(new THREE.Euler(THREE.MathUtils.degToRad(-180), 0, 0));
+                    targetQuat.multiply(rightHandFlip);
+                }
+
                 // FIX #1 (cont.): enforce quaternion continuity (shortest-path) so
                 // slerp never takes the "long way around" during wrist rotation.
                 if (hasPrevQuat && prevTargetQuat.dot(targetQuat) < 0) {
@@ -967,11 +1197,13 @@
                 hasPrevQuat = true;
             }
 
-            // Position the watch model and occluder inside watchGroup with a local translation offset
-            // Y offset is -0.055 (5.5 cm down the arm)
-            // Z offset is CONFIG.zOffset (above the wrist bone)
-            modelGroup.position.set(0, -0.055, CONFIG.zOffset);
-            occluder.position.set(0, -0.055, -0.42 + CONFIG.zOffset);
+            // Position the watch model inside watchGroup
+            // X offset = CONFIG.xOffset (side-to-side across the wrist)
+            // Y offset = CONFIG.yOffset (down the arm from wrist landmark)
+            // Z offset = CONFIG.zOffset (above the wrist bone / skin surface)
+            modelGroup.position.set(CONFIG.xOffset, CONFIG.yOffset, CONFIG.zOffset);
+            contactShadow.position.set(CONFIG.xOffset, CONFIG.yOffset, CONFIG.zOffset - 0.05); // slightly below model
+            occluder.position.set(CONFIG.xOffset, CONFIG.yOffset, CONFIG.zOffset - 0.38);      // push inside wrist
 
             // 3. PHYSICAL SCALE & MIRRORING
             const baseHandWidth = 0.075; // average hand width (7.5 cm)
