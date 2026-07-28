@@ -89,9 +89,9 @@
                                         <div class="mb-4">
                                             <label class="text-silver small d-flex justify-content-between mb-2">
                                                 <span>Size / Scale</span>
-                                                <span id="scale-val">100%</span>
+                                                <span id="scale-val">80%</span>
                                             </label>
-                                            <input type="range" id="scale-slider" class="premium-range" min="30" max="250" value="100">
+                                            <input type="range" id="scale-slider" class="premium-range" min="30" max="250" value="80">
                                         </div>
                                         
                                         <div class="mb-4">
@@ -464,7 +464,7 @@
             const resetBtn = document.getElementById('reset-btn');
             const downloadBtn = document.getElementById('download-btn');
             
-            let scale = 100;
+            let scale = 80;
             let rotation = -10;
             let isDragging = false;
             let startX, startY;
@@ -514,9 +514,9 @@
             });
 
             resetBtn.addEventListener('click', () => {
-                scale = 100;
+                scale = 80;
                 rotation = -10;
-                scaleSlider.value = 100;
+                scaleSlider.value = 80;
                 rotateSlider.value = -10;
                 watchWrapper.style.left = '50%';
                 watchWrapper.style.top = '50%';

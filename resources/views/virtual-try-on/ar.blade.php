@@ -296,20 +296,20 @@
 
             <div class="tuning-panel pt-3 border-top border-silver-dim">
                 <div class="tuning-row">
-                    <label><span>Rotation X</span> <span class="tuning-val" id="val-rx">90</span></label>
-                    <input type="range" id="tune-rx" min="-180" max="180" value="90">
+                    <label><span>Rotation X</span> <span class="tuning-val" id="val-rx">2</span></label>
+                    <input type="range" id="tune-rx" min="-180" max="180" value="2">
                 </div>
                 <div class="tuning-row">
-                    <label><span>Rotation Y</span> <span class="tuning-val" id="val-ry">0</span></label>
-                    <input type="range" id="tune-ry" min="-180" max="180" value="0">
+                    <label><span>Rotation Y</span> <span class="tuning-val" id="val-ry">33</span></label>
+                    <input type="range" id="tune-ry" min="-180" max="180" value="33">
                 </div>
                 <div class="tuning-row">
-                    <label><span>Rotation Z</span> <span class="tuning-val" id="val-rz">-90</span></label>
-                    <input type="range" id="tune-rz" min="-180" max="180" value="-90">
+                    <label><span>Rotation Z</span> <span class="tuning-val" id="val-rz">-80</span></label>
+                    <input type="range" id="tune-rz" min="-180" max="180" value="-80">
                 </div>
                 <div class="tuning-row">
-                    <label><span>Scale</span> <span class="tuning-val" id="val-scale">12</span></label>
-                    <input type="range" id="tune-scale" min="0.5" max="50" step="0.5" value="12">
+                    <label><span>Scale</span> <span class="tuning-val" id="val-scale">5</span></label>
+                    <input type="range" id="tune-scale" min="0.5" max="50" step="0.5" value="5">
                 </div>
                 <div class="tuning-row">
                     <label><span>X-Offset (Side)</span> <span class="tuning-val" id="val-x">0</span></label>
@@ -399,7 +399,7 @@
         // CONFIGURATION
         const CONFIG = {
             modelUrl: "{{ str_starts_with($product->model_3d, 'http') ? $product->model_3d : (str_starts_with(ltrim($product->model_3d, '/'), 'storage/') ? asset(ltrim($product->model_3d, '/')) : asset('storage/' . ltrim($product->model_3d, '/'))) }}",
-            scaleMultiplier: 12.0,
+            scaleMultiplier: 5.0,
             xOffset: 0,
             yOffset: -0.15,
             zOffset: -0.2,
@@ -411,7 +411,7 @@
             oneEuroMinCutoff: 1.0,
             oneEuroBeta: 0.007,
             oneEuroDCutoff: 1.0,
-            rotationOffset: new THREE.Euler(THREE.MathUtils.degToRad(90), 0, THREE.MathUtils.degToRad(-90))
+            rotationOffset: new THREE.Euler(THREE.MathUtils.degToRad(2), THREE.MathUtils.degToRad(33), THREE.MathUtils.degToRad(-80))
         };
 
         // TUNING HANDLERS
